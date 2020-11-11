@@ -8,7 +8,7 @@
             </el-breadcrumb>
         </div>
         <div class="container">
-            <div class="handle-box">
+            <div class="handle-box"> 
                 <el-button
                     type="danger"
                     icon="el-icon-delete"
