@@ -120,7 +120,7 @@ export default {
         } else if (this.$store.getters.getUser.roseID === '1') {
             this.findUserUrl = '/api/teacher/findTeacherByID';
             this.updateOneUrl = '/api/teacher/updateOne';
-        } else {
+        } else { 
             this.findUserUrl = '/api/admin/findAdminByID';
             this.updateOneUrl = '/api/admin/updateOne';
         }
