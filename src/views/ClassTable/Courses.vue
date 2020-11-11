@@ -82,13 +82,87 @@
 <script>
 export default {
     name: 'CourseTable',
+    props: ['usualCourses'],
     data() {
         return {
             showUsualCourseDialog: false,
             showPracticeCourseDialog: false,
-            selectedCourseIndex: 0
+            selectedCourseIndex: 0,
+            usualCourses: [
+                // {
+                //     day: '1',
+                //     length: '3',
+                //     name: '普通物理A2',
+                //     period: '3-5节',
+                //     room: '2-N219',
+                //     teacher: '祝华',
+                //     type: '一般课',
+                //     week: '1-16周'
+                // },
+                // {
+                //     day: '3',
+                //     length: '3',
+                //     name: '普通物理A2',
+                //     period: '6',
+                //     room: '2-N219',
+                //     teacher: '祝华',
+                //     type: '一般课',
+                //     week: '1-16周'
+                // },
+                // {
+                //     day: '3',
+                //     length: '3',
+                //     name: '普通物理A2',
+                //     period: '3',
+                //     room: '2-N219',
+                //     teacher: '祝华',
+                //     type: '一般课',
+                //     week: '1-16周'
+                // },
+                // {
+                //     day: '3',
+                //     length: '2',
+                //     name: '普通物理A2',
+                //     period: '1',
+                //     room: '2-N219',
+                //     teacher: '祝华',
+                //     type: '一般课',
+                //     week: '1-16周'
+                // },
+                // {
+                //     day: '2',
+                //     length: '2',
+                //     name: '普通物理A2',
+                //     period: '1',
+                //     room: '2-N219',
+                //     teacher: '祝华',
+                //     type: '一般课',
+                //     week: '1-16周'
+                // },
+                // {
+                //     day: '4',
+                //     length: '2',
+                //     name: '普通物理A2',
+                //     period: '1',
+                //     room: '2-N219',
+                //     teacher: '祝华',
+                //     type: '一般课',
+                //     week: '1-16周'
+                // },
+                // {
+                //     day: '5',
+                //     length: '2',
+                //     name: '普通物理A2',
+                //     period: '1',
+                //     room: '2-N219',
+                //     teacher: '祝华',
+                //     type: '一般课',
+                //     week: '1-16周'
+                // }
+            ]
         };
     },
+
     props: {
         width: {
             type: Number,
@@ -98,81 +172,81 @@ export default {
             type: Number,
             default: 635
         },
-        usualCourses: {
-            type: Array,
-            default: () => [
-                {
-                    day: '1',
-                    length: '3',
-                    name: '普通物理A2',
-                    period: '3-5节',
-                    room: '2-N219',
-                    teacher: '祝华',
-                    type: '一般课',
-                    week: '1-16周'
-                },
-                {
-                    day: '3',
-                    length: '3',
-                    name: '普通物理A2',
-                    period: '6',
-                    room: '2-N219',
-                    teacher: '祝华',
-                    type: '一般课',
-                    week: '1-16周'
-                },
-                {
-                    day: '3',
-                    length: '3',
-                    name: '普通物理A2',
-                    period: '3',
-                    room: '2-N219',
-                    teacher: '祝华',
-                    type: '一般课',
-                    week: '1-16周'
-                },
-                {
-                    day: '3',
-                    length: '2',
-                    name: '普通物理A2',
-                    period: '1',
-                    room: '2-N219',
-                    teacher: '祝华',
-                    type: '一般课',
-                    week: '1-16周'
-                },
-                {
-                    day: '2',
-                    length: '2',
-                    name: '普通物理A2',
-                    period: '1',
-                    room: '2-N219',
-                    teacher: '祝华',
-                    type: '一般课',
-                    week: '1-16周'
-                },
-                {
-                    day: '4',
-                    length: '2',
-                    name: '普通物理A2',
-                    period: '1',
-                    room: '2-N219',
-                    teacher: '祝华',
-                    type: '一般课',
-                    week: '1-16周'
-                },
-                {
-                    day: '5',
-                    length: '2',
-                    name: '普通物理A2',
-                    period: '1',
-                    room: '2-N219',
-                    teacher: '祝华',
-                    type: '一般课',
-                    week: '1-16周'
-                }
-            ]
-        },
+        // usualCourses: {
+        //     type: Array,
+        //     default: () => [
+        //         {
+        //             day: '1',
+        //             length: '3',
+        //             name: '普通物理A2',
+        //             period: '3-5节',
+        //             room: '2-N219',
+        //             teacher: '祝华',
+        //             type: '一般课',
+        //             week: '1-16周'
+        //         },
+        //         {
+        //             day: '3',
+        //             length: '3',
+        //             name: '普通物理A2',
+        //             period: '6',
+        //             room: '2-N219',
+        //             teacher: '祝华',
+        //             type: '一般课',
+        //             week: '1-16周'
+        //         },
+        //         {
+        //             day: '3',
+        //             length: '3',
+        //             name: '普通物理A2',
+        //             period: '3',
+        //             room: '2-N219',
+        //             teacher: '祝华',
+        //             type: '一般课',
+        //             week: '1-16周'
+        //         },
+        //         {
+        //             day: '3',
+        //             length: '2',
+        //             name: '普通物理A2',
+        //             period: '1',
+        //             room: '2-N219',
+        //             teacher: '祝华',
+        //             type: '一般课',
+        //             week: '1-16周'
+        //         },
+        //         {
+        //             day: '2',
+        //             length: '2',
+        //             name: '普通物理A2',
+        //             period: '1',
+        //             room: '2-N219',
+        //             teacher: '祝华',
+        //             type: '一般课',
+        //             week: '1-16周'
+        //         },
+        //         {
+        //             day: '4',
+        //             length: '2',
+        //             name: '普通物理A2',
+        //             period: '1',
+        //             room: '2-N219',
+        //             teacher: '祝华',
+        //             type: '一般课',
+        //             week: '1-16周'
+        //         },
+        //         {
+        //             day: '5',
+        //             length: '2',
+        //             name: '普通物理A2',
+        //             period: '1',
+        //             room: '2-N219',
+        //             teacher: '祝华',
+        //             type: '一般课',
+        //             week: '1-16周'
+        //         }
+        //     ]
+        // },
         practiceCourses: {
             type: Array,
             default: () => []
@@ -201,8 +275,10 @@ export default {
             return this.usualCourses[this.selectedCourseIndex];
         }
     },
-    created() {},
-    mounted() {},
+    created() {
+        console.log("ddddddddddd")
+    },
+    mounted() { console.log("ggg")},
     methods: {}
 };
 </script>
