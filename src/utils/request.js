@@ -8,7 +8,7 @@ const service = axios.create({
         'content-type': 'application/json;charset=UTF-8',
         'token': 'one'
     },
-    baseURL: 'http://localhost:8082',
+   // baseURL: 'http://localhost:8082',
     timeout: 5000,
     withCredentials: true
 });
