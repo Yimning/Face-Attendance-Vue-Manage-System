@@ -15,7 +15,7 @@
                     </div>
 
                     <!--课表-->
-                    <div v-for="(item, index) in usualCourses" :key="(item, index)">
+                    <!-- <div v-for="(item, index) in usualCourses" :key="(item, index)">
                         <div
                             class="flex-item kcb-item"
                             @click="
@@ -23,25 +23,51 @@
                                 showUsualCourseDialog = true;
                             "
                             :style="{
-                                marginLeft: (item.courseDay - 1) * courseWidth + 'px',
-                                marginTop: (item.period - 1) * courseHeight + 5 + 'px',
+                                marginLeft: (item - 1) * courseWidth + 'px',
+                                marginTop: (item - 1) * courseHeight + 5 + 'px',
                                 width: courseWidth + 'px',
-                                height: item.length * courseHeight - 5 + 'px',
+                                height: item * courseHeight - 5 + 'px',
                                 backgroundColor: colorArrays[index % 9]
                             }"
                         >
                             <div class="small-text">{{ item.name + '@' + item.room }}</div>
+                        </div>
+                    </div> -->
+
+                    <div class="s" v-for="(item, index) in usualCourses" :key="'s-' + index">
+                        <div v-for="(item, key, idx) in item.course" :key="(item, idx)">
+                            <div
+                                class="flex-item kcb-item"
+                                @click="
+                                    selectedCourseIndex = index;
+                                    showUsualCourseDialog = true;
+                                "
+                                
+                                :style="{
+                                    marginLeft: (item - 1) * courseWidth + 'px',
+                                    marginTop: (item - 1) * courseHeight + 5 + 'px',
+                                    width: courseWidth + 'px',
+                                    height: item * courseHeight - 5 + 'px',
+                                    backgroundColor: colorArrays[idx % 9]
+                                }"
+                            >
+                                <div class="small-text">{{ item + '@' + item }}</div>
+                            </div>
                         </div>
                     </div>
 
                     <!-- 遍历对象时,参数： 第一个为值，第二个为键名，第三个为索引 -->
                     <div class="s" v-for="(item, index) in usualCourses" :key="'s-' + index">
                         {{ item }}
-                        <div v-for="(item,key,idx) in item.course" :key="(item,idx)"></div>
-                         课程号:{{item.courseID}}
+                        <div v-for="(item,key,idx) in item.course" :key="(item,idx)">
+                                              
+                            {{ index }}:{{ key }}:{{ item }}
+                            
+                           <div v-if="key=='courseDay' ">
+                                 课程号:{{item}}
+                            </div>
+                        </div>
                     </div>
-
-                    <!-- <template v-for="b in book.course"> 书名:{{ b.classRoomID }} 作者:{{ b.courseWeek }} </template> -->
 
                     <!--事件课显示按钮-->
                     <el-button type="primary" @click="showPracticeCourseDialog = true" class="btn_practice_course">实践课</el-button>
@@ -98,10 +124,12 @@ export default {
             showPracticeCourseDialog: false,
             selectedCourseIndex: 0,
             findUserUrl: '',
-            usualCourses: {
-                type: Array,
-                default: () => []
-            }
+            // usualCourses: {
+            //     type: Array,
+            //     default: () => []
+            // },
+            usualCourses: [{}],
+            list: [{}]
         };
     },
 
@@ -222,10 +250,11 @@ export default {
         this.$axios
             .get(this.findUserUrl, { params: { studentNumber: this.$store.getters.getUser.userID } })
             .then((res) => {
-                console.log(res);
+                // console.log(res);
                 //this.form = res.data[res.data.length - 1];
                 this.usualCourses = res.data;
                 console.log(this.usualCourses);
+               
             })
             .catch((err) => {
                 console.log(err);
