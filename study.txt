@@ -44,3 +44,17 @@
           <el-input v-model="password" placeholder="请输入密码" @keyup.enter.native="search()"></el-input>
 
           全部的键盘别名： .enter .tab  .delete  “退格”和“删除”  .esc  .space  .up  .down  .left  .right
+
+三:数据处理
+          对象转成数组
+                for (const i in this.usualCourses) {
+                    this.$set(this.list[0], i, this.usualCourses[i]);
+                }
+                console.log(this.list);
+                
+          1、将对象转换为JSON格式字符串
+          JSON.stringify(object)
+
+          2、将JSON字符串转换为对象
+          JSON.parse(jsonString);
+
