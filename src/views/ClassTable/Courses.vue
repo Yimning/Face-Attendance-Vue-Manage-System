@@ -23,7 +23,7 @@
                                 showUsualCourseDialog = true;
                             "
                             :style="{
-                                marginLeft: (item.day - 1) * courseWidth + 'px',
+                                marginLeft: (item.courseDay - 1) * courseWidth + 'px',
                                 marginTop: (item.period - 1) * courseHeight + 5 + 'px',
                                 width: courseWidth + 'px',
                                 height: item.length * courseHeight - 5 + 'px',
@@ -33,6 +33,15 @@
                             <div class="small-text">{{ item.name + '@' + item.room }}</div>
                         </div>
                     </div>
+
+                    <!-- 遍历对象时,参数： 第一个为值，第二个为键名，第三个为索引 -->
+                    <div class="s" v-for="(item, index) in usualCourses" :key="'s-' + index">
+                        {{ item }}
+                        <div v-for="(item,key,idx) in item.course" :key="(item,idx)"></div>
+                         课程号:{{item.courseID}}
+                    </div>
+
+                    <!-- <template v-for="b in book.course"> 书名:{{ b.classRoomID }} 作者:{{ b.courseWeek }} </template> -->
 
                     <!--事件课显示按钮-->
                     <el-button type="primary" @click="showPracticeCourseDialog = true" class="btn_practice_course">实践课</el-button>
@@ -88,78 +97,11 @@ export default {
             showUsualCourseDialog: false,
             showPracticeCourseDialog: false,
             selectedCourseIndex: 0,
-            usualCourses: [
-                // {
-                //     day: '1',
-                //     length: '3',
-                //     name: '普通物理A2',
-                //     period: '3-5节',
-                //     room: '2-N219',
-                //     teacher: '祝华',
-                //     type: '一般课',
-                //     week: '1-16周'
-                // },
-                // {
-                //     day: '3',
-                //     length: '3',
-                //     name: '普通物理A2',
-                //     period: '6',
-                //     room: '2-N219',
-                //     teacher: '祝华',
-                //     type: '一般课',
-                //     week: '1-16周'
-                // },
-                // {
-                //     day: '3',
-                //     length: '3',
-                //     name: '普通物理A2',
-                //     period: '3',
-                //     room: '2-N219',
-                //     teacher: '祝华',
-                //     type: '一般课',
-                //     week: '1-16周'
-                // },
-                // {
-                //     day: '3',
-                //     length: '2',
-                //     name: '普通物理A2',
-                //     period: '1',
-                //     room: '2-N219',
-                //     teacher: '祝华',
-                //     type: '一般课',
-                //     week: '1-16周'
-                // },
-                // {
-                //     day: '2',
-                //     length: '2',
-                //     name: '普通物理A2',
-                //     period: '1',
-                //     room: '2-N219',
-                //     teacher: '祝华',
-                //     type: '一般课',
-                //     week: '1-16周'
-                // },
-                // {
-                //     day: '4',
-                //     length: '2',
-                //     name: '普通物理A2',
-                //     period: '1',
-                //     room: '2-N219',
-                //     teacher: '祝华',
-                //     type: '一般课',
-                //     week: '1-16周'
-                // },
-                // {
-                //     day: '5',
-                //     length: '2',
-                //     name: '普通物理A2',
-                //     period: '1',
-                //     room: '2-N219',
-                //     teacher: '祝华',
-                //     type: '一般课',
-                //     week: '1-16周'
-                // }
-            ]
+            findUserUrl: '',
+            usualCourses: {
+                type: Array,
+                default: () => []
+            }
         };
     },
 
@@ -276,9 +218,20 @@ export default {
         }
     },
     created() {
-        console.log("ddddddddddd")
+        this.findUserUrl = '/api/scourse/findScourseBystudentNumber';
+        this.$axios
+            .get(this.findUserUrl, { params: { studentNumber: this.$store.getters.getUser.userID } })
+            .then((res) => {
+                console.log(res);
+                //this.form = res.data[res.data.length - 1];
+                this.usualCourses = res.data;
+                console.log(this.usualCourses);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     },
-    mounted() { console.log("ggg")},
+    mounted() {},
     methods: {}
 };
 </script>
