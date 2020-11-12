@@ -298,7 +298,7 @@ export default {
             this.$axios
                 .get('/api/student/page?currentPage=' + this.query.currentPage)
                 .then((res) => {
-                    //  console.log(res);
+                // console.log(res);
                     this.tableData = res.data.data.records;
                     this.query.currentPage = res.data.data.current;
                     this.query.pageTotal = res.data.data.total;
