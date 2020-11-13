@@ -292,7 +292,7 @@ export default {
                     }
                     this.list = []; //循环完必须清空,否则可能会覆盖
                 }
-                // console.log('this.list');
+                // console.log('this.list');  
                 // console.log(this.list);
                  console.log('newArray');
                  console.log(newArray);
