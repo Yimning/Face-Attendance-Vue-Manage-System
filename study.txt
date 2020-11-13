@@ -58,3 +58,12 @@
           2、将JSON字符串转换为对象
           JSON.parse(jsonString);
 
+          3、vue把对象转为数组
+          registerServiceWorkerlet data = {'A':'A-VALUE', 'B': 'B-Value'};
+          let result = Object.keys(data).map(item => ({key:item, value:data[item]}));
+
+          4、对象转为数组对象
+          for (const i in res.data[res.data.length - 1].course) {
+          this.$set(this.list[0], i, res.data[res.data.length - 1].course[i]);
+          }
+

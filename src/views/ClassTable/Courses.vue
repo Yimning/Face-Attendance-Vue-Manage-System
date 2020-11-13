@@ -1,13 +1,15 @@
 <template>
     <div class="course-table">
-        <div class="content-title">个人课程表</div>
         <el-scrollbar style="height: 100%">
             <div class="course-table-content">
                 <div class="top" :style="{ width: courseWidth * weekTable.length + 'px' }">
-                    <div v-for="item in weekTable" :key="item" class="top-text" :style="{ width: courseWidth + 'px' }">星期{{ item }}</div>
+                    <div v-for="item in weekTable" :key="item" class="top-text" :style="{ width: courseWidth + 'px' }">周{{ item }}</div>
                 </div>
 
-                <div class="main" :style="{ width: courseWidth * weekTable.length + 'px', height: courseHeight * timeTable.length + 'px' }">
+                <div
+                    class="main"
+                    :style="{ width: courseWidth * weekTable.length + 35 + 'px', height: courseHeight * timeTable.length + 'px' }"
+                >
                     <div class="period">
                         <div v-for="item in timeTable" :key="item" class="left-text" :style="{ height: courseHeight + 'px' }">
                             {{ item }}
@@ -15,57 +17,23 @@
                     </div>
 
                     <!--课表-->
-                    <!-- <div v-for="(item, index) in usualCourses" :key="(item, index)">
-                        <div
+                    <div v-for="(item, index) in usualCourses.course" :key="(item, index)">
+                        {{item}}
+                        <div 
                             class="flex-item kcb-item"
                             @click="
                                 selectedCourseIndex = index;
                                 showUsualCourseDialog = true;
                             "
                             :style="{
-                                marginLeft: (item - 1) * courseWidth + 'px',
-                                marginTop: (item - 1) * courseHeight + 5 + 'px',
+                                marginLeft: (item.courseDay - 1) * courseWidth + 'px',
+                                marginTop: (item.period - 1) * courseHeight + 5 + 'px',
                                 width: courseWidth + 'px',
-                                height: item * courseHeight - 5 + 'px',
+                                height: item.length * courseHeight - 5 + 'px',
                                 backgroundColor: colorArrays[index % 9]
                             }"
                         >
                             <div class="small-text">{{ item.name + '@' + item.room }}</div>
-                        </div>
-                    </div> -->
-
-                    <div class="s" v-for="(item, index) in usualCourses" :key="'s-' + index">
-                        <div v-for="(item, key, idx) in item.course" :key="(item, idx)">
-                            <div
-                                class="flex-item kcb-item"
-                                @click="
-                                    selectedCourseIndex = index;
-                                    showUsualCourseDialog = true;
-                                "
-                                
-                                :style="{
-                                    marginLeft: (item - 1) * courseWidth + 'px',
-                                    marginTop: (item - 1) * courseHeight + 5 + 'px',
-                                    width: courseWidth + 'px',
-                                    height: item * courseHeight - 5 + 'px',
-                                    backgroundColor: colorArrays[idx % 9]
-                                }"
-                            >
-                                <div class="small-text">{{ item + '@' + item }}</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 遍历对象时,参数： 第一个为值，第二个为键名，第三个为索引 -->
-                    <div class="s" v-for="(item, index) in usualCourses" :key="'s-' + index">
-                        {{ item }}
-                        <div v-for="(item,key,idx) in item.course" :key="(item,idx)">
-                                              
-                            {{ index }}:{{ key }}:{{ item }}
-                            
-                           <div v-if="key=='courseDay' ">
-                                 课程号:{{item}}
-                            </div>
                         </div>
                     </div>
 
@@ -117,22 +85,13 @@
 <script>
 export default {
     name: 'CourseTable',
-    props: ['usualCourses'],
     data() {
         return {
             showUsualCourseDialog: false,
             showPracticeCourseDialog: false,
-            selectedCourseIndex: 0,
-            findUserUrl: '',
-            // usualCourses: {
-            //     type: Array,
-            //     default: () => []
-            // },
-            usualCourses: [{}],
-            list: [{}]
+            selectedCourseIndex: 0
         };
     },
-
     props: {
         width: {
             type: Number,
@@ -142,81 +101,66 @@ export default {
             type: Number,
             default: 635
         },
-        // usualCourses: {
-        //     type: Array,
-        //     default: () => [
-        //         {
-        //             day: '1',
-        //             length: '3',
-        //             name: '普通物理A2',
-        //             period: '3-5节',
-        //             room: '2-N219',
-        //             teacher: '祝华',
-        //             type: '一般课',
-        //             week: '1-16周'
-        //         },
-        //         {
-        //             day: '3',
-        //             length: '3',
-        //             name: '普通物理A2',
-        //             period: '6',
-        //             room: '2-N219',
-        //             teacher: '祝华',
-        //             type: '一般课',
-        //             week: '1-16周'
-        //         },
-        //         {
-        //             day: '3',
-        //             length: '3',
-        //             name: '普通物理A2',
-        //             period: '3',
-        //             room: '2-N219',
-        //             teacher: '祝华',
-        //             type: '一般课',
-        //             week: '1-16周'
-        //         },
-        //         {
-        //             day: '3',
-        //             length: '2',
-        //             name: '普通物理A2',
-        //             period: '1',
-        //             room: '2-N219',
-        //             teacher: '祝华',
-        //             type: '一般课',
-        //             week: '1-16周'
-        //         },
-        //         {
-        //             day: '2',
-        //             length: '2',
-        //             name: '普通物理A2',
-        //             period: '1',
-        //             room: '2-N219',
-        //             teacher: '祝华',
-        //             type: '一般课',
-        //             week: '1-16周'
-        //         },
-        //         {
-        //             day: '4',
-        //             length: '2',
-        //             name: '普通物理A2',
-        //             period: '1',
-        //             room: '2-N219',
-        //             teacher: '祝华',
-        //             type: '一般课',
-        //             week: '1-16周'
-        //         },
-        //         {
-        //             day: '5',
-        //             length: '2',
-        //             name: '普通物理A2',
-        //             period: '1',
-        //             room: '2-N219',
-        //             teacher: '祝华',
-        //             type: '一般课',
-        //             week: '1-16周'
-        //         }
-        //     ]
-        // },
+        usualCourses: {
+            type: Array,
+            default: () => [
+                {
+                    courseID: '2',
+                    studentNumber: '1',
+                    teacherNumber: 'T1',
+                    course: {
+                        courseID: '2',
+                        courseName: 'Java2应用教程',
+                        courseTime: '08:00:35',
+                        courseDay: '2',
+                        classRoomID: 'S202',
+                        courseWeek: 18,
+                        courseNote: '',
+                        coursePeriodF: 2,
+                        coursePeriodB: 4
+                    },
+                    student: {
+                        studentNumber: '1',
+                        studentName: 'Yimning',
+                        studentSex: '男'
+                    },
+                    teacher: {
+                        teacherNumber: 'T1',
+                        teacherName: '1',
+                        teacherSex: '男',
+                        courseID: 2
+                    },
+                    id: 6
+                },
+                {
+                    courseID: '3',
+                    studentNumber: '1',
+                    teacherNumber: 'T010002',
+                    course: {
+                        courseID: '3',
+                        courseName: 'C#程序设计教程',
+                        courseTime: '09:25:00',
+                        courseDay: '1',
+                        classRoomID: 'N401',
+                        courseWeek: 18,
+                        coursePeriodF: 6,
+                        coursePeriodB: 8
+                    },
+                    student: {
+                        studentNumber: '1',
+                        studentName: 'Yimning',
+                        studentSex: '男'
+                    },
+                    teacher: {
+                        teacherNumber: 'T010002',
+                        teacherName: '王晓晓',
+                        teacherSex: '女',
+                        courseID: 3
+                    },
+                    id: 5
+                }
+            ]
+        },
         practiceCourses: {
             type: Array,
             default: () => []
@@ -239,7 +183,7 @@ export default {
             return Math.max(this.width / this.weekTable.length, 130);
         },
         courseHeight() {
-            return Math.max(this.height / this.timeTable.length, 35);
+            return Math.max(this.height / this.timeTable.length, 50);
         },
         selectedCourse() {
             return this.usualCourses[this.selectedCourseIndex];
@@ -252,9 +196,8 @@ export default {
             .then((res) => {
                 // console.log(res);
                 //this.form = res.data[res.data.length - 1];
-                this.usualCourses = res.data;
-                console.log(this.usualCourses);
-               
+                // this.props.usualCourses = res.data;
+                // console.log(this.props.usualCourses);
             })
             .catch((err) => {
                 console.log(err);
@@ -266,16 +209,8 @@ export default {
 </script>
  
 <style scoped>
-.content-title {
-    font-size: 30px;
-    /* justify-content: center; */
-    display: flex;
-    align-items: center;
-    text-align: center;
-    padding: 0px 0px 20px 40px;
-}
 .course-table-content {
-    padding: 0px 0px 0px 40px;
+    padding: 20px 0px 0px 20px;
 }
 
 .course-table {
@@ -285,19 +220,16 @@ export default {
     display: flex;
     flex-direction: row;
     padding-left: 35px;
-    height: 60px;
     background-color: #31c27c;
     color: #fff;
 }
 .top-text {
-    padding: 0px 0px 0px 50px;
     width: 100px;
-    height: 60px;
-    font-size: 25px;
+    height: 35px;
+    font-size: 26px;
     justify-content: center;
     display: flex;
     align-items: center;
-    text-align: center;
 }
 .main {
     height: 1200px;
@@ -327,7 +259,7 @@ export default {
     text-align: center;
 }
 .left-text {
-    width: 70px;
+    width: 35px;
     height: 100px;
     font-size: 26px;
     justify-content: center;
