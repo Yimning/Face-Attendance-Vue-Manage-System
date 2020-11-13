@@ -67,3 +67,19 @@
           this.$set(this.list[0], i, res.data[res.data.length - 1].course[i]);
           }
 
+         /**
+          *
+          * @param arr  一维数组
+          * @param n  设置几个为一行
+          */
+     arraytoDim(arr, n = 3) {
+          // 定义数组
+          let newArray = [];
+          // Math.ceil(arr.length / n) 是计算按照n列可以划分为几行，不满n则另其一行
+          for (let i = 0; i < Math.ceil(arr.length / n); i++) {
+               // 使用slice（start，end]进行截取,这个截取公式，可以自行研究
+               newArray[i] = arr.slice(i * n, (i + 1) * n);
+          }
+          console.log(newArray);
+        },
+
