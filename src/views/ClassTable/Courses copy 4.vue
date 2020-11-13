@@ -131,7 +131,7 @@ export default {
             list: [{}],
             catalogArr: [], //类目数组
             catalogObj: {} //嵌套对象
-        };
+        }; 
     },
 
     props: {
