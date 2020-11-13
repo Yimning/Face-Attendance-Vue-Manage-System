@@ -630,7 +630,7 @@ export default {
             //window.close();
             //删除session缓存信息
             this.ForgetPwdVisible = false;
-            this.SelectVisible = false;
+            this.SelectVisible = false;  
             this.ForgetPwd1Visible = false;
             this.$store.commit('REMOVE_INFO');
             this.$router.push('/login');
