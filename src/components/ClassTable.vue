@@ -131,7 +131,7 @@ tr td:first-child {
   width: 47%;
   margin: 1px 1%;
 }
-.bgColor {
+.bgColor { 
   background-color: #89b2e5;
 }
 </style>
