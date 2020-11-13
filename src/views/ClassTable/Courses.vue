@@ -56,17 +56,26 @@
                     </div> -->
 
                     <!-- 遍历对象时,参数： 第一个为值，第二个为键名，第三个为索引 -->
-                    <div class="s" v-for="(item, index) in usualCourses" :key="'s-' + index">
-                        {{ item }}
-                        <div v-for="(item,key,idx) in item.course" :key="(item,idx)">
-                                              
-                            {{ index }}:{{ key }}:{{ item }}
-                            
-                           <div v-if="key=='courseDay' ">
-                                 课程号:{{item}}
+                    <!-- <div class="s" v-for="(item, index) in usualCourses" :key="'s-' + index">
+                        <template v-for="(items, key,idx) in item.course">
+                             {{ items }}{{key }}{{idx }}
+                            <div 
+                                v-if="key == 'courseDay'"
+                                :key="key"
+                                :style="{
+                                    marginLeft: (key == 'courseDay' ? item : '1' - 1) * courseWidth + 'px',
+                                    marginTop: (key == 'coursePeriodF' ? item : '1' - 1) * courseHeight + 5 + 'px',
+                                    width: courseWidth + 'px',
+                                    height: 3 * courseHeight - 5 + 'px',
+                                    backgroundColor: colorArrays[idx % 9]
+                                }"
+                            >
                             </div>
-                        </div>
-                    </div>
+                            <div v-if="key == 'courseName'" :key="key">课程:{{ items }}</div>
+                        </template>
+                    </div> -->
+
+                    <div class="s" v-for="(item, index) in Course" :key="'s-' + index">{{ item.courseName }} {{ index }}</div>
 
                     <!--事件课显示按钮-->
                     <el-button type="primary" @click="showPracticeCourseDialog = true" class="btn_practice_course">实践课</el-button>
@@ -128,6 +137,7 @@ export default {
             //     default: () => []
             // },
             usualCourses: [{}],
+            Course: [{}],
             list: [{}],
             catalogArr: [], //类目数组
             catalogObj: {} //嵌套对象
@@ -246,16 +256,47 @@ export default {
             return this.usualCourses[this.selectedCourseIndex];
         }
     },
+    /**
+     *
+     * @param arr  一维数组
+     * @param n  设置几个为一行
+     */
+    arraytoDim(arr, n = 3) {
+        // 定义数组
+        let newArray = [];
+        // Math.ceil(arr.length / n) 是计算按照n列可以划分为几行，不满n则另其一行
+        for (let i = 0; i < Math.ceil(arr.length / n); i++) {
+            // 使用slice（start，end]进行截取,这个截取公式，可以自行研究
+            newArray[i] = arr.slice(i * n, (i + 1) * n);
+        }
+        console.log(newArray);
+    },
 
     created() {
         this.findUserUrl = '/api/scourse/findScourseBystudentNumber';
         this.$axios
             .get(this.findUserUrl, { params: { studentNumber: this.$store.getters.getUser.userID } })
             .then((res) => {
-                // console.log(res);
+                console.log(res);
                 //this.form = res.data[res.data.length - 1];
                 this.usualCourses = res.data;
                 console.log(this.usualCourses);
+                this.list = [];
+                let newArray = [];
+                for (const i in res.data) {
+                    for (const key in res.data[i].course) {
+                        //console.log("属性:"+key);
+                        this.$set(this.list, key, res.data[i].course[key]); //对象新增属性(使用Vue.$set())
+                        newArray[i] = this.list; //新建数组存放
+                        // this.list.push(i + ':' + JSON.stringify(res.data[k].course[i]));
+                    }
+                    this.list = []; //循环完必须清空,否则可能会覆盖
+                }
+                // console.log('this.list');
+                // console.log(this.list);
+                 console.log('newArray');
+                 console.log(newArray);
+                this.Course = newArray;
             })
             .catch((err) => {
                 console.log(err);
@@ -267,7 +308,6 @@ export default {
 </script>
  
 <style scoped>
-
 .content-title {
     font-size: 30px;
     /* justify-content: center; */
