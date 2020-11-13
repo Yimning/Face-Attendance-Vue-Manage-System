@@ -91,7 +91,7 @@ export default {
             selectedCourseIndex: 0
         };
     },
-    props: {
+    props: { 
         width: {
             type: Number,
             default: 385
