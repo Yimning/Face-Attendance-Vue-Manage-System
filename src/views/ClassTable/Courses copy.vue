@@ -91,7 +91,7 @@ export default {
             selectedCourseIndex: 0
         };
     },
-    props: { 
+    props: {
         width: {
             type: Number,
             default: 385
@@ -100,66 +100,81 @@ export default {
             type: Number,
             default: 635
         },
-        usualCourses: {
-            type: Array,
-            default: () => [
-                {
-                    courseID: '2',
-                    studentNumber: '1',
-                    teacherNumber: 'T1',
-                    course: {
-                        courseID: '2',
-                        courseName: 'Java2应用教程',
-                        courseTime: '08:00:35',
-                        courseDay: '2',
-                        classRoomID: 'S202',
-                        courseWeek: 18,
-                        courseNote: '',
-                        coursePeriodF: 2,
-                        coursePeriodB: 4
-                    },
-                    student: {
-                        studentNumber: '1',
-                        studentName: 'Yimning',
-                        studentSex: '男'
-                    },
-                    teacher: {
-                        teacherNumber: 'T1',
-                        teacherName: '1',
-                        teacherSex: '男',
-                        courseID: 2
-                    },
-                    id: 6
-                },
-                {
-                    courseID: '3',
-                    studentNumber: '1',
-                    teacherNumber: 'T010002',
-                    course: {
-                        courseID: '3',
-                        courseName: 'C#程序设计教程',
-                        courseTime: '09:25:00',
-                        courseDay: '1',
-                        classRoomID: 'N401',
-                        courseWeek: 18,
-                        coursePeriodF: 6,
-                        coursePeriodB: 8
-                    },
-                    student: {
-                        studentNumber: '1',
-                        studentName: 'Yimning',
-                        studentSex: '男'
-                    },
-                    teacher: {
-                        teacherNumber: 'T010002',
-                        teacherName: '王晓晓',
-                        teacherSex: '女',
-                        courseID: 3
-                    },
-                    id: 5
-                }
-            ]
-        },
+        // usualCourses: {
+        //     type: Array,
+        //     default: () => [
+        //         {
+        //             day: '1',
+        //             length: '3',
+        //             name: '普通物理A2',
+        //             period: '3-5节',
+        //             room: '2-N219',
+        //             teacher: '祝华',
+        //             type: '一般课',
+        //             week: '1-16周'
+        //         },
+        //         {
+        //             day: '3',
+        //             length: '3',
+        //             name: '普通物理A2',
+        //             period: '6',
+        //             room: '2-N219',
+        //             teacher: '祝华',
+        //             type: '一般课',
+        //             week: '1-16周'
+        //         },
+        //         {
+        //             day: '3',
+        //             length: '3',
+        //             name: '普通物理A2',
+        //             period: '3',
+        //             room: '2-N219',
+        //             teacher: '祝华',
+        //             type: '一般课',
+        //             week: '1-16周'
+        //         },
+        //         {
+        //             day: '3',
+        //             length: '2',
+        //             name: '普通物理A2',
+        //             period: '1',
+        //             room: '2-N219',
+        //             teacher: '祝华',
+        //             type: '一般课',
+        //             week: '1-16周'
+        //         },
+        //         {
+        //             day: '2',
+        //             length: '2',
+        //             name: '普通物理A2',
+        //             period: '1',
+        //             room: '2-N219',
+        //             teacher: '祝华',
+        //             type: '一般课',
+        //             week: '1-16周'
+        //         },
+        //         {
+        //             day: '4',
+        //             length: '2',
+        //             name: '普通物理A2',
+        //             period: '1',
+        //             room: '2-N219',
+        //             teacher: '祝华',
+        //             type: '一般课',
+        //             week: '1-16周'
+        //         },
+        //         {
+        //             day: '5',
+        //             length: '2',
+        //             name: '普通物理A2',
+        //             period: '1',
+        //             room: '2-N219',
+        //             teacher: '祝华',
+        //             type: '一般课',
+        //             week: '1-16周'
+        //         }
+        //     ]
+        // },
         practiceCourses: {
             type: Array,
             default: () => []
