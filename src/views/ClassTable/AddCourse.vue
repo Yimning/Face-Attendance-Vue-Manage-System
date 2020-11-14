@@ -20,7 +20,7 @@
                             <el-option key="xtc" label="小天才" value="xtc"></el-option>
                             <el-option key="imoo" label="imoo" value="imoo"></el-option>
                         </el-select>
-                    </el-form-item>
+                    </el-form-item> 
                     <el-form-item label="日期时间">
                         <el-col :span="11">
                             <el-date-picker
