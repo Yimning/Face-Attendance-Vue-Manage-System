@@ -165,14 +165,14 @@ export default {
     },
 
     created() {
-        if(this.$store.getters.getUser.userID=='0'){
+        if(this.$store.getters.getUser.roseID=='0'){
              this.findUserUrl = '/api/scourse/findScourseBystudentNumber';
-        }else if(this.$store.getters.getUser.userID=='1'){
+        }else if(this.$store.getters.getUser.roseID=='1'){
              this.findUserUrl = '/api/scourse/findScourseByteacherNumber';
         }else{}
        
         this.$axios
-            .get(this.findUserUrl, { params: { studentNumber: this.$store.getters.getUser.userID } })
+            .get(this.findUserUrl, { params: { id: this.$store.getters.getUser.userID } })
             .then((res) => {
                 console.log(res);
                 //this.form = res.data[res.data.length - 1];
