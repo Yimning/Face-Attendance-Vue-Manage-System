@@ -98,7 +98,7 @@
                     <div>上课教师： {{ selectedCourse.teacherName }}</div>
                     <div>上课周期： {{ selectedCourse.courseWeekF + '-' + selectedCourse.courseWeekB + '周' }}</div>
                 </div>
-                <div v-else class="tip">本学期没有课哦</div>
+                <div v-else class="tip">本学期没有课哦！</div>
             </div>
             <span slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="showUsualCourseDialog = false">确 定</el-button>
