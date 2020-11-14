@@ -12,7 +12,7 @@ export default {
             showUsualCourseDialog: false,
             showPracticeCourseDialog: false,
             selectedCourseIndex: 0
-        };
+        }; 
         courseList: [
             ['大学英语(Ⅳ)@10203', '大学英语(Ⅳ)@10203', '', '', '', '', '毛概@14208', '毛概@14208', '', '', '', '选修'],
             ['', '', '信号与系统@11302', '信号与系统@11302', '模拟电子技术基础@16204', '模拟电子技术基础@16204', '', '', '', '', '', ''],
