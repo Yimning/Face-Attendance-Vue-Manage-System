@@ -96,7 +96,7 @@
 
                     <div>上课地点： {{ selectedCourse.classRoomID }}</div>
                     <div>上课教师： {{ selectedCourse.teacherName }}</div>
-                    <div>上课周期： {{ selectedCourse.courseWeekF + '-' + selectedCourse.courseWeekB+'周' }}</div>
+                    <div>上课周期： {{ selectedCourse.courseWeekF + '-' + selectedCourse.courseWeekB + '周' }}</div>
                 </div>
                 <div v-else class="tip">本学期没有课哦</div>
             </div>
@@ -163,14 +163,16 @@ export default {
             return this.CourseInfo[this.selectedCourseIndex];
         }
     },
-
+    //数据渲染
     created() {
-        if(this.$store.getters.getUser.roseID=='0'){
-             this.findUserUrl = '/api/scourse/findScourseBystudentNumber';
-        }else if(this.$store.getters.getUser.roseID=='1'){
-             this.findUserUrl = '/api/scourse/findScourseByteacherNumber';
-        }else{}
-       
+        //角色判断
+        if (this.$store.getters.getUser.roseID == '0') {
+            this.findUserUrl = '/api/scourse/findScourseBystudentNumber';
+        } else if (this.$store.getters.getUser.roseID == '1') {
+            this.findUserUrl = '/api/scourse/findScourseByteacherNumber';
+        } else {
+        }
+
         this.$axios
             .get(this.findUserUrl, { params: { id: this.$store.getters.getUser.userID } })
             .then((res) => {
