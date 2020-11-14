@@ -35,7 +35,7 @@
                             <div class="small-text">{{ item.name + '@' + item.room }}</div>
                         </div>
                     </div>
-
+ 
                     <!--事件课显示按钮-->
                     <el-button type="primary" @click="showPracticeCourseDialog = true" class="btn_practice_course">实践课</el-button>
                 </div>
