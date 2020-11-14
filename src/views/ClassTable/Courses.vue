@@ -77,11 +77,11 @@
                 <div v-if="typeof selectedCourse != 'undefined'">
                     <div>课程名称： {{ selectedCourse.courseName }}</div>
                     <div>
-                        上课时刻：
+                        上课时间：
                         {{ selectedCourse.courseTime }}
                     </div>
                     <div>
-                        上课时间：
+                        课程信息：
                         {{
                             '每周' +
                             selectedCourse.courseDay +
