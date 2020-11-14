@@ -15,7 +15,8 @@
                     </div>
 
                     <!--课表-->
-                    <!-- <div v-for="(item, index) in usualCourses" :key="(item, index)">
+                    <!-- class="s" v-for="(item, index) in CourseInfo" :key="'s-' + index" -->
+                    <div v-for="(item, index) in CourseInfo" :key="(item, index)">
                         <div
                             class="flex-item kcb-item"
                             @click="
@@ -23,37 +24,16 @@
                                 showUsualCourseDialog = true;
                             "
                             :style="{
-                                marginLeft: (item - 1) * courseWidth + 'px',
-                                marginTop: (item - 1) * courseHeight + 5 + 'px',
+                                marginLeft: (item.courseDay - 1) * courseWidth + 'px',
+                                marginTop: (item.coursePeriodF - 1) * courseHeight + 5 + 'px',
                                 width: courseWidth + 'px',
-                                height: item * courseHeight - 5 + 'px',
+                                height: (item.coursePeriodB - item.coursePeriodF) * courseHeight - 5 + 'px',
                                 backgroundColor: colorArrays[index % 9]
                             }"
                         >
-                            <div class="small-text">{{ item.name + '@' + item.room }}</div>
+                            <div class="small-text">{{ item.courseName + '@' + item.classRoomID }}</div>
                         </div>
-                    </div> -->
-
-                    <!-- <div class="s" v-for="(item, index) in usualCourses" :key="'s-' + index">
-                        <div v-for="(item, key, idx) in item.course" :key="(item, idx)">
-                            <div
-                                class="flex-item kcb-item"
-                                @click="
-                                    selectedCourseIndex = index;
-                                    showUsualCourseDialog = true;
-                                "
-                                :style="{
-                                    marginLeft: (key == 'courseDay' ? item : '1' - 1) * courseWidth + 'px',
-                                    marginTop: (key == 'coursePeriodF' ? item : '1' - 1) * courseHeight + 5 + 'px',
-                                    width: courseWidth + 'px',
-                                    height: 3 * courseHeight - 5 + 'px',
-                                    backgroundColor: colorArrays[idx % 9]
-                                }"
-                            >
-                                <div class="small-text">{{ key == 'courseName' ? item : '' + '@' + key == 'courseName' ? item : '' }}</div>
-                            </div>
-                        </div>
-                    </div> -->
+                    </div>
 
                     <!-- 遍历对象时,参数： 第一个为值，第二个为键名，第三个为索引 -->
                     <!-- <div class="s" v-for="(item, index) in usualCourses" :key="'s-' + index">
@@ -75,8 +55,6 @@
                         </template>
                     </div> -->
 
-                    <div class="s" v-for="(item, index) in Course" :key="'s-' + index">{{ item.courseName }} {{ index }}</div>
-
                     <!--事件课显示按钮-->
                     <el-button type="primary" @click="showPracticeCourseDialog = true" class="btn_practice_course">实践课</el-button>
                 </div>
@@ -97,21 +75,28 @@
         <el-dialog title="课程信息" :visible.sync="showUsualCourseDialog" width="30%" center>
             <div class="dialog-content">
                 <div v-if="typeof selectedCourse != 'undefined'">
-                    <div>课程名称： {{ selectedCourse.name }}</div>
+                    <div>课程名称： {{ selectedCourse.courseName }}</div>
+                    <div>
+                        上课时刻：
+                        {{ selectedCourse.courseTime }}
+                    </div>
                     <div>
                         上课时间：
                         {{
-                            selectedCourse.week +
+                            '每周' +
+                            selectedCourse.courseDay +
                             ' ' +
                             '第' +
-                            selectedCourse.period +
+                            selectedCourse.coursePeriodF +
                             '-' +
-                            (Number(selectedCourse.period) + Number(selectedCourse.length) - 1) +
+                            selectedCourse.coursePeriodB +
                             '节'
                         }}
                     </div>
-                    <div>上课教师： {{ selectedCourse.teacher }}</div>
-                    <div>上课地点： {{ selectedCourse.room }}</div>
+
+                    <div>上课地点： {{ selectedCourse.classRoomID }}</div>
+                    <div>上课教师： {{ selectedCourse.teacherName }}</div>
+                    <div>上课周期： {{ selectedCourse.courseWeekF + '-' + selectedCourse.courseWeekB+'周' }}</div>
                 </div>
                 <div v-else class="tip">本学期没有课哦</div>
             </div>
@@ -132,12 +117,8 @@ export default {
             showPracticeCourseDialog: false,
             selectedCourseIndex: 0,
             findUserUrl: '',
-            // usualCourses: {
-            //     type: Array,
-            //     default: () => []
-            // },
             usualCourses: [{}],
-            Course: [{}],
+            CourseInfo: [{}],
             list: [{}],
             catalogArr: [], //类目数组
             catalogObj: {} //嵌套对象
@@ -153,81 +134,7 @@ export default {
             type: Number,
             default: 635
         },
-        // usualCourses: {
-        //     type: Array,
-        //     default: () => [
-        //         {
-        //             day: '1',
-        //             length: '3',
-        //             name: '普通物理A2',
-        //             period: '3-5节',
-        //             room: '2-N219',
-        //             teacher: '祝华',
-        //             type: '一般课',
-        //             week: '1-16周'
-        //         },
-        //         {
-        //             day: '3',
-        //             length: '3',
-        //             name: '普通物理A2',
-        //             period: '6',
-        //             room: '2-N219',
-        //             teacher: '祝华',
-        //             type: '一般课',
-        //             week: '1-16周'
-        //         },
-        //         {
-        //             day: '3',
-        //             length: '3',
-        //             name: '普通物理A2',
-        //             period: '3',
-        //             room: '2-N219',
-        //             teacher: '祝华',
-        //             type: '一般课',
-        //             week: '1-16周'
-        //         },
-        //         {
-        //             day: '3',
-        //             length: '2',
-        //             name: '普通物理A2',
-        //             period: '1',
-        //             room: '2-N219',
-        //             teacher: '祝华',
-        //             type: '一般课',
-        //             week: '1-16周'
-        //         },
-        //         {
-        //             day: '2',
-        //             length: '2',
-        //             name: '普通物理A2',
-        //             period: '1',
-        //             room: '2-N219',
-        //             teacher: '祝华',
-        //             type: '一般课',
-        //             week: '1-16周'
-        //         },
-        //         {
-        //             day: '4',
-        //             length: '2',
-        //             name: '普通物理A2',
-        //             period: '1',
-        //             room: '2-N219',
-        //             teacher: '祝华',
-        //             type: '一般课',
-        //             week: '1-16周'
-        //         },
-        //         {
-        //             day: '5',
-        //             length: '2',
-        //             name: '普通物理A2',
-        //             period: '1',
-        //             room: '2-N219',
-        //             teacher: '祝华',
-        //             type: '一般课',
-        //             week: '1-16周'
-        //         }
-        //     ]
-        // },
+
         practiceCourses: {
             type: Array,
             default: () => []
@@ -247,33 +154,23 @@ export default {
     },
     computed: {
         courseWidth() {
-            return Math.max(this.width / this.weekTable.length, 130);
+            return Math.max((this.width - 35) / this.weekTable.length, 150);
         },
         courseHeight() {
-            return Math.max(this.height / this.timeTable.length, 35);
+            return Math.max((this.height - 35) / this.timeTable.length, 35);
         },
         selectedCourse() {
-            return this.usualCourses[this.selectedCourseIndex];
+            return this.CourseInfo[this.selectedCourseIndex];
         }
-    },
-    /**
-     *
-     * @param arr  一维数组
-     * @param n  设置几个为一行
-     */
-    arraytoDim(arr, n = 3) {
-        // 定义数组
-        let newArray = [];
-        // Math.ceil(arr.length / n) 是计算按照n列可以划分为几行，不满n则另其一行
-        for (let i = 0; i < Math.ceil(arr.length / n); i++) {
-            // 使用slice（start，end]进行截取,这个截取公式，可以自行研究
-            newArray[i] = arr.slice(i * n, (i + 1) * n);
-        }
-        console.log(newArray);
     },
 
     created() {
-        this.findUserUrl = '/api/scourse/findScourseBystudentNumber';
+        if(this.$store.getters.getUser.userID=='0'){
+             this.findUserUrl = '/api/scourse/findScourseBystudentNumber';
+        }else if(this.$store.getters.getUser.userID=='1'){
+             this.findUserUrl = '/api/scourse/findScourseByteacherNumber';
+        }else{}
+       
         this.$axios
             .get(this.findUserUrl, { params: { studentNumber: this.$store.getters.getUser.userID } })
             .then((res) => {
@@ -290,13 +187,23 @@ export default {
                         newArray[i] = this.list; //新建数组存放
                         // this.list.push(i + ':' + JSON.stringify(res.data[k].course[i]));
                     }
+                    for (const key in res.data[i].student) {
+                        //console.log("属性:"+key);
+                        this.$set(this.list, key, res.data[i].student[key]); //对象新增属性(使用Vue.$set())
+                        newArray[i] = this.list; //新建数组存放
+                        // this.list.push(i + ':' + JSON.stringify(res.data[k].course[i]));
+                    }
+                    for (const key in res.data[i].teacher) {
+                        //console.log("属性:"+key);
+                        this.$set(this.list, key, res.data[i].teacher[key]); //对象新增属性(使用Vue.$set())
+                        newArray[i] = this.list; //新建数组存放
+                        // this.list.push(i + ':' + JSON.stringify(res.data[k].course[i]));
+                    }
                     this.list = []; //循环完必须清空,否则可能会覆盖
                 }
-                // console.log('this.list');  
-                // console.log(this.list);
-                 console.log('newArray');
-                 console.log(newArray);
-                this.Course = newArray;
+                // console.log('newArray');
+                // console.log(newArray);
+                this.CourseInfo = newArray;
             })
             .catch((err) => {
                 console.log(err);
