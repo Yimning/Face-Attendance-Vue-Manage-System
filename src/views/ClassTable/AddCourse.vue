@@ -9,7 +9,7 @@
         <div class="container">
             <div class="form-box">
                 <el-form ref="form" :model="form" :rules="rules" label-width="280px" class="box-content">
-                    <el-form-item label="课程号:" prop="id">
+                    <el-form-item label="课程号:" prop="courseID">
                         <el-input
                             placeholder="请输入课程号"
                             v-model="form.courseID"
@@ -21,11 +21,11 @@
                         </el-input>
                     </el-form-item>
 
-                    <el-form-item label="课程名称:" prop="name">
+                    <el-form-item label="课程名称:" prop="courseName">
                         <el-input placeholder="请输入课程名称" v-model="form.courseName" clearable> </el-input>
                     </el-form-item>
 
-                    <el-form-item label="每周:" prop="week">
+                    <el-form-item label="每周:" prop="courseDay">
                         <el-select v-model="form.courseDay" placeholder="请选择">
                             <el-option
                                 @change="handleChange5"
@@ -37,7 +37,7 @@
                             ></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="上课时间:" prop="time">
+                    <el-form-item label="上课时间:" prop="courseTime">
                         <el-time-select
                             :span="11"
                             v-model="form.courseTime"
@@ -50,7 +50,7 @@
                         >
                         </el-time-select>
                     </el-form-item>
-                    <el-form-item label="上课地点:" prop="place">
+                    <el-form-item label="上课地点:" prop="classRoomID">
                         <el-select v-model="form.classRoomID" placeholder="请选择">
                             <el-option
                                 el-option
@@ -61,7 +61,7 @@
                             ></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="起始节:" prop="perid" class="perid">
+                    <el-form-item label="起始节:" prop="coursePeriodF" class="perid">
                         <el-input-number v-model="form.coursePeriodF" @change="handleChange1" :min="1" :max="12"></el-input-number>
                         <el-input-number
                             class="perid-right"
@@ -72,7 +72,7 @@
                         ></el-input-number>
                         <el-col class="line" :span="4">-</el-col>
                     </el-form-item>
-                    <el-form-item label="起始周:" prop="weeks" class="perid">
+                    <el-form-item label="起始周:" prop="courseWeekF" class="perid">
                         <el-input-number v-model="form.courseWeekF" @change="handleChange3" :min="1" :max="25"></el-input-number>
                         <el-input-number
                             class="perid-right"
@@ -137,13 +137,13 @@ export default {
             findUserUrl: '',
             updateOneUrl: '',
             rules: {
-                id: [{ required: true, message: '必填', trigger: 'blur' }],
-                name: [{ required: true, message: '必填', trigger: 'blur' }],
-                week: [{ required: true, message: '必填', trigger: 'blur' }],
-                weeks: [{ required: true, message: '必填', trigger: 'blur' }],
-                place: [{ required: true, message: '必填', trigger: 'blur' }],
-                time: [{ required: true, message: '必填', trigger: 'blur' }],
-                perid: [{ required: true, message: '必填', trigger: 'blur' }]
+                courseID: [{ required: true, message: '必填', trigger: 'blur' }],
+                courseName: [{ required: true, message: '必填', trigger: 'blur' }],
+                courseDay: [{ required: true, message: '必填', trigger: 'blur' }],
+                courseTime: [{ required: true, message: '必填', trigger: 'blur' }],
+                classRoomID: [{ required: true, message: '必填', trigger: 'blur' }],
+                coursePeriodF: [{ required: true, message: '必填', trigger: 'blur' }],
+                courseWeekF: [{ required: true, message: '必填', trigger: 'blur' }]
             },
             Successdialog: false, //控制弹出
             Sencond: 5, //设置初始倒计时
@@ -168,7 +168,6 @@ export default {
         onSubmit() {
             const that = this;
             this.$refs.form.validate((valid) => {
-                console.log(this.form);
                 if (valid) {
                     this.$confirm('确定修改?', '提示', {
                         confirmButtonText: '确定',
