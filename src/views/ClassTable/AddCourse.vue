@@ -31,7 +31,7 @@
                     <el-form-item label="上课时间:" prop="time">
                         <el-time-select
                             :span="11"
-                            v-model="courseTime"
+                            v-model="form.courseTime"
                             :picker-options="{
                                 start: '08:00',
                                 step: '00:05',
@@ -42,16 +42,16 @@
                         </el-time-select>
                     </el-form-item>
                     <el-form-item label="上课地点:" prop="place">
-                        <el-cascader :options="options" v-model="form.classRoomID"></el-cascader>
+                        <el-cascader :options="form.classRoomID" v-model="form.classRoomID"></el-cascader>
                     </el-form-item>
                     <el-form-item label="起始节:" prop="perid" class="perid">
-                        <el-input-number v-model="num" @change="handleChange" :min="1" :max="10"></el-input-number>
-                        <el-input-number class="perid-right" v-model="num" @change="handleChange" :min="1" :max="10"></el-input-number>
+                        <el-input-number v-model="num1" @change="handleChange1" :min="1" :max="12"></el-input-number>
+                        <el-input-number class="perid-right" v-model="num2" @change="handleChange2" :min="1" :max="12"></el-input-number>
                         <el-col class="line" :span="4">-</el-col>
                     </el-form-item>
                     <el-form-item label="起始周:" prop="weeks" class="perid">
-                        <el-input-number v-model="num" @change="handleChange" :min="1" :max="10"></el-input-number>
-                        <el-input-number class="perid-right" v-model="num" @change="handleChange" :min="1" :max="10"></el-input-number>
+                        <el-input-number v-model="num3" @change="handleChange3" :min="1" :max="25"></el-input-number>
+                        <el-input-number class="perid-right" v-model="num4" @change="handleChange4" :min="1" :max="25"></el-input-number>
                         <el-col class="line" :span="4">-</el-col>
                     </el-form-item>
                     <el-form-item label="课程说明:">
@@ -97,22 +97,112 @@ export default {
                 { value: '6', label: '星期六' },
                 { value: '7', label: '星期天' }
             ],
+            num1: 1,
+            num2: 1,
+            num3: 1,
+            num4: 1,
             form: {
-                name: '',
-                region: '',
-                date1: '',
-                date2: '',
-                delivery: true,
-                type: ['步步高'],
-                resource: '小天才',
-                desc: '',
                 options: []
-            }
+            },
+            findUserUrl: '',
+            updateOneUrl: '',
+            rules: {
+                pwdAnswer: [{ required: true, message: '请输入密保答案', trigger: 'blur' }],
+                pwd: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+                pwdNew: [{ required: true, message: '再次输入密码', trigger: 'blur' }]
+            },
+            Successdialog: false, //控制弹出
+            Sencond: 5, //设置初始倒计时
+            isDisabled: false
         };
+    },
+    //  或者使用做个地址请求 '/api/student/findStudentByID?id=1'
+    created() {
+        this.findUserUrl = '/api/classroom/findAllClassroom';
+        this.$axios
+            .get(this.findUserUrl, { params: { id: this.$store.getters.getUser.userID } })
+            .then((res) => {
+                console.log(res.data);
+                this.form = res.data[res.data.length - 1];
+                this.form.rightAnswer = res.data[res.data.length - 1].answer;
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     },
     methods: {
         onSubmit() {
-            this.$message.success('提交成功！');
+            const that = this;
+            this.$refs.form.validate((valid) => {
+                if (valid) {
+                    if (this.form.pwd == this.form.pwdNew) {
+                        if (this.form.rightAnswer == this.form.pwdAnswer) {
+                            this.form.studentPassword = this.form.pwdNew;
+                            this.form.teacherPassword = this.form.pwdNew;
+                            this.form.adminPassword = this.form.pwdNew;
+                            this.$confirm('确定修改?', '提示', {
+                                confirmButtonText: '确定',
+                                cancelButtonText: '取消',
+                                type: 'info'
+                            })
+                                .then(() => {
+                                    that.$axios
+                                        .post(that.updateOneUrl, that.form)
+                                        .then((res) => {
+                                            // console.log(res);
+                                            that.getSencond();
+                                        })
+                                        .catch((err) => {
+                                            console.error();
+                                            that.$message.error(`修改失败`);
+                                        });
+                                })
+                                .catch(() => {});
+                        } else {
+                            this.$message.error('密保答案错误，请正确输入！');
+                        }
+                    } else {
+                        this.$message.error('两次密码输入不一致');
+                        this.form.pwdNew = '';
+                        this.form.pwd = '';
+                    }
+                }
+            });
+        },
+        onCancel() {
+            this.form.pwdAnswer = '';
+            this.form.pwdNew = '';
+            this.form.pwd = '';
+        },
+        handleChange1(value) {
+            this.num2 = this.num1 + 1;
+            console.log(value);
+        },
+        handleChange2(value) {
+            // console.log(value);
+        },
+        handleChange3(value) {
+            this.num4 = this.num3 + 1;
+        },
+        handleChange4(value) {},
+        getSencond() {
+            const that = this;
+            that.Successdialog = true;
+            const interval = window.setInterval(function () {
+                --that.Sencond;
+                if (that.Sencond === 0) {
+                    that.isDisabled = false;
+                    that.Successdialog = false;
+                    window.clearInterval(interval);
+                    that.sendMsg(); //倒计时结束时运行的业务逻辑，这里的是关闭当前页面
+                }
+            }, 1000);
+        },
+        sendMsg() {
+            //window.close();
+            //删除session缓存信息
+            this.$store.commit('REMOVE_INFO');
+            this.$router.push('/login');
         }
     }
 };
