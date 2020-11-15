@@ -44,7 +44,7 @@
                 <el-button
                     v-if="showOrNot"
                     type="warning"
-                    icon="el-icon-close"
+                    icon="el-icon-close" 
                     @click="handleClear"
                 >清除</el-button>
                 <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>

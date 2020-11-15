@@ -258,7 +258,7 @@ export default {
             defaultAvatar: {},
             idx: -1,
             id: -1
-        };
+        };  
     },
     created() {
         this.getData(); //渲染
