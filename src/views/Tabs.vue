@@ -24,7 +24,7 @@
                     <div class="handle-row">
                         <el-button type="primary">全部标为已读</el-button>
                     </div>
-                </el-tab-pane>
+                </el-tab-pane> 
                 <el-tab-pane :label="`已读消息(${read.length})`" name="second">
                     <template v-if="message === 'second'">
                         <el-table :data="read" :show-header="false" style="width: 100%">
