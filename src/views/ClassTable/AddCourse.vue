@@ -115,6 +115,7 @@
 <script>
 export default {
     name: 'baseform',
+    inject: ['reload'],
     data() {
         return {
             weekOptions: [
@@ -191,7 +192,7 @@ export default {
             });
         },
         onCancel() {
-
+             this.reload(); //刷新 ----推荐
         },
 
         handleSearch() {
@@ -205,8 +206,7 @@ export default {
                         this.form.courseID = '';
                     }
                 });
-            }else{
-
+            } else {
             }
         },
         handleChange1(value) {
@@ -237,10 +237,7 @@ export default {
             }, 1000);
         },
         sendMsg() {
-            //window.close();
-            //删除session缓存信息
-            this.$store.commit('REMOVE_INFO');
-            this.$router.push('/login');
+            this.reload(); //刷新 ----推荐
         }
     }
 };
