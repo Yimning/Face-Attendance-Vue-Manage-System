@@ -10,7 +10,15 @@
             <div class="form-box">
                 <el-form ref="form" :model="form" :rules="rules" label-width="280px" class="box-content">
                     <el-form-item label="课程号:" prop="id">
-                        <el-input placeholder="请输入课程号" v-model="form.courseID"> </el-input>
+                        <el-input
+                            placeholder="请输入课程号"
+                            v-model="form.courseID"
+                            @keyup.enter.native="handleSearch"
+                            id="idInput"
+                            @blur.native.capture="handleSearch"
+                            clearable
+                        >
+                        </el-input>
                     </el-form-item>
 
                     <el-form-item label="课程名称:" prop="name">
@@ -122,16 +130,20 @@ export default {
             form: {
                 options: [],
                 coursePeriodF: 1,
-                coursePeriodB: 1,
+                coursePeriodB: 3,
                 courseWeekF: 1,
                 courseWeekB: 18
             },
             findUserUrl: '',
             updateOneUrl: '',
             rules: {
-                pwdAnswer: [{ required: true, message: '请输入密保答案', trigger: 'blur' }],
-                pwd: [{ required: true, message: '请输入密码', trigger: 'blur' }],
-                pwdNew: [{ required: true, message: '再次输入密码', trigger: 'blur' }]
+                id: [{ required: true, message: '必填', trigger: 'blur' }],
+                name: [{ required: true, message: '必填', trigger: 'blur' }],
+                week: [{ required: true, message: '必填', trigger: 'blur' }],
+                weeks: [{ required: true, message: '必填', trigger: 'blur' }],
+                place: [{ required: true, message: '必填', trigger: 'blur' }],
+                time: [{ required: true, message: '必填', trigger: 'blur' }],
+                perid: [{ required: true, message: '必填', trigger: 'blur' }]
             },
             Successdialog: false, //控制弹出
             Sencond: 5, //设置初始倒计时
@@ -141,12 +153,12 @@ export default {
     //  或者使用做个地址请求 '/api/student/findStudentByID?id=1'
     created() {
         this.findUserUrl = '/api/classroom/findAllClassroom';
+        this.updateOneUrl = '/api/course/add';
         this.$axios
             .get(this.findUserUrl)
             .then((res) => {
-                console.log(res.data);
+                // console.log(res.data);
                 this.form.options = res.data;
-                // this.form.rightAnswer = res.data[res.data.length - 1].answer;
             })
             .catch((err) => {
                 console.log(err);
@@ -156,45 +168,47 @@ export default {
         onSubmit() {
             const that = this;
             this.$refs.form.validate((valid) => {
+                console.log(this.form);
                 if (valid) {
-                    if (this.form.pwd == this.form.pwdNew) {
-                        if (this.form.rightAnswer == this.form.pwdAnswer) {
-                            this.form.studentPassword = this.form.pwdNew;
-                            this.form.teacherPassword = this.form.pwdNew;
-                            this.form.adminPassword = this.form.pwdNew;
-                            this.$confirm('确定修改?', '提示', {
-                                confirmButtonText: '确定',
-                                cancelButtonText: '取消',
-                                type: 'info'
-                            })
-                                .then(() => {
-                                    that.$axios
-                                        .post(that.updateOneUrl, that.form)
-                                        .then((res) => {
-                                            // console.log(res);
-                                            that.getSencond();
-                                        })
-                                        .catch((err) => {
-                                            console.error();
-                                            that.$message.error(`修改失败`);
-                                        });
+                    this.$confirm('确定修改?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'info'
+                    })
+                        .then(() => {
+                            that.$axios
+                                .post(that.updateOneUrl, that.form)
+                                .then((res) => {
+                                    // console.log(res);
+                                    that.getSencond();
                                 })
-                                .catch(() => {});
-                        } else {
-                            this.$message.error('密保答案错误，请正确输入！');
-                        }
-                    } else {
-                        this.$message.error('两次密码输入不一致');
-                        this.form.pwdNew = '';
-                        this.form.pwd = '';
-                    }
+                                .catch((err) => {
+                                    console.error();
+                                    that.$message.error(`修改失败`);
+                                });
+                        })
+                        .catch(() => {});
                 }
             });
         },
         onCancel() {
-            this.form.pwdAnswer = '';
-            this.form.pwdNew = '';
-            this.form.pwd = '';
+
+        },
+
+        handleSearch() {
+            const that = this;
+            //console.log(this.id); //打印输入搜索的值
+            if (this.form.courseID != '' || this.form.courseID != null) {
+                this.findUserUrl = '/api/course/findCourseByID';
+                this.$axios.get(this.findUserUrl, { params: { id: this.form.courseID } }).then((res) => {
+                    if (res.data[res.data.length - 1] != null) {
+                        that.$message.error(`课程号已经存在`);
+                        this.form.courseID = '';
+                    }
+                });
+            }else{
+
+            }
         },
         handleChange1(value) {
             this.form.coursePeriodB = this.form.coursePeriodF + 1;
