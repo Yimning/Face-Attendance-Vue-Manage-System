@@ -151,7 +151,7 @@ export default {
             type: Array,
             default: () => ['#ef5b9c', '#f15b6c', '#f26522', '#ffd400', '#8552a1', '#7fb80e', '#65c294', '#78cdd1', '#33a3dc']
         }
-    },
+    },   
     computed: {
         courseWidth() {
             return Math.max((this.width - 35) / this.weekTable.length, 150);
