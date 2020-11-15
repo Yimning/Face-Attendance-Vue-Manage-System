@@ -15,7 +15,7 @@
             <el-button class="editor-btn" type="primary" @click="submit">提交</el-button>
         </div>
     </div>
-</template>
+</template>   
 
 <script>
     import 'quill/dist/quill.core.css';
