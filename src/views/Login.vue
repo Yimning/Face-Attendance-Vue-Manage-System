@@ -584,7 +584,7 @@ export default {
                                 .catch((err) => {
                                     console.log(err);
                                 });
-                            setTimeout(() => {
+                            setTimeout(() => { 
                                 //设置延迟执行
                                 video.load();
                                 that.first = null;
