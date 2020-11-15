@@ -97,7 +97,7 @@ export default {
                 ADOM.download = new Date().getTime() + '.jpeg';
             }
             ADOM.click();
-        },
+        },  
         // 关闭摄像头
         closeCamera() {
             if (!this.$refs['video'].srcObject) return;
