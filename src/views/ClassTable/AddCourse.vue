@@ -10,7 +10,7 @@
             <div class="form-box">
                 <el-form ref="form" :model="form" :rules="rules" label-width="280px" class="box-content">
                     <el-form-item label="课程号:" prop="id">
-                        <el-input placeholder="请输入课程号" v-model="form.question"> </el-input>
+                        <el-input placeholder="请输入课程号" v-model="form.courseID"> </el-input>
                     </el-form-item>
 
                     <el-form-item label="课程名称:" prop="name">
@@ -18,8 +18,9 @@
                     </el-form-item>
 
                     <el-form-item label="每周:" prop="week">
-                        <el-select v-model="form.region" placeholder="请选择">
+                        <el-select v-model="form.courseDay" placeholder="请选择">
                             <el-option
+                                @change="handleChange5"
                                 el-option
                                 v-for="item in weekOptions"
                                 :key="item.value"
@@ -42,20 +43,40 @@
                         </el-time-select>
                     </el-form-item>
                     <el-form-item label="上课地点:" prop="place">
-                        <el-cascader :options="form.classRoomID" v-model="form.classRoomID"></el-cascader>
+                        <el-select v-model="form.classRoomID" placeholder="请选择">
+                            <el-option
+                                el-option
+                                v-for="item in form.options"
+                                :key="item.classRoomID"
+                                :label="item.classRoomName"
+                                :value="item.classRoomName"
+                            ></el-option>
+                        </el-select>
                     </el-form-item>
                     <el-form-item label="起始节:" prop="perid" class="perid">
-                        <el-input-number v-model="num1" @change="handleChange1" :min="1" :max="12"></el-input-number>
-                        <el-input-number class="perid-right" v-model="num2" @change="handleChange2" :min="1" :max="12"></el-input-number>
+                        <el-input-number v-model="form.coursePeriodF" @change="handleChange1" :min="1" :max="12"></el-input-number>
+                        <el-input-number
+                            class="perid-right"
+                            v-model="form.coursePeriodB"
+                            @change="handleChange2"
+                            :min="1"
+                            :max="12"
+                        ></el-input-number>
                         <el-col class="line" :span="4">-</el-col>
                     </el-form-item>
                     <el-form-item label="起始周:" prop="weeks" class="perid">
-                        <el-input-number v-model="num3" @change="handleChange3" :min="1" :max="25"></el-input-number>
-                        <el-input-number class="perid-right" v-model="num4" @change="handleChange4" :min="1" :max="25"></el-input-number>
+                        <el-input-number v-model="form.courseWeekF" @change="handleChange3" :min="1" :max="25"></el-input-number>
+                        <el-input-number
+                            class="perid-right"
+                            v-model="form.courseWeekB"
+                            @change="handleChange4"
+                            :min="1"
+                            :max="25"
+                        ></el-input-number>
                         <el-col class="line" :span="4">-</el-col>
                     </el-form-item>
                     <el-form-item label="课程说明:">
-                        <el-input placeholder="选填" v-model="form.question"> </el-input>
+                        <el-input placeholder="选填" v-model="form.courseNote"> </el-input>
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="onSubmit('form')">确认修改</el-button>
@@ -97,12 +118,13 @@ export default {
                 { value: '6', label: '星期六' },
                 { value: '7', label: '星期天' }
             ],
-            num1: 1,
-            num2: 1,
-            num3: 1,
-            num4: 1,
+
             form: {
-                options: []
+                options: [],
+                coursePeriodF: 1,
+                coursePeriodB: 1,
+                courseWeekF: 1,
+                courseWeekB: 18
             },
             findUserUrl: '',
             updateOneUrl: '',
@@ -120,11 +142,11 @@ export default {
     created() {
         this.findUserUrl = '/api/classroom/findAllClassroom';
         this.$axios
-            .get(this.findUserUrl, { params: { id: this.$store.getters.getUser.userID } })
+            .get(this.findUserUrl)
             .then((res) => {
                 console.log(res.data);
-                this.form = res.data[res.data.length - 1];
-                this.form.rightAnswer = res.data[res.data.length - 1].answer;
+                this.form.options = res.data;
+                // this.form.rightAnswer = res.data[res.data.length - 1].answer;
             })
             .catch((err) => {
                 console.log(err);
@@ -175,16 +197,19 @@ export default {
             this.form.pwd = '';
         },
         handleChange1(value) {
-            this.num2 = this.num1 + 1;
+            this.form.coursePeriodB = this.form.coursePeriodF + 1;
             console.log(value);
         },
         handleChange2(value) {
             // console.log(value);
         },
         handleChange3(value) {
-            this.num4 = this.num3 + 1;
+            this.form.courseWeekB = this.form.courseWeekF + 1;
         },
         handleChange4(value) {},
+        handleChange5(value) {
+            console.log(value);
+        },
         getSencond() {
             const that = this;
             that.Successdialog = true;
