@@ -112,7 +112,7 @@ export default {
             form: {},
             roseID: this.$store.getters.getUser.roseID
         };
-    },
+    }, 
     created() {
         if (this.$store.getters.getUser.roseID === '0') {
             this.findUserUrl = '/api/student/findStudentByID';
