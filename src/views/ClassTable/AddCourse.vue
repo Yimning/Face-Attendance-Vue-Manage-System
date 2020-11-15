@@ -197,7 +197,6 @@ export default {
 
         handleSearch() {
             const that = this;
-            //console.log(this.id); //打印输入搜索的值
             if (this.form.courseID != '' || this.form.courseID != null) {
                 this.findUserUrl = '/api/course/findCourseByID';
                 this.$axios.get(this.findUserUrl, { params: { id: this.form.courseID } }).then((res) => {
@@ -229,7 +228,7 @@ export default {
             const interval = window.setInterval(function () {
                 --that.Sencond;
                 if (that.Sencond === 0) {
-                    that.isDisabled = false;
+                    that.isDisabled = false; 
                     that.Successdialog = false;
                     window.clearInterval(interval);
                     that.sendMsg(); //倒计时结束时运行的业务逻辑，这里的是关闭当前页面
