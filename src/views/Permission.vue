@@ -11,7 +11,7 @@
             <p>想尝试一下，请<router-link to="/login" class="logout">退出登录</router-link>，随便输入个账号名，再进来试试看。</p>
         </div>  
 
-    </div>
+    </div> 
 </template>
 
 <script>
