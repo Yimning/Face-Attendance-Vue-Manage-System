@@ -191,6 +191,10 @@ export default {
                             title: '课程表'
                         },
                         {
+                            index: 'studenttable',
+                            title: '选课情况'
+                        },
+                        {
                             index: 'personInfo',
                             title: '人脸信息'
                         }
