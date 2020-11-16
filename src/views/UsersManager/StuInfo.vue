@@ -38,14 +38,15 @@
                 <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
                 <el-button type="success" icon="el-icon-circle-plus" @click="handleAdd">添加学生信息</el-button>
                 <download-excel
-                   class="handleUpload"
+                    class="handleUpload"
                     :fields="json_fields"
                     :data="multipleSelection"
                     :before-generate="startDownload"
                     :before-finish="finishDownload"
                     type="xls"
                 >
-                    <el-button  type="info" icon="el-icon-download" >导出</el-button>
+                    <el-button type="info" icon="el-icon-download">导出</el-button>
+                    <el-button type="info" icon="el-icon-download" @click="handleAllUpload">全部导出</el-button>
                 </download-excel>
             </div>
             <el-table
@@ -246,10 +247,10 @@ export default {
             json_fields: {
                 学号: 'studentNumber',
                 姓名: 'studentName',
-                性别:  'studentSex',
-                班号:  'studentClass',
-                专业:  'profession',
-                身份证号:  'cardNo',
+                性别: 'studentSex',
+                班号: 'studentClass',
+                专业: 'profession',
+                身份证号: 'cardNo'
             },
             requestAddr: '',
             selected: '0', //注意数据格式的转换，否则会导致不正常
@@ -537,7 +538,9 @@ export default {
             }
         },
 
-        handleUpload() {},
+        handleAllUpload() {
+            //未完
+        },
 
         // 分页导航
         handlePageChange(val) {
@@ -561,13 +564,13 @@ export default {
 </script>
 
 <style scoped>
-.handleUpload{
+.handleUpload {
     position: relative;
     margin-left: 662px;
-    margin-top: -32px; 
+    margin-top: -32px;
 }
 .handle-box {
-     margin-bottom: 20px; 
+    margin-bottom: 20px;
 }
 
 .handle-select {
