@@ -2,19 +2,12 @@
     <div>
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 全部学生信息
-                </el-breadcrumb-item>
+                <el-breadcrumb-item> <i class="el-icon-lx-cascades"></i> 全部学生信息 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="container">
-            <div class="handle-box"> 
-                <el-button
-                    type="danger"
-                    icon="el-icon-delete"
-                    class="handle-del mr10"
-                    @click="delAllSelection"
-                >批量删除</el-button>
+            <div class="handle-box">
+                <el-button type="danger" icon="el-icon-delete" class="handle-del mr10" @click="delAllSelection">批量删除</el-button>
 
                 <el-select v-model="selected" placeholder="查询条件" class="handle-select mr10">
                     <el-option key="查学号" label="学号" value="0"></el-option>
@@ -23,7 +16,7 @@
 
                 <el-input
                     v-model="query.request"
-                    v-if="selected==='0'"
+                    v-if="selected === '0'"
                     placeholder="输入学号"
                     class="handle-input mr10"
                     @keyup.enter.native="handleSearch"
@@ -41,15 +34,19 @@
                     v-on:input="inputFunc"
                 ></el-input>
 
-                <el-button
-                    v-if="showOrNot"
-                    type="warning"
-                    icon="el-icon-close" 
-                    @click="handleClear"
-                >清除</el-button>
+                <el-button v-if="showOrNot" type="warning" icon="el-icon-close" @click="handleClear">清除</el-button>
                 <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
                 <el-button type="success" icon="el-icon-circle-plus" @click="handleAdd">添加学生信息</el-button>
-                <el-button type="info" icon="el-icon-download" @click="handleUpload">外部导入</el-button>
+                <download-excel
+                   class="handleUpload"
+                    :fields="json_fields"
+                    :data="multipleSelection"
+                    :before-generate="startDownload"
+                    :before-finish="finishDownload"
+                    type="xls"
+                >
+                    <el-button  type="info" icon="el-icon-download" >导出</el-button>
+                </download-excel>
             </div>
             <el-table
                 :data="tableData"
@@ -92,23 +89,13 @@
                 </el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
-                        <el-button
-                            type="text"
-                            icon="el-icon-more"
-                            class="blue"
-                            @click="handleMore(scope.$index, scope.row)"
-                        >详情</el-button>
-                        <el-button
-                            type="text"
-                            icon="el-icon-edit"
-                            @click="handleEdit(scope.$index, scope.row)"
-                        >编辑</el-button>
-                        <el-button
-                            type="text"
-                            icon="el-icon-delete"
-                            class="red"
-                            @click="handleDelete(scope.$index, scope.row)"
-                        >删除</el-button>
+                        <el-button type="text" icon="el-icon-more" class="blue" @click="handleMore(scope.$index, scope.row)"
+                            >详情</el-button
+                        >
+                        <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                        <el-button type="text" icon="el-icon-delete" class="red" @click="handleDelete(scope.$index, scope.row)"
+                            >删除</el-button
+                        >
                     </template>
                 </el-table-column>
             </el-table>
@@ -183,11 +170,7 @@
                 <el-form-item label="加入时间">
                     <div class="block">
                         <span class="demonstration"></span>
-                        <el-date-picker
-                            v-model="form.joinTime"
-                            type="datetime"
-                            placeholder="选择日期时间"
-                        ></el-date-picker>
+                        <el-date-picker v-model="form.joinTime" type="datetime" placeholder="选择日期时间"></el-date-picker>
                     </div>
                 </el-form-item>
                 <el-form-item label="头像">
@@ -226,22 +209,14 @@
                 <el-form-item label="加入时间">
                     <div class="block">
                         <span class="demonstration"></span>
-                        <el-date-picker
-                            v-model="formAdd.joinTime"
-                            type="datetime"
-                            placeholder="选择日期时间"
-                        ></el-date-picker>
+                        <el-date-picker v-model="formAdd.joinTime" type="datetime" placeholder="选择日期时间"></el-date-picker>
                     </div>
                 </el-form-item>
                 <el-form-item label="初始密码">
                     <el-input v-model="formAdd.studentPassword" placeholder="必填项"></el-input>
                 </el-form-item>
                 <el-form-item label="默认头像">
-                    <el-input
-                        v-model="form.studentAvatar"
-                        readonly="readonly"
-                        placeholder="后台会选择默认头像,此项无需操作"
-                    ></el-input>
+                    <el-input v-model="form.studentAvatar" readonly="readonly" placeholder="后台会选择默认头像,此项无需操作"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -254,6 +229,7 @@
 
 <script>
 import { fetchData, AvatarData } from '../../api/index';
+import JsonExcel from 'vue-json-excel';
 export default {
     name: 'basetable',
     data() {
@@ -265,6 +241,15 @@ export default {
                 pageSize: 5,
                 pageTotal: 0,
                 request: ''
+            },
+            multipleSelection: [],
+            json_fields: {
+                学号: 'studentNumber',
+                姓名: 'studentName',
+                性别:  'studentSex',
+                班号:  'studentClass',
+                专业:  'profession',
+                身份证号:  'cardNo',
             },
             requestAddr: '',
             selected: '0', //注意数据格式的转换，否则会导致不正常
@@ -282,6 +267,9 @@ export default {
             id: -1
         };
     },
+    components: {
+        'download-excel': JsonExcel
+    },
     created() {
         this.getData(); //渲染
         AvatarData(this.defaultAvatar).then((res) => {
@@ -298,12 +286,12 @@ export default {
             this.$axios
                 .get('/api/student/page?currentPage=' + this.query.currentPage)
                 .then((res) => {
-                // console.log(res);
+                    // console.log(res);
                     this.tableData = res.data.data.records;
                     this.query.currentPage = res.data.data.current;
                     this.query.pageTotal = res.data.data.total;
                     this.query.pageSize = res.data.data.size;
-                   // console.log('请求后台数据结果', res.data.data);
+                    // console.log('请求后台数据结果', res.data.data);
                 })
                 .catch((err) => {
                     console.log(err);
@@ -457,6 +445,22 @@ export default {
                 // this.multipleSelection = [];
             }
         },
+        startDownload() {
+            let self = this;
+            if (self.multipleSelection.length == 0) {
+                self.$message({
+                    message: '警告，请勾选数据',
+                    type: 'warning'
+                });
+            }
+        },
+        finishDownload() {
+            let self = this;
+            self.$message({
+                message: '恭喜，数据导出成功',
+                type: 'success'
+            });
+        },
 
         handleAdd() {
             this.addVisible = true;
@@ -557,8 +561,13 @@ export default {
 </script>
 
 <style scoped>
+.handleUpload{
+    position: relative;
+    margin-left: 662px;
+    margin-top: -32px; 
+}
 .handle-box {
-    margin-bottom: 20px;
+     margin-bottom: 20px; 
 }
 
 .handle-select {
