@@ -46,6 +46,7 @@
                     type="xls"
                 >
                     <el-button type="info" icon="el-icon-download">导出</el-button>
+                    <el-button type="info" icon="el-icon-download" @click="handleAllUpload">全部导出</el-button>
                 </download-excel>
             </div>
             <el-table
@@ -56,14 +57,14 @@
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
-                <el-table-column type="selection"  align="center"></el-table-column>
+                <el-table-column type="selection" align="center"></el-table-column>
                 <el-table-column prop="teacherNumber" label="教师号" align="center"></el-table-column>
                 <el-table-column prop="teacherName" label="姓名" align="center"></el-table-column>
-                <el-table-column prop="teacherSex" label="性别"  align="center">
+                <el-table-column prop="teacherSex" label="性别" align="center">
                     <!-- 打印￥的模板 -->
                     <!-- <template slot-scope="scope">￥{{scope.row.money}}</template> -->
                 </el-table-column>
-                <el-table-column prop="courseID" label="授课课程号"  align="center"></el-table-column>
+                <el-table-column prop="courseID" label="授课课程号" align="center"></el-table-column>
 
                 <!-- <el-table-column label="状态" align="center">
                     <template slot-scope="scope">
@@ -492,7 +493,9 @@ export default {
             }
         },
 
-        handleUpload() {},
+        handleUpload() {
+            //未完
+        },
         startDownload() {
             let self = this;
             if (self.multipleSelection.length == 0) {
