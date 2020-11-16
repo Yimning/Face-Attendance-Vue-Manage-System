@@ -7,6 +7,7 @@
             </el-breadcrumb>
         </div>
         <div class="container">
+            <el-button type="info" icon="el-icon-download" >外部导入</el-button>
             <div class="form-box">
                 <el-form ref="form" :model="form" :rules="rules" label-width="280px" class="box-content">
                     <el-form-item label="课程号:" prop="courseID">
@@ -101,7 +102,7 @@
                     width="30%"
                     center
                 >
-                    <span style="font-size: 18px">修改密码成功！{{ Sencond }}秒后关闭页面,重新登录。</span>
+                    <span style="font-size: 18px">课程已添加！{{ Sencond }}秒后关闭页面,重新登录。</span>
                     <span slot="footer" class="dialog-footer">
                         <!-- //footer这里我只保留了一个按键，大家自由发挥 -->
                         <el-button @click="sendMsg" type="primary" :disabled="isDisabled">立即关闭</el-button>
