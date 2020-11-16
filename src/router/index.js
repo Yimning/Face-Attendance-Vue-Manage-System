@@ -193,6 +193,13 @@ export default new Router({
                         title: '添加课程'
                     }
                 },
+                {
+                    path: '/studenttable',
+                    component: () => import( /* webpackChunkName: "studenttable" */ '../views/ClassTable/StudentTable.vue'),
+                    meta: {
+                        title: '选修学生'
+                    }
+                },
 
                 {
                     // vue-schart组件
