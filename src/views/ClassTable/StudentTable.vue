@@ -38,13 +38,14 @@
                 <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
                 <el-button type="success" icon="el-icon-circle-plus" @click="handleAdd">添加学生信息</el-button>
                 <download-excel
+                   class="handleUpload"
                     :fields="json_fields"
                     :data="multipleSelection"
                     :before-generate="startDownload"
                     :before-finish="finishDownload"
                     type="xls"
                 >
-                    <el-button class="handleUpload" type="info" icon="el-icon-download" >导出</el-button>
+                    <el-button  type="info" icon="el-icon-download" >导出</el-button>
                 </download-excel>
             </div>
             <el-table
@@ -561,10 +562,12 @@ export default {
 
 <style scoped>
 .handleUpload{
-    margin-left: 400px;
+    position: relative;
+    margin-left: 665px;
+    margin-top: -32px; 
 }
 .handle-box {
-    margin-bottom: 20px;
+     margin-bottom: 20px; 
 }
 
 .handle-select {
