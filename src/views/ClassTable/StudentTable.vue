@@ -11,7 +11,7 @@
 
                 <el-select v-model="selected" placeholder="查询条件" class="handle-select mr10">
                     <el-option key="查课程号" label="课程号" value="0"></el-option>
-                    <el-option key="查课程名" label="课程名" value="1"></el-option>
+                    <el-option key="查教师号" label="教师号" value="1"></el-option>
                 </el-select>
 
                 <el-input
@@ -27,7 +27,7 @@
                 <el-input
                     v-model="query.request"
                     v-else
-                    placeholder="输入课程名"
+                    placeholder="输入教师号"
                     class="handle-input mr10"
                     @keyup.enter.native="handleSearch"
                     id="messageInput"
@@ -66,17 +66,6 @@
                 <el-table-column prop="courseName" label="课程名" align="center"></el-table-column>
                 <el-table-column prop="teacherName" label="授课教师" align="center"></el-table-column>
 
-                <el-table-column label="操作" width="180" align="center">
-                    <template slot-scope="scope">
-                        <el-button type="text" icon="el-icon-more" class="blue" @click="handleMore(scope.$index, scope.row)"
-                            >详情</el-button
-                        >
-                        <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                        <el-button type="text" icon="el-icon-delete" class="red" @click="handleDelete(scope.$index, scope.row)"
-                            >删除</el-button
-                        >
-                    </template>
-                </el-table-column>
             </el-table>
             <div class="pagination">
                 <el-pagination
@@ -89,120 +78,6 @@
                 ></el-pagination>
             </div>
         </div>
-        <!-- 编辑详情框 -->
-        <el-dialog title="个人信息" :visible.sync="moreVisible" width="30%">
-            <el-form ref="form" :model="form" label-width="70px">
-                <el-form-item label="班号">
-                    <el-input v-model="form.studentClass" readonly="readonly"></el-input>
-                </el-form-item>
-                <el-form-item label="学号">
-                    <el-input v-model="form.studentNumber" readonly="readonly"></el-input>
-                </el-form-item>
-                <el-form-item label="姓名">
-                    <el-input v-model="form.studentName" readonly="readonly"></el-input>
-                </el-form-item>
-                <el-form-item label="性别">
-                    <el-input v-model="form.studentSex" readonly="readonly"></el-input>
-                </el-form-item>
-                <el-form-item label="专业">
-                    <el-input v-model="form.profession" readonly="readonly"></el-input>
-                </el-form-item>
-                <el-form-item label="身份证号">
-                    <el-input v-model="form.cardNo" readonly="readonly"></el-input>
-                </el-form-item>
-                <el-form-item label="加入时间">
-                    <el-input v-model="form.joinTime" readonly="readonly"></el-input>
-                </el-form-item>
-                <el-form-item label="头像">
-                    <el-input v-model="form.studentAvatar" readonly="readonly"></el-input>
-                </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="moreVisible = false">取 消</el-button>
-                <el-button type="primary" @click="moreVisible = false">确 定</el-button>
-            </span>
-        </el-dialog>
-
-        <!-- 编辑弹出框 -->
-        <el-dialog title="编辑" :visible.sync="editVisible" width="30%">
-            <el-form ref="form" :model="form" label-width="70px">
-                <el-form-item label="班号">
-                    <el-input v-model="form.studentClass"></el-input>
-                </el-form-item>
-                <el-form-item label="学号">
-                    <el-input v-model="form.studentNumber" readonly="readonly"></el-input>
-                </el-form-item>
-                <el-form-item label="姓名">
-                    <el-input v-model="form.studentName"></el-input>
-                </el-form-item>
-                <el-form-item label="性别">
-                    <!-- <el-input v-model="formAdd.studentSex"></el-input> -->
-                    <el-radio v-model="form.studentSex" label="男">男</el-radio>
-                    <el-radio v-model="form.studentSex" label="女">女</el-radio>
-                </el-form-item>
-                <el-form-item label="专业">
-                    <el-input v-model="form.profession"></el-input>
-                </el-form-item>
-                <el-form-item label="身份证号">
-                    <el-input v-model="form.cardNo"></el-input>
-                </el-form-item>
-                <el-form-item label="加入时间">
-                    <div class="block">
-                        <span class="demonstration"></span>
-                        <el-date-picker v-model="form.joinTime" type="datetime" placeholder="选择日期时间"></el-date-picker>
-                    </div>
-                </el-form-item>
-                <el-form-item label="头像">
-                    <el-input v-model="form.studentAvatar" readonly="readonly"></el-input>
-                </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="editVisible = false">取 消</el-button>
-                <el-button type="primary" @click="saveEdit">确 定</el-button>
-            </span>
-        </el-dialog>
-
-        <!--添加弹出框 -->
-        <el-dialog title="添加" :visible.sync="addVisible" width="30%">
-            <el-form ref="formAdd" :model="formAdd" label-width="70px">
-                <el-form-item label="班号">
-                    <el-input v-model="formAdd.studentClass"></el-input>
-                </el-form-item>
-                <el-form-item label="学号">
-                    <el-input v-model="formAdd.studentNumber" placeholder="必填项"></el-input>
-                </el-form-item>
-                <el-form-item label="姓名">
-                    <el-input v-model="formAdd.studentName" placeholder="必填项"></el-input>
-                </el-form-item>
-                <el-form-item label="性别">
-                    <!-- <el-input v-model="formAdd.studentSex"></el-input> -->
-                    <el-radio v-model="formAdd.studentSex" label="男">男</el-radio>
-                    <el-radio v-model="formAdd.studentSex" label="女">女</el-radio>
-                </el-form-item>
-                <el-form-item label="专业">
-                    <el-input v-model="formAdd.profession"></el-input>
-                </el-form-item>
-                <el-form-item label="身份证号">
-                    <el-input v-model="formAdd.cardNo"></el-input>
-                </el-form-item>
-                <el-form-item label="加入时间">
-                    <div class="block">
-                        <span class="demonstration"></span>
-                        <el-date-picker v-model="formAdd.joinTime" type="datetime" placeholder="选择日期时间"></el-date-picker>
-                    </div>
-                </el-form-item>
-                <el-form-item label="初始密码">
-                    <el-input v-model="formAdd.studentPassword" placeholder="必填项"></el-input>
-                </el-form-item>
-                <el-form-item label="默认头像">
-                    <el-input v-model="form.studentAvatar" readonly="readonly" placeholder="后台会选择默认头像,此项无需操作"></el-input>
-                </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="addVisible = false">取 消</el-button>
-                <el-button type="primary" @click="saveAdd">确 定</el-button>
-            </span>
-        </el-dialog>
     </div>
 </template>
 
@@ -229,7 +104,9 @@ export default {
                 性别: 'studentSex',
                 班号: 'studentClass',
                 专业: 'profession',
-                身份证号: 'cardNo'
+                课程号: 'courseID',
+                课程名: 'courseName',
+                授课教师: 'teacherName',
             },
             requestAddr: '',
             selected: '0', //注意数据格式的转换，否则会导致不正常
@@ -325,8 +202,8 @@ export default {
             // console.log(this.query.request);//打印输入搜索的值
             this.tableData = [];
             const that = this;
-            const findByID = '/api/course/findCourseByID/';
-            const findByName = '/api/course/findCourseByName/';
+            const findByID = '/api/scourse/findScourseBycourseID/';
+            const findByName = '/api/scourse/findScourseByName/';
             console.log(this.selected);
             if (this.query.request != '') {
                 //
@@ -439,16 +316,6 @@ export default {
                         });
                     });
 
-                // this.delList = this.delList.concat(this.multipleSelection);
-                // console.log(this.delList);
-                // for (let i = 0; i < length; i++) {
-                //     str += this.multipleSelection[i].studentName + ' ';
-                // }
-                // for (let i = 0; i < length; i++) {
-                //     str += this.multipleSelection[i].studentName + ' ';
-                // }
-                // this.$message.error(`删除了${str}`);
-                // this.multipleSelection = [];
             }
         },
         startDownload() {
@@ -469,79 +336,11 @@ export default {
         },
 
         handleAdd() {
-            this.addVisible = true;
+             this.$router.push('/addCourse');
         },
-        //详情信息
-        handleMore(index, row) {
-            this.idx = index;
-            this.form = row;
-            this.moreVisible = true;
-        },
-        // 编辑操作
-        handleEdit(index, row) {
-            this.idx = index;
-            this.form = row;
-            this.editVisible = true;
-        },
-        // 保存编辑
-        saveEdit() {
-            const that = this;
-            this.editVisible = false;
-            this.$set(this.tableData, this.idx, this.form);
-            console.log(this.tableData[this.idx]);
 
-            this.$axios
-                .post('/api/student/updateOne', this.tableData[this.idx])
-                .then((res) => {
-                    console.log(res);
-                    that.$message.success(`修改第 ${this.idx + 1} 行成功`);
-                    // if (res && res.status === 200) {
-                    //     this.loadLogInfo();
-                    // }
-                })
-                .catch((err) => {
-                    console.error();
-                    that.$message.error(`修改失败`);
 
-                    // message:“请添加记录”,
-                    // type:‘warning’
-                    // })
-                    // type 取值 ‘success’ /warning/info/error/;
-                });
-            // .catch((err) => {
-            //     console.log(err);
-            // });
-        },
-        // 保存编辑
-        saveAdd() {
-            const that = this;
-            this.addisible = false;
-            // this.$set(this.tableData, this.idx, this.form);
-            this.formAdd.studentAvatar = this.defaultAvatar;
-            if (this.formAdd.studentName && this.formAdd.studentPassword && this.formAdd.studentNumber != null) {
-                console.log(this.formAdd);
-                this.$axios
-                    .post('/api/student/add', this.formAdd)
-                    .then((res) => {
-                        console.log(res);
-                        if (res.status === 200) {
-                            that.$message.success(`添加成功！`);
-                            this.formAdd = {};
-                            this.addVisible = false;
-                        }
-
-                        // if (res && res.status === 200) {
-                        //     this.loadLogInfo();
-                        // }
-                    })
-                    .catch((err) => {
-                        console.error();
-                        that.$message.error(`添加失败，账号已存在，请重新添加!`);
-                    });
-            } else {
-                that.$message.error(`必填项未填`);
-            }
-        },
+        
 
         handleUpload() {},
 
@@ -553,23 +352,13 @@ export default {
         }
     }
 
-    // mounted: function () {
-    //     var me = this;
-    //     this.$axios.all([me.getAllTask(), me.getAllCity()]).then(
-    //         me.$axios.spread(function (allTask, allCity) {
-    //             console.log('所有请求完成');
-    //             console.log('请求1结果', allTask);
-    //             console.log('请求2结果', allCity);
-    //         })
-    //     );
-    // }
 };
 </script>
 
 <style scoped>
 .handleUpload {
     position: relative;
-    margin-left: 665px;
+    margin-left: 640px;
     margin-top: -32px;
 }
 .handle-box {
