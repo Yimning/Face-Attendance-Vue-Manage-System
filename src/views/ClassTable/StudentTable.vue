@@ -202,7 +202,7 @@ export default {
             const that = this;
             const findByID = '/api/scourse/findScourseBycourseID/';
             const findByName = '/api/scourse/findScourseByteacherNumber/';
-            console.log(this.selected);
+            //console.log(this.selected);
             if (this.query.request != '') {
                 //
                 if (this.selected == 0) {
@@ -368,7 +368,7 @@ export default {
 
         // 分页导航
         handlePageChange(val) {
-            console.log(val);
+            //console.log(val);
             this.$set(this.query, 'currentPage', val);
             this.getData();
         }
