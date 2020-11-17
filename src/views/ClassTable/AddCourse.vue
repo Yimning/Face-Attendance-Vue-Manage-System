@@ -7,7 +7,7 @@
             </el-breadcrumb>
         </div>
         <div class="container">
-            <el-button type="info" icon="el-icon-download">外部导入</el-button>
+            <el-button type="info" icon="el-icon-download" @click="onUpload">外部导入</el-button>
             <div class="form-box">
                 <el-form ref="form" :model="form" :rules="rules" label-width="280px" class="box-content">
                     <el-form-item label="课程号:" prop="courseID">
@@ -156,7 +156,7 @@ export default {
     created() {
         this.findUserUrl = '/api/classroom/findAllClassroom';
         this.updateOneUrl = '/api/course/add';
-        if (this.$store.getters.getUser.roleName == '教师管理员') {
+        if (this.$store.getters.getUser.roseName == '教师管理员') {
             this.$axios
                 .get(this.findUserUrl)
                 .then((res) => {
@@ -226,7 +226,10 @@ export default {
         },
         handleChange4(value) {},
         handleChange5(value) {
-            console.log(value);
+            // console.log(value);
+        },
+        onUpload() {
+            this.$message.error(`导入未开发完，敬请期待!`);
         },
         getSencond() {
             const that = this;
