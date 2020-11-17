@@ -204,7 +204,14 @@ export default new Router({
                     path: '/studenttable',
                     component: () => import( /* webpackChunkName: "studenttable" */ '../views/ClassTable/StudentTable.vue'),
                     meta: {
-                        title: '选修学生'
+                        title: '选修情况'
+                    }
+                },
+                {
+                    path: '/signin',
+                    component: () => import( /* webpackChunkName: "signin" */ '../views/SignIn/SignIn.vue'),
+                    meta: {
+                        title: '考勤'
                     }
                 },
 
