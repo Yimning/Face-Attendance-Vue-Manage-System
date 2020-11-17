@@ -7,7 +7,7 @@
             </el-breadcrumb>
         </div>
         <div class="container">
-            <el-button type="info" icon="el-icon-download" >外部导入</el-button>
+            <el-button type="info" icon="el-icon-download">外部导入</el-button>
             <div class="form-box">
                 <el-form ref="form" :model="form" :rules="rules" label-width="280px" class="box-content">
                     <el-form-item label="课程号:" prop="courseID">
@@ -156,15 +156,20 @@ export default {
     created() {
         this.findUserUrl = '/api/classroom/findAllClassroom';
         this.updateOneUrl = '/api/course/add';
-        this.$axios
-            .get(this.findUserUrl)
-            .then((res) => {
-                // console.log(res.data);
-                this.form.options = res.data;
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+        if (this.$store.getters.getUser.roleName == '教师管理员') {
+            this.$axios
+                .get(this.findUserUrl)
+                .then((res) => {
+                    // console.log(res.data);
+                    this.form.options = res.data;
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        } else {
+            this.$message.error(`无权限访问！`);
+            this.$router.push('/403');
+        }
     },
     methods: {
         onSubmit() {
@@ -193,7 +198,7 @@ export default {
             });
         },
         onCancel() {
-             this.reload(); //刷新 ----推荐
+            this.reload(); //刷新 ----推荐
         },
 
         handleSearch() {
@@ -229,7 +234,7 @@ export default {
             const interval = window.setInterval(function () {
                 --that.Sencond;
                 if (that.Sencond === 0) {
-                    that.isDisabled = false; 
+                    that.isDisabled = false;
                     that.Successdialog = false;
                     window.clearInterval(interval);
                     that.sendMsg(); //倒计时结束时运行的业务逻辑，这里的是关闭当前页面
