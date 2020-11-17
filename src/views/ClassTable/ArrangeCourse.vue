@@ -11,81 +11,85 @@
             <div class="form-box">
                 <el-form ref="form" :model="form" :rules="rules" label-width="280px" class="box-content">
                     <el-form-item label="课程号:" prop="courseID">
-                        <el-input
-                            placeholder="请输入课程号"
-                            v-model="form.courseID"
-                            @keyup.enter.native="handleSearch"
-                            id="idInput"
-                            @blur.native.capture="handleSearch"
-                            clearable
-                        >
-                        </el-input>
-                    </el-form-item>
-
-                    <el-form-item label="课程名称:" prop="courseName">
-                        <el-input placeholder="请输入课程名称" v-model="form.courseName" clearable> </el-input>
-                    </el-form-item>
-
-                    <el-form-item label="每周:" prop="courseDay">
-                        <el-select v-model="form.courseDay" placeholder="请选择">
-                            <el-option
-                                @change="handleChange5"
-                                el-option
-                                v-for="item in weekOptions"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                            ></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="上课时间:" prop="courseTime">
-                        <el-time-select
-                            :span="11"
-                            v-model="form.courseTime"
-                            :picker-options="{
-                                start: '08:00',
-                                step: '00:05',
-                                end: '21:05'
-                            }"
-                            placeholder="选择时间"
-                        >
-                        </el-time-select>
-                    </el-form-item>
-                    <el-form-item label="上课地点:" prop="classRoomID">
-                        <el-select v-model="form.classRoomID" placeholder="请选择">
+                        <el-select v-model="form.courseID" placeholder="请选择">
                             <el-option
                                 el-option
                                 v-for="item in form.options"
-                                :key="item.classRoomID"
-                                :label="item.classRoomName"
-                                :value="item.classRoomName"
+                                :key="item.courseID"
+                                :label="item.courseID"
+                                :value="item.courseID"
                             ></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="起始节:" prop="coursePeriodF" class="perid">
-                        <el-input-number v-model="form.coursePeriodF" @change="handleChange1" :min="1" :max="12"></el-input-number>
-                        <el-input-number
-                            class="perid-right"
-                            v-model="form.coursePeriodB"
-                            @change="handleChange2"
-                            :min="1"
-                            :max="12"
-                        ></el-input-number>
-                        <el-col class="line" :span="4">-</el-col>
+
+                    <el-form-item label="课程名称:" prop="courseName">
+                        <el-select v-model="form.courseID" placeholder="请选择">
+                            <el-option
+                                el-option
+                                v-for="item in form.options"
+                                :key="item.courseID"
+                                :label="item.courseName"
+                                :value="item.courseID"
+                            ></el-option>
+                        </el-select>
                     </el-form-item>
-                    <el-form-item label="起始周:" prop="courseWeekF" class="perid">
-                        <el-input-number v-model="form.courseWeekF" @change="handleChange3" :min="1" :max="25"></el-input-number>
-                        <el-input-number
-                            class="perid-right"
-                            v-model="form.courseWeekB"
-                            @change="handleChange4"
-                            :min="1"
-                            :max="25"
-                        ></el-input-number>
-                        <el-col class="line" :span="4">-</el-col>
+
+                    <el-form-item label="教师号:" prop="teacherNumber">
+                        <el-select v-model="form.teacherNumber" placeholder="请选择">
+                            <el-option
+                                el-option
+                                v-for="item in form.teacherOptions"
+                                :key="item.teacherNumber"
+                                :label="item.teacherNumber"
+                                :value="item.teacherNumber"
+                            ></el-option>
+                        </el-select>
                     </el-form-item>
-                    <el-form-item label="课程说明:">
-                        <el-input placeholder="选填" v-model="form.courseNote"> </el-input>
+                    <el-form-item label="授课教师:" prop="teacherName">
+                        <el-select v-model="form.teacherNumber" placeholder="请选择">
+                            <el-option
+                                @change="handleChange5"
+                                el-option
+                                v-for="item in form.teacherOptions"
+                                :key="item.teacherNumber"
+                                :label="item.teacherName"
+                                :value="item.teacherNumber"
+                            ></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="班级号:" prop="studentClass">
+                        <el-select v-model="form.studentNumber" placeholder="请选择">
+                            <el-option
+                                el-option
+                                v-for="item in form.studentOptions"
+                                :key="item.studentNumber"
+                                :label="item.studentClass"
+                                :value="item.studentNumber"
+                            ></el-option>
+                        </el-select>
+                    </el-form-item>
+
+                    <el-form-item label="学号:" prop="studentNumber">
+                        <el-select v-model="form.studentNumber" placeholder="请选择">
+                            <el-option
+                                el-option
+                                v-for="item in form.studentOptions"
+                                :key="item.studentNumber"
+                                :label="item.studentNumber"
+                                :value="item.studentNumber"
+                            ></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="学生姓名:" prop="studentName">
+                        <el-select v-model="form.studentNumber" placeholder="请选择">
+                            <el-option
+                                el-option
+                                v-for="item in form.studentOptions"
+                                :key="item.studentNumber"
+                                :label="item.studentName"
+                                :value="item.studentNumber"
+                            ></el-option>
+                        </el-select>
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="onSubmit('form')">确认修改</el-button>
@@ -102,7 +106,7 @@
                     width="30%"
                     center
                 >
-                    <span style="font-size: 18px">课程已添加！{{ Sencond }}秒后关闭页面,重新登录。</span>
+                    <span style="font-size: 18px">课程已添加！{{ Sencond }}秒后关闭页面,并刷新。</span>
                     <span slot="footer" class="dialog-footer">
                         <!-- //footer这里我只保留了一个按键，大家自由发挥 -->
                         <el-button @click="sendMsg" type="primary" :disabled="isDisabled">立即关闭</el-button>
@@ -131,6 +135,8 @@ export default {
 
             form: {
                 options: [],
+                teacherOptions: [],
+                studentOptions: [],
                 coursePeriodF: 1,
                 coursePeriodB: 3,
                 courseWeekF: 1,
@@ -140,12 +146,12 @@ export default {
             updateOneUrl: '',
             rules: {
                 courseID: [{ required: true, message: '必填', trigger: 'blur' }],
-                courseName: [{ required: true, message: '必填', trigger: 'blur' }],
-                courseDay: [{ required: true, message: '必填', trigger: 'blur' }],
-                courseTime: [{ required: true, message: '必填', trigger: 'blur' }],
-                classRoomID: [{ required: true, message: '必填', trigger: 'blur' }],
-                coursePeriodF: [{ required: true, message: '必填', trigger: 'blur' }],
-                courseWeekF: [{ required: true, message: '必填', trigger: 'blur' }]
+             //   courseName: [{ required: true, message: '必填', trigger: 'blur' }],
+                teacherNumber: [{ required: true, message: '必填', trigger: 'blur' }],
+             //   teacherName: [{ required: true, message: '必填', trigger: 'blur' }],
+              //  studentClass: [{ required: true, message: '必填', trigger: 'blur' }],
+                studentNumber: [{ required: true, message: '必填', trigger: 'blur' }],
+               // studentName: [{ required: true, message: '必填', trigger: 'blur' }]
             },
             Successdialog: false, //控制弹出
             Sencond: 5, //设置初始倒计时
@@ -154,15 +160,27 @@ export default {
     },
     //  或者使用做个地址请求 '/api/student/findStudentByID?id=1'
     created() {
-        this.findUserUrl = '/api/classroom/findAllClassroom';
-        this.updateOneUrl = '/api/course/add';
+        const that = this;
+        this.findUserUrl = '/api/course/findAllCourse';
+        this.updateOneUrl = '/api/scourse/add';
+
+        var r0 = this.$axios.get(this.findUserUrl);
+        var r1 = this.$axios.get('/api/student/findAllStudent');
+        var r2 = this.$axios.get('/api/teacher/findAllTeacher');
+        //并发请求
         if (this.$store.getters.getUser.roseName == '教师管理员') {
             this.$axios
-                .get(this.findUserUrl)
-                .then((res) => {
-                    // console.log(res.data);
-                    this.form.options = res.data;
-                })
+                .all([r0, r1, r2])
+                .then(
+                    that.$axios.spread((res1, res2, res3) => {
+                       // console.log(res1);
+                        that.form.options = res1.data;
+                       // console.log(res2);
+                        that.form.studentOptions = res2.data;
+                        //console.log(res3);
+                        that.form.teacherOptions = res3.data;
+                    })
+                )
                 .catch((err) => {
                     console.log(err);
                 });
