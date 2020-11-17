@@ -266,11 +266,8 @@ export default {
             this.$axios
                 .get('/api/scourse/findAllScourse')
                 .then((res) => {
-                   // console.log(res);
-                    this.tableData = res.data.data;
-                    // this.query.currentPage = res.data.data.current;
-                    // this.query.pageTotal = res.data.data.total;
-                    // this.query.pageSize = res.data.data.size;
+                    console.log(res);
+                    // this.tableData = res.data.data;
                     // // console.log('请求后台数据结果', res.data.data);
                     this.list = [];
                     let newArray = [];
@@ -296,8 +293,11 @@ export default {
                         this.list = []; //循环完必须清空,否则可能会覆盖
                     }
                     // console.log('newArray');
-                     console.log(newArray);
+                    console.log(newArray);
                     this.tableData = newArray;
+                    this.query.currentPage = 1;
+                    this.query.pageTotal = res.data.length;
+                    this.query.pageSize = res.data.length;
                 })
                 .catch((err) => {
                     console.log(err);
