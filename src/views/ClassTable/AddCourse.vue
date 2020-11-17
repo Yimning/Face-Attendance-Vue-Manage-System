@@ -102,7 +102,7 @@
                     width="30%"
                     center
                 >
-                    <span style="font-size: 18px">课程已添加！{{ Sencond }}秒后关闭页面,重新登录。</span>
+                    <span style="font-size: 18px">课程已添加！{{ Sencond }}秒后关闭页面并刷新。</span>
                     <span slot="footer" class="dialog-footer">
                         <!-- //footer这里我只保留了一个按键，大家自由发挥 -->
                         <el-button @click="sendMsg" type="primary" :disabled="isDisabled">立即关闭</el-button>
