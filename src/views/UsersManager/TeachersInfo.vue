@@ -493,8 +493,21 @@ export default {
             }
         },
 
-        handleUpload() {
-            //未完
+        handleAllUpload() {
+            const that = this;
+            //axios的get请求,//使用spread方法处理响应数组结果
+            this.$axios
+                .get('/api/teacher/findAllTeacher')
+                .then((res) => {
+                    //console.log(res);
+                    that.tableData = res.data;
+                    that.query.currentPage = 1;
+                    that.query.pageTotal = res.data.length;
+                    that.query.pageSize = res.data.length;
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
         },
         startDownload() {
             let self = this;
