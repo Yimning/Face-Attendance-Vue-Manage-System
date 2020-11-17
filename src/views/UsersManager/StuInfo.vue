@@ -566,7 +566,7 @@ export default {
 <style scoped>
 .handleUpload {
     position: relative;
-    margin-left: 662px;
+    margin-left: 720px;
     margin-top: -32px;
 }
 .handle-box {
