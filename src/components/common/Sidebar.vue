@@ -191,6 +191,10 @@ export default {
                             title: '课程表'
                         },
                         {
+                            index: 'arrangeCourse',
+                            title: '安排课程'
+                        },
+                        {
                             index: 'studenttable',
                             title: '选课情况'
                         },
