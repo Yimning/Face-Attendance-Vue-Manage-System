@@ -102,6 +102,7 @@
             </div>
             <span slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="showUsualCourseDialog = false">确 定</el-button>
+                 <el-button type="primary" @click="signIn">进行签到</el-button>
             </span>
         </el-dialog>
     </div>
@@ -176,7 +177,7 @@ export default {
         this.$axios
             .get(this.findUserUrl, { params: { id: this.$store.getters.getUser.userID } })
             .then((res) => {
-                console.log(res);
+                //console.log(res);
                 //this.form = res.data[res.data.length - 1];
                 this.usualCourses = res.data;
                 console.log(this.usualCourses);
@@ -212,7 +213,11 @@ export default {
             });
     },
     mounted() {},
-    methods: {}
+    methods: {
+        signIn(){
+
+        }
+    }
 };
 </script>
  
