@@ -207,7 +207,21 @@ export default {
                 {
                     icon: 'el-icon-edit-outline',
                     index: 'records',
-                    title: '考勤记录'
+                    title: '考勤管理',
+                    subs: [
+                        {
+                            index: 'signin',
+                            title: '考勤'
+                        },
+                        {
+                            index: 'records',
+                            title: '考勤记录'
+                        }
+                        // {
+                        //     index: 'signin',
+                        //     title: '等等'
+                        // }
+                    ]
                 },
                 {
                     icon: 'el-icon-s-tools',
