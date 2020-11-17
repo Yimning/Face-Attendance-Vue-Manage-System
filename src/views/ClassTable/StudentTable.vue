@@ -169,8 +169,6 @@ export default {
                         }
                         this.list = []; //循环完必须清空,否则可能会覆盖
                     }
-                    // console.log('newArray');
-                    console.log(newArray);
                     this.tableData = newArray;
                     this.query.currentPage = 1;
                     this.query.pageTotal = res.data.length;
@@ -203,7 +201,7 @@ export default {
             this.tableData = [];
             const that = this;
             const findByID = '/api/scourse/findScourseBycourseID/';
-            const findByName = '/api/scourse/findScourseByName/';
+            const findByName = '/api/scourse/findScourseByteacherNumber/';
             console.log(this.selected);
             if (this.query.request != '') {
                 //
@@ -224,7 +222,7 @@ export default {
             const that = this;
             this.tableData = [];
             this.$axios
-                .get(val + this.query.request)
+                .get(val,{ params: { id: this.query.request } }) 
                 .then((res) => {
                     console.log(res);
                     if (res.data[0] == null) {
@@ -233,11 +231,35 @@ export default {
                         that.query.pageTotal = res.data.length;
                         that.query.pageSize = res.data.length;
                     } else {
-                        that.tableData = res.data;
-                        that.query.currentPage = 1;
-                        that.query.pageTotal = res.data.length;
-                        that.query.pageSize = res.data.length;
-                        // console.log('请求后台数据结果', res.data);
+                    this.list = [];
+                    let newArray = [];
+                    for (const i in res.data) {
+                        for (const key in res.data[i].course) {
+                            //console.log("属性:"+key);
+                            this.$set(this.list, key, res.data[i].course[key]); //对象新增属性(使用Vue.$set())
+                            newArray[i] = this.list; //新建数组存放
+                            // this.list.push(i + ':' + JSON.stringify(res.data[k].course[i]));
+                        }
+                        for (const key in res.data[i].student) {
+                            //console.log("属性:"+key);
+                            this.$set(this.list, key, res.data[i].student[key]); //对象新增属性(使用Vue.$set())
+                            newArray[i] = this.list; //新建数组存放
+                            // this.list.push(i + ':' + JSON.stringify(res.data[k].course[i]));
+                        }
+                        for (const key in res.data[i].teacher) {
+                            //console.log("属性:"+key);
+                            this.$set(this.list, key, res.data[i].teacher[key]); //对象新增属性(使用Vue.$set())
+                            newArray[i] = this.list; //新建数组存放
+                            // this.list.push(i + ':' + JSON.stringify(res.data[k].course[i]));
+                        }
+                        this.list = []; //循环完必须清空,否则可能会覆盖
+                    }
+                    // console.log('newArray');
+                    console.log(newArray);
+                    this.tableData = newArray;
+                    this.query.currentPage = 1;
+                    this.query.pageTotal = res.data.length;
+                    this.query.pageSize = res.data.length;
                     }
                 })
                 .catch((err) => {
@@ -358,7 +380,7 @@ export default {
 <style scoped>
 .handleUpload {
     position: relative;
-    margin-left: 640px;
+    margin-left: 720px;
     margin-top: -32px;
 }
 .handle-box {
