@@ -194,6 +194,13 @@ export default new Router({
                     }
                 },
                 {
+                    path: '/arrangeCourse',
+                    component: () => import( /* webpackChunkName: "arrangeCourse" */ '../views/ClassTable/ArrangeCourse.vue'),
+                    meta: {
+                        title: '排课'
+                    }
+                },
+                {
                     path: '/studenttable',
                     component: () => import( /* webpackChunkName: "studenttable" */ '../views/ClassTable/StudentTable.vue'),
                     meta: {
