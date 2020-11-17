@@ -2,7 +2,7 @@
     <div>
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item> <i class="el-icon-lx-cascades"></i> 全部学生信息 </el-breadcrumb-item>
+                <el-breadcrumb-item> <i class="el-icon-lx-cascades"></i> 全部学生选课 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="container">
@@ -10,14 +10,14 @@
                 <el-button type="danger" icon="el-icon-delete" class="handle-del mr10" @click="delAllSelection">批量删除</el-button>
 
                 <el-select v-model="selected" placeholder="查询条件" class="handle-select mr10">
-                    <el-option key="查学号" label="学号" value="0"></el-option>
-                    <el-option key="查姓名" label="姓名" value="1"></el-option>
+                    <el-option key="查课程号" label="课程号" value="0"></el-option>
+                    <el-option key="查课程名" label="课程名" value="1"></el-option>
                 </el-select>
 
                 <el-input
                     v-model="query.request"
                     v-if="selected === '0'"
-                    placeholder="输入学号"
+                    placeholder="输入课程号"
                     class="handle-input mr10"
                     @keyup.enter.native="handleSearch"
                     id="messageInput"
@@ -27,7 +27,7 @@
                 <el-input
                     v-model="query.request"
                     v-else
-                    placeholder="输入姓名"
+                    placeholder="输入课程名"
                     class="handle-input mr10"
                     @keyup.enter.native="handleSearch"
                     id="messageInput"
@@ -36,16 +36,16 @@
 
                 <el-button v-if="showOrNot" type="warning" icon="el-icon-close" @click="handleClear">清除</el-button>
                 <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
-                <el-button type="success" icon="el-icon-circle-plus" @click="handleAdd">添加学生信息</el-button>
+                <el-button type="success" icon="el-icon-circle-plus" @click="handleAdd">添加课程</el-button>
                 <download-excel
-                   class="handleUpload"
+                    class="handleUpload"
                     :fields="json_fields"
                     :data="multipleSelection"
                     :before-generate="startDownload"
                     :before-finish="finishDownload"
                     type="xls"
                 >
-                    <el-button  type="info" icon="el-icon-download" >导出</el-button>
+                    <el-button type="info" icon="el-icon-download">导出</el-button>
                 </download-excel>
             </div>
             <el-table
@@ -59,34 +59,13 @@
                 <el-table-column type="selection" width="55" align="center"></el-table-column>
                 <el-table-column prop="studentNumber" label="学号" align="center"></el-table-column>
                 <el-table-column prop="studentName" label="姓名" align="center"></el-table-column>
-                <el-table-column prop="studentSex" label="性别" width="55" align="center">
-                    <!-- 打印￥的模板 -->
-                    <!-- <template slot-scope="scope">￥{{scope.row.money}}</template> -->
-                </el-table-column>
+                <el-table-column prop="studentSex" label="性别" width="55" align="center"> </el-table-column>
                 <el-table-column prop="studentClass" label="班号" width="55" align="center"></el-table-column>
                 <el-table-column prop="profession" label="专业" align="center"></el-table-column>
-                <el-table-column prop="cardNo" label="身份证号" align="center"></el-table-column>
+                <el-table-column prop="courseID" label="课程号" align="center"></el-table-column>
+                <el-table-column prop="courseName" label="课程名" align="center"></el-table-column>
+                <el-table-column prop="teacherName" label="授课教师" align="center"></el-table-column>
 
-                <!-- <el-table-column label="状态" align="center">
-                    <template slot-scope="scope">
-                        <el-tag
-                            :type="scope.row.state==='成功'?'success':(scope.row.state==='失败'?'danger':'')"
-                        >{{scope.row.state}}</el-tag>
-                    </template>
-                </el-table-column>-->
-
-                <el-table-column prop="joinTime" label="注册时间" align="center"></el-table-column>
-
-                <el-table-column label="头像(查看大图)" align="center">
-                    <!-- scope.row  当前行的数据对象 -->
-                    <template slot-scope="scope">
-                        <el-image
-                            class="table-td-thumb"
-                            :src="scope.row.studentAvatar"
-                            :preview-src-list="[scope.row.studentAvatar]"
-                        ></el-image>
-                    </template>
-                </el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
                         <el-button type="text" icon="el-icon-more" class="blue" @click="handleMore(scope.$index, scope.row)"
@@ -243,13 +222,14 @@ export default {
                 request: ''
             },
             multipleSelection: [],
+            list: [{}],
             json_fields: {
                 学号: 'studentNumber',
                 姓名: 'studentName',
-                性别:  'studentSex',
-                班号:  'studentClass',
-                专业:  'profession',
-                身份证号:  'cardNo',
+                性别: 'studentSex',
+                班号: 'studentClass',
+                专业: 'profession',
+                身份证号: 'cardNo'
             },
             requestAddr: '',
             selected: '0', //注意数据格式的转换，否则会导致不正常
@@ -284,14 +264,40 @@ export default {
             const that = this;
             //axios的get请求,//使用spread方法处理响应数组结果
             this.$axios
-                .get('/api/student/page?currentPage=' + this.query.currentPage)
+                .get('/api/scourse/findAllScourse')
                 .then((res) => {
-                    // console.log(res);
-                    this.tableData = res.data.data.records;
-                    this.query.currentPage = res.data.data.current;
-                    this.query.pageTotal = res.data.data.total;
-                    this.query.pageSize = res.data.data.size;
-                    // console.log('请求后台数据结果', res.data.data);
+                   // console.log(res);
+                    this.tableData = res.data.data;
+                    // this.query.currentPage = res.data.data.current;
+                    // this.query.pageTotal = res.data.data.total;
+                    // this.query.pageSize = res.data.data.size;
+                    // // console.log('请求后台数据结果', res.data.data);
+                    this.list = [];
+                    let newArray = [];
+                    for (const i in res.data) {
+                        for (const key in res.data[i].course) {
+                            //console.log("属性:"+key);
+                            this.$set(this.list, key, res.data[i].course[key]); //对象新增属性(使用Vue.$set())
+                            newArray[i] = this.list; //新建数组存放
+                            // this.list.push(i + ':' + JSON.stringify(res.data[k].course[i]));
+                        }
+                        for (const key in res.data[i].student) {
+                            //console.log("属性:"+key);
+                            this.$set(this.list, key, res.data[i].student[key]); //对象新增属性(使用Vue.$set())
+                            newArray[i] = this.list; //新建数组存放
+                            // this.list.push(i + ':' + JSON.stringify(res.data[k].course[i]));
+                        }
+                        for (const key in res.data[i].teacher) {
+                            //console.log("属性:"+key);
+                            this.$set(this.list, key, res.data[i].teacher[key]); //对象新增属性(使用Vue.$set())
+                            newArray[i] = this.list; //新建数组存放
+                            // this.list.push(i + ':' + JSON.stringify(res.data[k].course[i]));
+                        }
+                        this.list = []; //循环完必须清空,否则可能会覆盖
+                    }
+                    // console.log('newArray');
+                     console.log(newArray);
+                    this.tableData = newArray;
                 })
                 .catch((err) => {
                     console.log(err);
@@ -319,8 +325,8 @@ export default {
             // console.log(this.query.request);//打印输入搜索的值
             this.tableData = [];
             const that = this;
-            const findByID = '/api/student/findStudentByID/';
-            const findByName = '/api/student/findStudentByName/';
+            const findByID = '/api/course/findCourseByID/';
+            const findByName = '/api/course/findCourseByName/';
             console.log(this.selected);
             if (this.query.request != '') {
                 //
@@ -561,13 +567,13 @@ export default {
 </script>
 
 <style scoped>
-.handleUpload{
+.handleUpload {
     position: relative;
     margin-left: 665px;
-    margin-top: -32px; 
+    margin-top: -32px;
 }
 .handle-box {
-     margin-bottom: 20px; 
+    margin-bottom: 20px;
 }
 
 .handle-select {
