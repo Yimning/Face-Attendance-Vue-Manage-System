@@ -269,7 +269,7 @@ export default {
             const that = this;
             //axios的get请求,//使用spread方法处理响应数组结果
             this.$axios
-                .get('/api/scourse/findAllScourse')
+                .get('/api/attendance/findAllAttendance')
                 .then((res) => {
                     console.log(res);
                     // this.tableData = res.data.data;
@@ -277,8 +277,12 @@ export default {
                     this.list = [];
                     let newArray = [];
                     for (const i in res.data) {
+                        //console.log('属性:' + i);
+                        this.$set(this.list, 'recordID', res.data[i].recordID);
+                        this.$set(this.list, 'recordTime', res.data[i].recordTime);
+                        this.$set(this.list, 'flag', res.data[i].flag);
+                        this.$set(this.list, 'weekDay', res.data[i].weekDay);
                         for (const key in res.data[i].course) {
-                            //console.log("属性:"+key);
                             this.$set(this.list, key, res.data[i].course[key]); //对象新增属性(使用Vue.$set())
                             newArray[i] = this.list; //新建数组存放
                             // this.list.push(i + ':' + JSON.stringify(res.data[k].course[i]));
@@ -297,6 +301,7 @@ export default {
                         }
                         this.list = []; //循环完必须清空,否则可能会覆盖
                     }
+                    console.log(newArray);
                     this.tableData = newArray;
                     this.query.currentPage = 1;
                     this.query.pageTotal = res.data.length;
