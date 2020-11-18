@@ -375,7 +375,6 @@ export default {
             })
                 .then(() => {
                     // this.$message.success('删除成功');
-                    // this.tableData.splice(index, 1);
                     const id = this.tableData.splice(index, 1)[0].studentNumber;
                     console.log(id);
                     this.$axios
@@ -490,22 +489,11 @@ export default {
                 .then((res) => {
                     console.log(res);
                     that.$message.success(`修改第 ${this.idx + 1} 行成功`);
-                    // if (res && res.status === 200) {
-                    //     this.loadLogInfo();
-                    // }
                 })
                 .catch((err) => {
                     console.error();
                     that.$message.error(`修改失败`);
-
-                    // message:“请添加记录”,
-                    // type:‘warning’
-                    // })
-                    // type 取值 ‘success’ /warning/info/error/;
                 });
-            // .catch((err) => {
-            //     console.log(err);
-            // });
         },
         // 保存编辑
         saveAdd() {
@@ -524,10 +512,6 @@ export default {
                             this.formAdd = {};
                             this.addVisible = false;
                         }
-
-                        // if (res && res.status === 200) {
-                        //     this.loadLogInfo();
-                        // }
                     })
                     .catch((err) => {
                         console.error();
