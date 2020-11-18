@@ -217,10 +217,6 @@ export default {
                             index: 'attendenceRecords',
                             title: '考勤记录'
                         }
-                        // {
-                        //     index: 'signin',
-                        //     title: '等等'
-                        // }
                     ]
                 },
                 {
