@@ -284,13 +284,13 @@ export default {
                     //console.log(res);
                     this.form = res.data;
                     //console.log('请求后台数据结果', this.form);
-                    this.dataTraversql(this.form);
+                    this.dataTraversal(this.form);
                 })
                 .catch((err) => {
                     console.log(err);
                 });
         },
-        dataTraversql(form) {
+        dataTraversal(form) {
             this.list = [];
             let newArray = [];
             for (const i in form) {
