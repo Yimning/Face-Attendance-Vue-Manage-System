@@ -35,7 +35,7 @@
         </div>
     </div>
 </template>
-
+  
 <script>
 require('tracking/build/tracking-min.js');
 require('tracking/build/data/face-min.js');
