@@ -158,7 +158,7 @@ export default {
                 },
                 {
                     name: '2018/09/07',
-                    value: 816
+                    value: 816  
                 },
                 {
                     name: '2018/09/08',
@@ -211,7 +211,7 @@ export default {
                         data: [164, 178, 150, 135, 160]
                     },
                     {
-                        label: '食品',
+                        label: '食品',  
                         data: [74, 118, 200, 235, 90]
                     }
                 ]
