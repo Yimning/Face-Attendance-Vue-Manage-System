@@ -214,7 +214,7 @@ export default {
                             title: '考勤'
                         },
                         {
-                            index: 'records',
+                            index: 'attendenceRecords',
                             title: '考勤记录'
                         }
                         // {
