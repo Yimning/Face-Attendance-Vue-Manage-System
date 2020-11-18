@@ -288,9 +288,9 @@ export default {
                 })
                 .catch((err) => {
                     console.log(err);
-                });
+                }); 
         },
-        dataTraversal(form) {
+        dataTraversal(form) { 
             this.list = [];
             let newArray = [];
             for (const i in form) {
