@@ -11,7 +11,7 @@
 
                 <el-select v-model="selected" placeholder="查询条件" class="handle-select mr10">
                     <el-option key="查课程号" label="课程号" value="0"></el-option>
-                    <el-option key="查教师号" label="教师号" value="1"></el-option>
+                    <el-option key="查课程名" label="课程名" value="1"></el-option>
                 </el-select>
 
                 <el-input
@@ -27,7 +27,7 @@
                 <el-input
                     v-model="query.request"
                     v-else
-                    placeholder="输入教师号"
+                    placeholder="输入课程名"
                     class="handle-input mr10"
                     @keyup.enter.native="handleSearch"
                     id="messageInput"
@@ -201,7 +201,7 @@ export default {
             this.tableData = [];
             const that = this;
             const findByID = '/api/scourse/findScourseBycourseID/';
-            const findByName = '/api/scourse/findScourseByteacherNumber/';
+            const findByName = '/api/scourse/findScourseByName/';
             //console.log(this.selected);
             if (this.query.request != '') {
                 //
@@ -224,7 +224,7 @@ export default {
             this.$axios
                 .get(val,{ params: { id: this.query.request } }) 
                 .then((res) => {
-                    console.log(res);
+                    //console.log(res);
                     if (res.data[0] == null) {
                         this.$message.error(`无记录`);
                         that.query.currentPage = 0;
@@ -254,8 +254,6 @@ export default {
                         }
                         this.list = []; //循环完必须清空,否则可能会覆盖
                     }
-                    // console.log('newArray');
-                    console.log(newArray);
                     this.tableData = newArray;
                     this.query.currentPage = 1;
                     this.query.pageTotal = res.data.length;
