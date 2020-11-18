@@ -214,7 +214,13 @@ export default new Router({
                         title: '考勤'
                     }
                 },
-
+                {
+                    path: '/attendenceRecords',
+                    component: () => import( /* webpackChunkName: "attendenceRecords" */ '../views/SignIn/AttendenceRecords.vue'),
+                    meta: {
+                        title: '考勤'
+                    }
+                },
                 {
                     // vue-schart组件
                     path: '/charts',
