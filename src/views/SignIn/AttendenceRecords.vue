@@ -46,6 +46,7 @@
                     type="xls"
                 >
                     <el-button type="info" icon="el-icon-download">导出</el-button>
+                    <el-button type="info" icon="el-icon-download" @click="handleAllUpload">全部导出</el-button>
                 </download-excel>
             </div>
             <el-table
@@ -56,16 +57,29 @@
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
-                <el-table-column type="selection" width="55" align="center"></el-table-column>
+                <el-table-column type="selection" width="40" align="center"></el-table-column>
+                <el-table-column prop="recordID" label="记录号" width="55" align="center"></el-table-column>
                 <el-table-column prop="studentNumber" label="学号" align="center"></el-table-column>
                 <el-table-column prop="studentName" label="姓名" align="center"></el-table-column>
                 <el-table-column prop="studentSex" label="性别" width="55" align="center"> </el-table-column>
                 <el-table-column prop="studentClass" label="班号" width="55" align="center"></el-table-column>
                 <el-table-column prop="profession" label="专业" align="center"></el-table-column>
-                <el-table-column prop="courseID" label="课程号" align="center"></el-table-column>
+                <el-table-column prop="courseID" label="课程号" width="55" align="center"></el-table-column>
                 <el-table-column prop="courseName" label="课程名" align="center"></el-table-column>
                 <el-table-column prop="teacherName" label="授课教师" align="center"></el-table-column>
-
+                <el-table-column prop="recordTime" label="签到时间" align="center"></el-table-column>
+                <el-table-column prop="flag" label="是否已签" align="center"></el-table-column>
+                <el-table-column label="操作" width="180" align="center">
+                    <template slot-scope="scope">
+                        <el-button type="text" icon="el-icon-more" class="blue" @click="handleMore(scope.$index, scope.row)"
+                            >详情</el-button
+                        >
+                        <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">补签</el-button>
+                        <el-button type="text" icon="el-icon-delete" class="red" @click="handleDelete(scope.$index, scope.row)"
+                            >删除</el-button
+                        >
+                    </template>
+                </el-table-column>
             </el-table>
             <div class="pagination">
                 <el-pagination
@@ -78,6 +92,120 @@
                 ></el-pagination>
             </div>
         </div>
+        <!-- 编辑详情框 -->
+        <el-dialog title="个人信息" :visible.sync="moreVisible" width="30%">
+            <el-form ref="form" :model="form" label-width="70px">
+                <el-form-item label="班号">
+                    <el-input v-model="form.studentClass" readonly="readonly"></el-input>
+                </el-form-item>
+                <el-form-item label="学号">
+                    <el-input v-model="form.studentNumber" readonly="readonly"></el-input>
+                </el-form-item>
+                <el-form-item label="姓名">
+                    <el-input v-model="form.studentName" readonly="readonly"></el-input>
+                </el-form-item>
+                <el-form-item label="性别">
+                    <el-input v-model="form.studentSex" readonly="readonly"></el-input>
+                </el-form-item>
+                <el-form-item label="专业">
+                    <el-input v-model="form.profession" readonly="readonly"></el-input>
+                </el-form-item>
+                <el-form-item label="身份证号">
+                    <el-input v-model="form.cardNo" readonly="readonly"></el-input>
+                </el-form-item>
+                <el-form-item label="加入时间">
+                    <el-input v-model="form.joinTime" readonly="readonly"></el-input>
+                </el-form-item>
+                <el-form-item label="头像">
+                    <el-input v-model="form.studentAvatar" readonly="readonly"></el-input>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="moreVisible = false">取 消</el-button>
+                <el-button type="primary" @click="moreVisible = false">确 定</el-button>
+            </span>
+        </el-dialog>
+
+        <!-- 编辑弹出框 -->
+        <el-dialog title="编辑" :visible.sync="editVisible" width="30%">
+            <el-form ref="form" :model="form" label-width="70px">
+                <el-form-item label="班号">
+                    <el-input v-model="form.studentClass"></el-input>
+                </el-form-item>
+                <el-form-item label="学号">
+                    <el-input v-model="form.studentNumber" readonly="readonly"></el-input>
+                </el-form-item>
+                <el-form-item label="姓名">
+                    <el-input v-model="form.studentName"></el-input>
+                </el-form-item>
+                <el-form-item label="性别">
+                    <!-- <el-input v-model="formAdd.studentSex"></el-input> -->
+                    <el-radio v-model="form.studentSex" label="男">男</el-radio>
+                    <el-radio v-model="form.studentSex" label="女">女</el-radio>
+                </el-form-item>
+                <el-form-item label="专业">
+                    <el-input v-model="form.profession"></el-input>
+                </el-form-item>
+                <el-form-item label="身份证号">
+                    <el-input v-model="form.cardNo"></el-input>
+                </el-form-item>
+                <el-form-item label="加入时间">
+                    <div class="block">
+                        <span class="demonstration"></span>
+                        <el-date-picker v-model="form.joinTime" type="datetime" placeholder="选择日期时间"></el-date-picker>
+                    </div>
+                </el-form-item>
+                <el-form-item label="头像">
+                    <el-input v-model="form.studentAvatar" readonly="readonly"></el-input>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="editVisible = false">取 消</el-button>
+                <el-button type="primary" @click="saveEdit">确 定</el-button>
+            </span>
+        </el-dialog>
+
+        <!--添加弹出框 -->
+        <el-dialog title="添加" :visible.sync="addVisible" width="30%">
+            <el-form ref="formAdd" :model="formAdd" label-width="70px">
+                <el-form-item label="班号">
+                    <el-input v-model="formAdd.studentClass"></el-input>
+                </el-form-item>
+                <el-form-item label="学号">
+                    <el-input v-model="formAdd.studentNumber" placeholder="必填项"></el-input>
+                </el-form-item>
+                <el-form-item label="姓名">
+                    <el-input v-model="formAdd.studentName" placeholder="必填项"></el-input>
+                </el-form-item>
+                <el-form-item label="性别">
+                    <!-- <el-input v-model="formAdd.studentSex"></el-input> -->
+                    <el-radio v-model="formAdd.studentSex" label="男">男</el-radio>
+                    <el-radio v-model="formAdd.studentSex" label="女">女</el-radio>
+                </el-form-item>
+                <el-form-item label="专业">
+                    <el-input v-model="formAdd.profession"></el-input>
+                </el-form-item>
+                <el-form-item label="身份证号">
+                    <el-input v-model="formAdd.cardNo"></el-input>
+                </el-form-item>
+                <el-form-item label="加入时间">
+                    <div class="block">
+                        <span class="demonstration"></span>
+                        <el-date-picker v-model="formAdd.joinTime" type="datetime" placeholder="选择日期时间"></el-date-picker>
+                    </div>
+                </el-form-item>
+                <el-form-item label="初始密码">
+                    <el-input v-model="formAdd.studentPassword" placeholder="必填项"></el-input>
+                </el-form-item>
+                <el-form-item label="默认头像">
+                    <el-input v-model="form.studentAvatar" readonly="readonly" placeholder="后台会选择默认头像,此项无需操作"></el-input>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="addVisible = false">取 消</el-button>
+                <el-button type="primary" @click="saveAdd">确 定</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -106,7 +234,7 @@ export default {
                 专业: 'profession',
                 课程号: 'courseID',
                 课程名: 'courseName',
-                授课教师: 'teacherName',
+                授课教师: 'teacherName'
             },
             requestAddr: '',
             selected: '0', //注意数据格式的转换，否则会导致不正常
@@ -222,7 +350,7 @@ export default {
             const that = this;
             this.tableData = [];
             this.$axios
-                .get(val,{ params: { id: this.query.request } }) 
+                .get(val, { params: { id: this.query.request } })
                 .then((res) => {
                     //console.log(res);
                     if (res.data[0] == null) {
@@ -231,33 +359,33 @@ export default {
                         that.query.pageTotal = res.data.length;
                         that.query.pageSize = res.data.length;
                     } else {
-                    this.list = [];
-                    let newArray = [];
-                    for (const i in res.data) {
-                        for (const key in res.data[i].course) {
-                            //console.log("属性:"+key);
-                            this.$set(this.list, key, res.data[i].course[key]); //对象新增属性(使用Vue.$set())
-                            newArray[i] = this.list; //新建数组存放
-                            // this.list.push(i + ':' + JSON.stringify(res.data[k].course[i]));
+                        this.list = [];
+                        let newArray = [];
+                        for (const i in res.data) {
+                            for (const key in res.data[i].course) {
+                                //console.log("属性:"+key);
+                                this.$set(this.list, key, res.data[i].course[key]); //对象新增属性(使用Vue.$set())
+                                newArray[i] = this.list; //新建数组存放
+                                // this.list.push(i + ':' + JSON.stringify(res.data[k].course[i]));
+                            }
+                            for (const key in res.data[i].student) {
+                                //console.log("属性:"+key);
+                                this.$set(this.list, key, res.data[i].student[key]); //对象新增属性(使用Vue.$set())
+                                newArray[i] = this.list; //新建数组存放
+                                // this.list.push(i + ':' + JSON.stringify(res.data[k].course[i]));
+                            }
+                            for (const key in res.data[i].teacher) {
+                                //console.log("属性:"+key);
+                                this.$set(this.list, key, res.data[i].teacher[key]); //对象新增属性(使用Vue.$set())
+                                newArray[i] = this.list; //新建数组存放
+                                // this.list.push(i + ':' + JSON.stringify(res.data[k].course[i]));
+                            }
+                            this.list = []; //循环完必须清空,否则可能会覆盖
                         }
-                        for (const key in res.data[i].student) {
-                            //console.log("属性:"+key);
-                            this.$set(this.list, key, res.data[i].student[key]); //对象新增属性(使用Vue.$set())
-                            newArray[i] = this.list; //新建数组存放
-                            // this.list.push(i + ':' + JSON.stringify(res.data[k].course[i]));
-                        }
-                        for (const key in res.data[i].teacher) {
-                            //console.log("属性:"+key);
-                            this.$set(this.list, key, res.data[i].teacher[key]); //对象新增属性(使用Vue.$set())
-                            newArray[i] = this.list; //新建数组存放
-                            // this.list.push(i + ':' + JSON.stringify(res.data[k].course[i]));
-                        }
-                        this.list = []; //循环完必须清空,否则可能会覆盖
-                    }
-                    this.tableData = newArray;
-                    this.query.currentPage = 1;
-                    this.query.pageTotal = res.data.length;
-                    this.query.pageSize = res.data.length;
+                        this.tableData = newArray;
+                        this.query.currentPage = 1;
+                        this.query.pageTotal = res.data.length;
+                        this.query.pageSize = res.data.length;
                     }
                 })
                 .catch((err) => {
@@ -266,6 +394,65 @@ export default {
                         this.$message.error(`请求错误！请正确输入查询内容`);
                     }
                 });
+        },
+        // 保存编辑
+        saveEdit() {
+            const that = this;
+            this.editVisible = false;
+            this.$set(this.tableData, this.idx, this.form);
+            console.log(this.tableData[this.idx]);
+
+            this.$axios
+                .post('/api/student/updateOne', this.tableData[this.idx])
+                .then((res) => {
+                    console.log(res);
+                    that.$message.success(`修改第 ${this.idx + 1} 行成功`);
+                    // if (res && res.status === 200) {
+                    //     this.loadLogInfo();
+                    // }
+                })
+                .catch((err) => {
+                    console.error();
+                    that.$message.error(`修改失败`);
+
+                    // message:“请添加记录”,
+                    // type:‘warning’
+                    // })
+                    // type 取值 ‘success’ /warning/info/error/;
+                });
+            // .catch((err) => {
+            //     console.log(err);
+            // });
+        },
+        // 保存编辑
+        saveAdd() {
+            const that = this;
+            this.addisible = false;
+            // this.$set(this.tableData, this.idx, this.form);
+            this.formAdd.studentAvatar = this.defaultAvatar;
+            if (this.formAdd.studentName && this.formAdd.studentPassword && this.formAdd.studentNumber != null) {
+                console.log(this.formAdd);
+                this.$axios
+                    .post('/api/student/add', this.formAdd)
+                    .then((res) => {
+                        console.log(res);
+                        if (res.status === 200) {
+                            that.$message.success(`添加成功！`);
+                            this.formAdd = {};
+                            this.addVisible = false;
+                        }
+
+                        // if (res && res.status === 200) {
+                        //     this.loadLogInfo();
+                        // }
+                    })
+                    .catch((err) => {
+                        console.error();
+                        that.$message.error(`添加失败，账号已存在，请重新添加!`);
+                    });
+            } else {
+                that.$message.error(`必填项未填`);
+            }
         },
 
         // 删除操作
@@ -335,7 +522,6 @@ export default {
                             message: '已取消删除'
                         });
                     });
-
             }
         },
         startDownload() {
@@ -355,12 +541,26 @@ export default {
             });
         },
 
-        handleAdd() {
-             this.$router.push('/addCourse');
+        handleAllUpload() {
+            const that = this;
+            //axios的get请求,//使用spread方法处理响应数组结果
+            this.$axios
+                .get('/api/student/findAllStudent')
+                .then((res) => {
+                    //console.log(res);
+                    that.tableData = res.data;
+                    that.query.currentPage = 1;
+                    that.query.pageTotal = res.data.length;
+                    that.query.pageSize = res.data.length;
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
         },
 
-
-        
+        handleAdd() {
+            this.$router.push('/addCourse');
+        },
 
         handleUpload() {},
 
@@ -371,7 +571,6 @@ export default {
             this.getData();
         }
     }
-
 };
 </script>
 
