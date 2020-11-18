@@ -68,6 +68,7 @@
                 <el-table-column prop="courseName" label="课程名" align="center"></el-table-column>
                 <el-table-column prop="teacherName" label="授课教师" align="center"></el-table-column>
                 <el-table-column prop="recordTime" label="签到时间" align="center"></el-table-column>
+                <el-table-column prop="weekDay" label="星期" align="center"></el-table-column>
                 <el-table-column prop="flag" label="是否已签" align="center"></el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
@@ -236,6 +237,15 @@ export default {
                 课程名: 'courseName',
                 授课教师: 'teacherName'
             },
+            weeks: {
+                0: '星期日',
+                1: '星期一',
+                2: '星期二',
+                3: '星期三',
+                4: '星期四',
+                5: '星期五',
+                6: '星期六'
+            },
             requestAddr: '',
             selected: '0', //注意数据格式的转换，否则会导致不正常
             tableData: [],
@@ -271,45 +281,67 @@ export default {
             this.$axios
                 .get('/api/attendance/findAllAttendance')
                 .then((res) => {
-                    console.log(res);
-                    // this.tableData = res.data.data;
-                    // // console.log('请求后台数据结果', res.data.data);
-                    this.list = [];
-                    let newArray = [];
-                    for (const i in res.data) {
-                        //console.log('属性:' + i);
-                        this.$set(this.list, 'recordID', res.data[i].recordID);
-                        this.$set(this.list, 'recordTime', res.data[i].recordTime);
-                        this.$set(this.list, 'flag', res.data[i].flag);
-                        this.$set(this.list, 'weekDay', res.data[i].weekDay);
-                        for (const key in res.data[i].course) {
-                            this.$set(this.list, key, res.data[i].course[key]); //对象新增属性(使用Vue.$set())
-                            newArray[i] = this.list; //新建数组存放
-                            // this.list.push(i + ':' + JSON.stringify(res.data[k].course[i]));
-                        }
-                        for (const key in res.data[i].student) {
-                            //console.log("属性:"+key);
-                            this.$set(this.list, key, res.data[i].student[key]); //对象新增属性(使用Vue.$set())
-                            newArray[i] = this.list; //新建数组存放
-                            // this.list.push(i + ':' + JSON.stringify(res.data[k].course[i]));
-                        }
-                        for (const key in res.data[i].teacher) {
-                            //console.log("属性:"+key);
-                            this.$set(this.list, key, res.data[i].teacher[key]); //对象新增属性(使用Vue.$set())
-                            newArray[i] = this.list; //新建数组存放
-                            // this.list.push(i + ':' + JSON.stringify(res.data[k].course[i]));
-                        }
-                        this.list = []; //循环完必须清空,否则可能会覆盖
-                    }
-                    console.log(newArray);
-                    this.tableData = newArray;
-                    this.query.currentPage = 1;
-                    this.query.pageTotal = res.data.length;
-                    this.query.pageSize = res.data.length;
+                    //console.log(res);
+                    this.form = res.data;
+                    //console.log('请求后台数据结果', this.form);
+                    this.dataTraversql(this.form);
                 })
                 .catch((err) => {
                     console.log(err);
                 });
+        },
+        dataTraversql(form) {
+            this.list = [];
+            let newArray = [];
+            for (const i in form) {
+                //console.log('属性:' + i);
+                this.$set(this.list, 'recordID', form[i].recordID);
+                this.$set(this.list, 'recordTime', form[i].recordTime);
+                this.$set(this.list, 'flag', form[i].flag);
+                this.$set(this.list, 'weekDay', this.dataDateChange(form[i].weekDay));
+
+                for (const key in form[i].course) {
+                    this.$set(this.list, key, form[i].course[key]); //对象新增属性(使用Vue.$set())
+                    newArray[i] = this.list; //新建数组存放
+                }
+                for (const key in form[i].student) {
+                    //console.log("属性:"+key);
+                    this.$set(this.list, key, form[i].student[key]); //对象新增属性(使用Vue.$set())
+                    newArray[i] = this.list; //新建数组存放
+                }
+                for (const key in form[i].teacher) {
+                    //console.log("属性:"+key);
+                    this.$set(this.list, key, form[i].teacher[key]); //对象新增属性(使用Vue.$set())
+                    newArray[i] = this.list; //新建数组存放
+                }
+                this.list = []; //循环完必须清空,否则可能会覆盖
+            }
+            //console.log(newArray);
+            this.tableData = newArray;
+            this.query.currentPage = 1;
+            this.query.pageTotal = form.length;
+            this.query.pageSize = form.length;
+        },
+        // 时间格式化
+        dataFormat(value) {
+            if (value != null || value == '') {
+                var year = value.substr(0, 4);
+                var month = value.substr(5, 2);
+                var day = value.substr(8, 2);
+                var hour = value.substr(11, 2);
+                var min = value.substr(14, 2);
+                var second = value.substr(17, 2);
+                return year + '-' + month + '-' + day + ' ' + hour + ':' + min + ':' + second;
+            } else return null;
+        },
+        //根据当前的日期显示当前是星期几
+        dataDateChange(dateStr) {
+            if (dateStr != null || dateStr == '') {
+                let date = new Date(dateStr);
+                let weekIndex = date.getDay();
+                //this.week = this.weeks[weekIndex];
+                return this.weeks[weekIndex];
+            } else return null;
         },
         //清除搜索框
         handleClear() {
