@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-redpacket_fill"></i> js调用摄像头拍照上传图片
+                    <i class="el-icon-lx-redpacket_fill"></i> 课程考勤
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
