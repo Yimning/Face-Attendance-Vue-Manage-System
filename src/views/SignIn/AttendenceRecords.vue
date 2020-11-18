@@ -41,7 +41,7 @@
                     class="handleUpload"
                     :fields="json_fields"
                     :data="multipleSelection"
-                    :before-generate="startDownload"
+                    :before-generate="startDownload"   
                     :before-finish="finishDownload"
                     type="xls"
                 >
