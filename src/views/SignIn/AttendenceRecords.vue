@@ -8,7 +8,7 @@
         <div class="container">
             <div class="handle-box">
                 <el-button type="danger" icon="el-icon-delete" class="handle-del mr10" @click="delAllSelection">批量删除</el-button>
-
+              
                 <el-select v-model="QueryConditions.courseID" placeholder="查询课程号" class="handle-select mr10">
                     <el-option
                         el-option
@@ -19,16 +19,56 @@
                     ></el-option>
                 </el-select>
 
-                <el-select v-model="QueryConditions.courseName" placeholder="课程名" class="handle-select mr10">
+                <el-select v-model="QueryConditions.courseID" placeholder="课程名" class="handle-select mr10">
                     <el-option
                         el-option
                         v-for="item in QueryConditions"
                         :key="item.courseID"
                         :label="item.courseName"
-                        :value="item.courseName"
+                        :value="item.courseID"
                     ></el-option>
                 </el-select>
-
+                <el-select v-model="QueryConditions.studentNumber" placeholder="学号" class="handle-select mr10">
+                    <el-option
+                        el-option
+                        v-for="item in QueryConditions"
+                        :key="item.studentNumber + '-item'"
+                        :label="item.studentNumber"
+                        :value="item.studentNumber"
+                    ></el-option>
+                </el-select>
+                <el-select v-model="QueryConditions.studentNumber" placeholder="姓名" class="handle-select mr10">
+                    <el-option
+                        el-option
+                        v-for="item in QueryConditions"
+                        :key="item.studentName + '-only'"
+                        :label="item.studentName"
+                        :value="item.studentNumber"
+                    ></el-option>
+                </el-select>
+                <div class="handle-weekday">
+                    <el-col :span="7">
+                        <el-date-picker
+                            type="date"
+                            placeholder="选择日期"
+                            v-model="QueryConditions.weekDay"
+                            value-format="yyyy-MM-dd"
+                            style="width: 100%"
+                        ></el-date-picker>
+                    </el-col>
+                    <el-select v-model="QueryConditions.weekDay" placeholder="星期" class="handle-select mr10">
+                        <el-option
+                            el-option
+                            v-for="item in QueryConditions"
+                            :key="item.weekDay"
+                            :label="item.weekDay"
+                            :value="item.weekDay"
+                        ></el-option>
+                    </el-select>
+                    <el-button v-if="showOrNot" type="warning" icon="el-icon-close" @click="handleClear">清除</el-button>
+                    <el-button class="" type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
+                    <!-- <el-button type="success" icon="el-icon-circle-plus" @click="handleAdd">添加课程</el-button> -->
+                </div>
 
                 <download-excel
                     class="handleUpload"
@@ -221,7 +261,8 @@ export default {
             form: {
                 options: []
             },
-            QueryConditions:{},
+            newArray : [],
+            QueryConditions: {},
             multipleSelection: [],
             list: [{}],
             json_fields: {
@@ -266,6 +307,7 @@ export default {
     },
     created() {
         this.getData(); //渲染
+        this.getAllCourse();
         AvatarData(this.defaultAvatar).then((res) => {
             // console.log(res.avatar[0]);
             this.defaultAvatar = res.avatar[0].base64;
@@ -284,16 +326,28 @@ export default {
                     this.form = res.data;
                     //console.log('请求后台数据结果', this.form);
                     this.dataTraversal(this.form);
-                    this.QueryConditions=res.data;
+                    this.QueryConditions = this.newArray;
                 })
                 .catch((err) => {
                     console.log(err);
                 });
         },
-
+        // 获取全部课程数据
+        getAllCourse() {
+            const that = this;
+            //axios的get请求,//使用spread方法处理响应数组结果
+            this.$axios
+                .get('/api/course/findAllCourse')
+                .then((res) => {
+                    console.log(res);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        },
         dataTraversal(form) {
             this.list = [];
-            let newArray = [];
+            this.newArray = [];
             for (const i in form) {
                 //console.log('属性:' + i);
                 this.$set(this.list, 'recordID', form[i].recordID);
@@ -303,22 +357,22 @@ export default {
 
                 for (const key in form[i].course) {
                     this.$set(this.list, key, form[i].course[key]); //对象新增属性(使用Vue.$set())
-                    newArray[i] = this.list; //新建数组存放
+                    this.newArray[i] = this.list; //新建数组存放
                 }
                 for (const key in form[i].student) {
                     //console.log("属性:"+key);
                     this.$set(this.list, key, form[i].student[key]); //对象新增属性(使用Vue.$set())
-                    newArray[i] = this.list; //新建数组存放
+                    this.newArray[i] = this.list; //新建数组存放
                 }
                 for (const key in form[i].teacher) {
                     //console.log("属性:"+key);
                     this.$set(this.list, key, form[i].teacher[key]); //对象新增属性(使用Vue.$set())
-                    newArray[i] = this.list; //新建数组存放
+                    this.newArray[i] = this.list; //新建数组存放
                 }
                 this.list = []; //循环完必须清空,否则可能会覆盖
             }
-            //console.log(newArray);
-            this.tableData = newArray;
+            //console.log(this.newArray);
+            this.tableData = this.newArray;
             this.query.currentPage = 1;
             this.query.pageTotal = form.length;
             this.query.pageSize = form.length;
@@ -398,29 +452,29 @@ export default {
                         that.query.pageSize = res.data.length;
                     } else {
                         this.list = [];
-                        let newArray = [];
+                       this.newArray = [];
                         for (const i in res.data) {
                             for (const key in res.data[i].course) {
                                 //console.log("属性:"+key);
                                 this.$set(this.list, key, res.data[i].course[key]); //对象新增属性(使用Vue.$set())
-                                newArray[i] = this.list; //新建数组存放
+                                this.newArray[i] = this.list; //新建数组存放
                                 // this.list.push(i + ':' + JSON.stringify(res.data[k].course[i]));
                             }
                             for (const key in res.data[i].student) {
                                 //console.log("属性:"+key);
                                 this.$set(this.list, key, res.data[i].student[key]); //对象新增属性(使用Vue.$set())
-                                newArray[i] = this.list; //新建数组存放
+                                this.newArray[i] = this.list; //新建数组存放
                                 // this.list.push(i + ':' + JSON.stringify(res.data[k].course[i]));
                             }
                             for (const key in res.data[i].teacher) {
                                 //console.log("属性:"+key);
                                 this.$set(this.list, key, res.data[i].teacher[key]); //对象新增属性(使用Vue.$set())
-                                newArray[i] = this.list; //新建数组存放
+                                this.newArray[i] = this.list; //新建数组存放
                                 // this.list.push(i + ':' + JSON.stringify(res.data[k].course[i]));
                             }
                             this.list = []; //循环完必须清空,否则可能会覆盖
                         }
-                        this.tableData = newArray;
+                        this.tableData = this.newArray;
                         this.query.currentPage = 1;
                         this.query.pageTotal = res.data.length;
                         this.query.pageSize = res.data.length;
