@@ -9,7 +9,7 @@
             <div class="handle-box">
                 <el-button type="danger" icon="el-icon-delete" class="handle-del mr10" @click="delAllSelection">批量删除</el-button>
 
-                <el-select v-if="courseOrNot" v-model="form.courseID" placeholder="查询课程号" class="handle-select mr10">
+                <el-select  v-model="form.courseID" placeholder="查询课程号" class="handle-select mr10">
                     <el-option
                         el-option
                         v-for="item in form.options"
@@ -19,7 +19,7 @@
                     ></el-option>
                 </el-select>
 
-                <el-select v-if="courseOrNot" v-model="form.courseID" placeholder="课程名" class="handle-select mr10">
+                <el-select v-model="form.courseID" placeholder="课程名" class="handle-select mr10">
                     <el-option
                         el-option
                         v-for="item in form.options"
@@ -28,7 +28,7 @@
                         :value="item.courseID"
                     ></el-option>
                 </el-select>
-                <el-select  v-if="stuNumberOrNot" v-model="form.courseID" placeholder="学号" class="handle-select mr10">
+                <el-select  v-model="form.courseID" placeholder="学号" class="handle-select mr10">
                     <el-option
                         el-option
                         v-for="item in form.options"
@@ -37,7 +37,7 @@
                         :value="item.courseID"
                     ></el-option>
                 </el-select>
-                <el-select v-if="stuNumberOrNot" v-model="form.courseID" placeholder="姓名" class="handle-select mr10">
+                <el-select v-model="form.courseID" placeholder="姓名" class="handle-select mr10">
                     <el-option
                         el-option
                         v-for="item in form.options"
@@ -47,7 +47,7 @@
                     ></el-option>
                 </el-select>
                 <div class="handle-weekday">
-                    <el-col :span="5">
+                    <el-col :span="7">
                         <el-date-picker
                             type="date"
                             placeholder="选择日期"
@@ -652,7 +652,7 @@ export default {
 <style scoped>
 .handleUpload {
     position: relative;
-    margin-left: 920px;
+    margin-left: 950px;
     margin-top: -32px;
 }
 .handle-box {
