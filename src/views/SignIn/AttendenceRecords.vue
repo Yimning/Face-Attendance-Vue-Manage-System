@@ -14,7 +14,7 @@
                         el-option
                         v-for="item in QueryConditions"
                         :key="item.courseID"
-                        :label="item.courseID"
+                        :label="item.courseID + '-' + item.courseName"
                         :value="item.courseID"
                     ></el-option>
                 </el-select>
