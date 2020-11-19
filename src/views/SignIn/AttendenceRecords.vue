@@ -8,44 +8,66 @@
         <div class="container">
             <div class="handle-box">
                 <el-button type="danger" icon="el-icon-delete" class="handle-del mr10" @click="delAllSelection">批量删除</el-button>
-              
-                <el-select v-model="QueryConditions.courseID" placeholder="查询课程号" class="handle-select mr10">
+
+                <el-select v-model="QueryConditions.courseID" placeholder="课程号-课程名" class=" mr10">
                     <el-option
                         el-option
                         v-for="item in QueryConditions"
                         :key="item.courseID"
-                        :label="item.courseID"
+                        :label="item.courseID +'-' +item.courseName"
                         :value="item.courseID"
                     ></el-option>
                 </el-select>
 
-                <el-select v-model="QueryConditions.courseID" placeholder="课程名" class="handle-select mr10">
-                    <el-option
-                        el-option
-                        v-for="item in QueryConditions"
-                        :key="item.courseID"
-                        :label="item.courseName"
-                        :value="item.courseID"
-                    ></el-option>
+                <el-select v-model="selected" placeholder="查询条件" class="handle-select mr10">
+                    <el-option key="查教师号" label="教师号" value="0"></el-option>
+                    <el-option key="查教师姓名" label="教师姓名" value="1"></el-option>
+                    <el-option key="查查学生学号" label="查学生学号" value="2"></el-option>
+                    <el-option key="查学生姓名" label="学生姓名" value="3"></el-option>
                 </el-select>
-                <el-select v-model="QueryConditions.studentNumber" placeholder="学号" class="handle-select mr10">
-                    <el-option
-                        el-option
-                        v-for="item in QueryConditions"
-                        :key="item.studentNumber + '-item'"
-                        :label="item.studentNumber"
-                        :value="item.studentNumber"
-                    ></el-option>
-                </el-select>
-                <el-select v-model="QueryConditions.studentNumber" placeholder="姓名" class="handle-select mr10">
-                    <el-option
-                        el-option
-                        v-for="item in QueryConditions"
-                        :key="item.studentName + '-only'"
-                        :label="item.studentName"
-                        :value="item.studentNumber"
-                    ></el-option>
-                </el-select>
+
+                <el-input
+                    v-model="query.request"
+                    v-if="selected === '0'"
+                    placeholder="教师号"
+                    class="handle-input mr10 mr10"
+                    @keyup.enter.native="handleSearch"
+                    id="messageInput"
+                    v-on:input="inputFunc"
+                    clearable
+                ></el-input>
+                <!-- @keyup.enter 但是若在组件框架中写需要加.native -->
+                <el-input
+                    v-model="query.request"
+                    v-else-if="selected === '1'"
+                    placeholder="输入教师姓名"
+                    class="handle-input mr10"
+                    @keyup.enter.native="handleSearch"
+                    id="messageInput"
+                    v-on:input="inputFunc"
+                    clearable
+                ></el-input>
+                <el-input
+                    v-model="query.request"
+                    v-else-if="selected === '2'"
+                    placeholder="学生学号"
+                    class="handle-input mr10"
+                    @keyup.enter.native="handleSearch"
+                    id="messageInput"
+                    v-on:input="inputFunc"
+                    clearable
+                ></el-input>
+                <!-- @keyup.enter 但是若在组件框架中写需要加.native -->
+                <el-input
+                    v-model="query.request"
+                    v-else
+                    placeholder="输入教师姓名"
+                    class="handle-input mr10"
+                    @keyup.enter.native="handleSearch"
+                    id="messageInput"
+                    v-on:input="inputFunc"
+                    clearable
+                ></el-input>
                 <div class="handle-weekday">
                     <el-col :span="7">
                         <el-date-picker
@@ -65,7 +87,7 @@
                             :value="item.weekDay"
                         ></el-option>
                     </el-select>
-                    <el-button v-if="showOrNot" type="warning" icon="el-icon-close" @click="handleClear">清除</el-button>
+
                     <el-button class="" type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
                     <!-- <el-button type="success" icon="el-icon-circle-plus" @click="handleAdd">添加课程</el-button> -->
                 </div>
@@ -261,7 +283,7 @@ export default {
             form: {
                 options: []
             },
-            newArray : [],
+            newArray: [],
             QueryConditions: {},
             multipleSelection: [],
             list: [{}],
@@ -326,7 +348,6 @@ export default {
                     this.form = res.data;
                     //console.log('请求后台数据结果', this.form);
                     this.dataTraversal(this.form);
-                    this.QueryConditions = this.newArray;
                 })
                 .catch((err) => {
                     console.log(err);
@@ -340,6 +361,7 @@ export default {
                 .get('/api/course/findAllCourse')
                 .then((res) => {
                     console.log(res);
+                    this.QueryConditions = res.data;
                 })
                 .catch((err) => {
                     console.log(err);
@@ -452,7 +474,7 @@ export default {
                         that.query.pageSize = res.data.length;
                     } else {
                         this.list = [];
-                       this.newArray = [];
+                        this.newArray = [];
                         for (const i in res.data) {
                             for (const key in res.data[i].course) {
                                 //console.log("属性:"+key);
@@ -686,7 +708,7 @@ export default {
 }
 
 .handle-input {
-    width: 200px;
+    width: 120px;
     display: inline-block;
 }
 /* .close {
