@@ -41,7 +41,7 @@
                     class="handleUpload"
                     :fields="json_fields"
                     :data="multipleSelection"
-                    :before-generate="startDownload"   
+                    :before-generate="startDownload"
                     :before-finish="finishDownload"
                     type="xls"
                 >
@@ -225,6 +225,9 @@ export default {
                 pageTotal: 0,
                 request: ''
             },
+            form: {
+                options: []
+            },
             multipleSelection: [],
             list: [{}],
             json_fields: {
@@ -288,9 +291,9 @@ export default {
                 })
                 .catch((err) => {
                     console.log(err);
-                }); 
+                });
         },
-        dataTraversal(form) { 
+        dataTraversal(form) {
             this.list = [];
             let newArray = [];
             for (const i in form) {
