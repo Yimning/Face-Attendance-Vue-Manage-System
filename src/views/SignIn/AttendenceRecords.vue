@@ -9,66 +9,26 @@
             <div class="handle-box">
                 <el-button type="danger" icon="el-icon-delete" class="handle-del mr10" @click="delAllSelection">批量删除</el-button>
 
-                <el-select  v-model="form.courseID" placeholder="查询课程号" class="handle-select mr10">
+                <el-select v-model="QueryConditions.courseID" placeholder="查询课程号" class="handle-select mr10">
                     <el-option
                         el-option
-                        v-for="item in form.options"
+                        v-for="item in QueryConditions"
                         :key="item.courseID"
                         :label="item.courseID"
                         :value="item.courseID"
                     ></el-option>
                 </el-select>
 
-                <el-select v-model="form.courseID" placeholder="课程名" class="handle-select mr10">
+                <el-select v-model="QueryConditions.courseName" placeholder="课程名" class="handle-select mr10">
                     <el-option
                         el-option
-                        v-for="item in form.options"
+                        v-for="item in QueryConditions"
                         :key="item.courseID"
                         :label="item.courseName"
-                        :value="item.courseID"
+                        :value="item.courseName"
                     ></el-option>
                 </el-select>
-                <el-select  v-model="form.courseID" placeholder="学号" class="handle-select mr10">
-                    <el-option
-                        el-option
-                        v-for="item in form.options"
-                        :key="item.courseID"
-                        :label="item.courseName"
-                        :value="item.courseID"
-                    ></el-option>
-                </el-select>
-                <el-select v-model="form.courseID" placeholder="姓名" class="handle-select mr10">
-                    <el-option
-                        el-option
-                        v-for="item in form.options"
-                        :key="item.courseID"
-                        :label="item.courseName"
-                        :value="item.courseID"
-                    ></el-option>
-                </el-select>
-                <div class="handle-weekday">
-                    <el-col :span="7">
-                        <el-date-picker
-                            type="date"
-                            placeholder="选择日期"
-                            v-model="form.weekDay"
-                            value-format="yyyy-MM-dd"
-                            style="width: 100%"
-                        ></el-date-picker>
-                    </el-col>
-                    <el-select  v-model="form.courseID" placeholder="星期" class="handle-select mr10">
-                        <el-option
-                            el-option
-                            v-for="item in form.options"
-                            :key="item.courseID"
-                            :label="item.courseName"
-                            :value="item.courseID"
-                        ></el-option>
-                    </el-select>
-                    <el-button v-if="showOrNot" type="warning" icon="el-icon-close" @click="handleClear">清除</el-button>
-                    <el-button class="" type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
-                    <!-- <el-button type="success" icon="el-icon-circle-plus" @click="handleAdd">添加课程</el-button> -->
-                </div>
+
 
                 <download-excel
                     class="handleUpload"
@@ -261,6 +221,7 @@ export default {
             form: {
                 options: []
             },
+            QueryConditions:{},
             multipleSelection: [],
             list: [{}],
             json_fields: {
@@ -323,11 +284,13 @@ export default {
                     this.form = res.data;
                     //console.log('请求后台数据结果', this.form);
                     this.dataTraversal(this.form);
+                    this.QueryConditions=res.data;
                 })
                 .catch((err) => {
                     console.log(err);
                 });
         },
+
         dataTraversal(form) {
             this.list = [];
             let newArray = [];
