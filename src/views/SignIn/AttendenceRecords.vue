@@ -9,34 +9,67 @@
             <div class="handle-box">
                 <el-button type="danger" icon="el-icon-delete" class="handle-del mr10" @click="delAllSelection">批量删除</el-button>
 
-                <el-select v-model="selected" placeholder="查询条件" class="handle-select mr10">
-                    <el-option key="查课程号" label="课程号" value="0"></el-option>
-                    <el-option key="查课程名" label="课程名" value="1"></el-option>
+                <el-select v-if="courseOrNot" v-model="form.courseID" placeholder="查询课程号" class="handle-select mr10">
+                    <el-option
+                        el-option
+                        v-for="item in form.options"
+                        :key="item.courseID"
+                        :label="item.courseID"
+                        :value="item.courseID"
+                    ></el-option>
                 </el-select>
 
-                <el-input
-                    v-model="query.request"
-                    v-if="selected === '0'"
-                    placeholder="输入课程号"
-                    class="handle-input mr10"
-                    @keyup.enter.native="handleSearch"
-                    id="messageInput"
-                    v-on:input="inputFunc"
-                ></el-input>
-                <!-- @keyup.enter 但是若在组件框架中写需要加.native -->
-                <el-input
-                    v-model="query.request"
-                    v-else
-                    placeholder="输入课程名"
-                    class="handle-input mr10"
-                    @keyup.enter.native="handleSearch"
-                    id="messageInput"
-                    v-on:input="inputFunc"
-                ></el-input>
+                <el-select v-if="courseOrNot" v-model="form.courseID" placeholder="课程名" class="handle-select mr10">
+                    <el-option
+                        el-option
+                        v-for="item in form.options"
+                        :key="item.courseID"
+                        :label="item.courseName"
+                        :value="item.courseID"
+                    ></el-option>
+                </el-select>
+                <el-select  v-if="stuNumberOrNot" v-model="form.courseID" placeholder="学号" class="handle-select mr10">
+                    <el-option
+                        el-option
+                        v-for="item in form.options"
+                        :key="item.courseID"
+                        :label="item.courseName"
+                        :value="item.courseID"
+                    ></el-option>
+                </el-select>
+                <el-select v-if="stuNumberOrNot" v-model="form.courseID" placeholder="姓名" class="handle-select mr10">
+                    <el-option
+                        el-option
+                        v-for="item in form.options"
+                        :key="item.courseID"
+                        :label="item.courseName"
+                        :value="item.courseID"
+                    ></el-option>
+                </el-select>
+                <div class="handle-weekday">
+                    <el-col :span="5">
+                        <el-date-picker
+                            type="date"
+                            placeholder="选择日期"
+                            v-model="form.weekDay"
+                            value-format="yyyy-MM-dd"
+                            style="width: 100%"
+                        ></el-date-picker>
+                    </el-col>
+                    <el-select  v-model="form.courseID" placeholder="星期" class="handle-select mr10">
+                        <el-option
+                            el-option
+                            v-for="item in form.options"
+                            :key="item.courseID"
+                            :label="item.courseName"
+                            :value="item.courseID"
+                        ></el-option>
+                    </el-select>
+                    <el-button v-if="showOrNot" type="warning" icon="el-icon-close" @click="handleClear">清除</el-button>
+                    <el-button class="" type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
+                    <!-- <el-button type="success" icon="el-icon-circle-plus" @click="handleAdd">添加课程</el-button> -->
+                </div>
 
-                <el-button v-if="showOrNot" type="warning" icon="el-icon-close" @click="handleClear">清除</el-button>
-                <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
-                <el-button type="success" icon="el-icon-circle-plus" @click="handleAdd">添加课程</el-button>
                 <download-excel
                     class="handleUpload"
                     :fields="json_fields"
@@ -46,7 +79,7 @@
                     type="xls"
                 >
                     <el-button type="info" icon="el-icon-download">导出</el-button>
-                    <el-button type="info" icon="el-icon-download" @click="handleAllUpload">全部导出</el-button>
+                    <!-- <el-button type="info" icon="el-icon-download" @click="handleAllUpload">全部导出</el-button> -->
                 </download-excel>
             </div>
             <el-table
@@ -258,6 +291,8 @@ export default {
             moreVisible: false,
             addVisible: false,
             showOrNot: false,
+            courseOrNot: true,
+            stuNumberOrNot: true,
             form: {},
             formAdd: {},
             defaultAvatar: {},
@@ -617,11 +652,16 @@ export default {
 <style scoped>
 .handleUpload {
     position: relative;
-    margin-left: 720px;
+    margin-left: 920px;
     margin-top: -32px;
 }
 .handle-box {
     margin-bottom: 20px;
+}
+.handle-weekday {
+    position: relative;
+    margin-left: 620px;
+    margin-top: -32px;
 }
 
 .handle-select {
