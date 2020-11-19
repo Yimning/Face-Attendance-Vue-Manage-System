@@ -9,12 +9,12 @@
             <div class="handle-box">
                 <el-button type="danger" icon="el-icon-delete" class="handle-del mr10" @click="delAllSelection">批量删除</el-button>
 
-                <el-select v-model="QueryConditions.courseID" placeholder="课程号-课程名" class=" mr10">
+                <el-select v-model="QueryConditions.courseID" placeholder="课程号-课程名" class="mr10">
                     <el-option
                         el-option
                         v-for="item in QueryConditions"
                         :key="item.courseID"
-                        :label="item.courseID +'-' +item.courseName"
+                        :label="item.courseID"
                         :value="item.courseID"
                     ></el-option>
                 </el-select>
@@ -30,7 +30,7 @@
                     v-model="query.request"
                     v-if="selected === '0'"
                     placeholder="教师号"
-                    class="handle-input mr10 mr10"
+                    class="handle-input mr10"
                     @keyup.enter.native="handleSearch"
                     id="messageInput"
                     v-on:input="inputFunc"
@@ -61,7 +61,7 @@
                 <el-input
                     v-model="query.request"
                     v-else
-                    placeholder="输入教师姓名"
+                    placeholder="输入学生姓名"
                     class="handle-input mr10"
                     @keyup.enter.native="handleSearch"
                     id="messageInput"
@@ -76,17 +76,10 @@
                             v-model="QueryConditions.weekDay"
                             value-format="yyyy-MM-dd"
                             style="width: 100%"
+                            v-on:input="inputFuncDay"
                         ></el-date-picker>
                     </el-col>
-                    <el-select v-model="QueryConditions.weekDay" placeholder="星期" class="handle-select mr10">
-                        <el-option
-                            el-option
-                            v-for="item in QueryConditions"
-                            :key="item.weekDay"
-                            :label="item.weekDay"
-                            :value="item.weekDay"
-                        ></el-option>
-                    </el-select>
+                    <el-input v-model="QueryConditions.IsDay" placeholder="" class="handle-input mr10" disabled></el-input>
 
                     <el-button class="" type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
                     <!-- <el-button type="success" icon="el-icon-circle-plus" @click="handleAdd">添加课程</el-button> -->
@@ -268,6 +261,7 @@
 <script>
 import { fetchData, AvatarData } from '../../api/index';
 import JsonExcel from 'vue-json-excel';
+const weekArr = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
 export default {
     name: 'basetable',
     data() {
@@ -283,8 +277,13 @@ export default {
             form: {
                 options: []
             },
+            timeValue: '',
+            input: '',
             newArray: [],
-            QueryConditions: {},
+            QueryConditions: {
+                IsDay: '',
+                courseID:'',
+            },
             multipleSelection: [],
             list: [{}],
             json_fields: {
@@ -360,8 +359,8 @@ export default {
             this.$axios
                 .get('/api/course/findAllCourse')
                 .then((res) => {
-                    console.log(res);
-                    this.QueryConditions = res.data;
+                   // console.log(res);
+                    that.QueryConditions = res.data;
                 })
                 .catch((err) => {
                     console.log(err);
@@ -420,6 +419,26 @@ export default {
                 return this.weeks[weekIndex];
             } else return null;
         },
+        GMTToStr: function (time) {
+            let date = new Date(time);
+            let Str =
+                date.getFullYear() +
+                '-' +
+                (date.getMonth() + 1) +
+                '-' +
+                date.getDate() +
+                ' ' +
+                date.getHours() +
+                ':' +
+                date.getMinutes() +
+                ':' +
+                date.getSeconds();
+            return Str;
+        },
+        StrToGMT(time) {
+            let GMT = new Date(time);
+            return GMT;
+        },
         //清除搜索框
         handleClear() {
             this.query.request = '';
@@ -436,6 +455,12 @@ export default {
             }
             // this.inputData = { value }; //把数据存入inputData
             // console.log('检测到变化'+this.query.request);
+        },
+        inputFuncDay(value) {
+            if (!value) return;
+            let date = new Date(value);
+            let weekIndex = date.getDay();
+            this.QueryConditions.IsDay = weekArr[weekIndex];
         },
         // 触发搜索按钮
         handleSearch() {
@@ -699,7 +724,7 @@ export default {
 }
 .handle-weekday {
     position: relative;
-    margin-left: 620px;
+    margin-left: 570px;
     margin-top: -32px;
 }
 
