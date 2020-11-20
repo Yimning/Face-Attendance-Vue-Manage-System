@@ -9,12 +9,12 @@
             <div class="handle-box">
                 <el-button type="danger" icon="el-icon-delete" class="handle-del mr10" @click="delAllSelection">批量删除</el-button>
 
-                <el-select v-model="QueryConditions.courseID" placeholder="课程号-课程名" class="mr10">
+                <el-select v-model="QueryConditions.courseID" placeholder="课程号-课程名" aria-label="课程号-课程名" class="mr10" v-on:input="courseFunc">
                     <el-option
                         el-option
                         v-for="item in QueryConditions"
                         :key="item.courseID"
-                        :label="item.courseID   +  item.courseName"
+                        :label="item.courseID +'-'+ item.courseName"
                         :value="item.courseID"
                     ></el-option>
                 </el-select>
@@ -281,7 +281,7 @@ export default {
             newArray: [],
             QueryConditions: {
                 IsDay: '',
-                courseID:'',
+                courseID: ''
             },
             multipleSelection: [],
             list: [{}],
@@ -294,9 +294,9 @@ export default {
                 课程号: 'courseID',
                 课程名: 'courseName',
                 授课教师: 'teacherName',
-                签到时间:'recordTime',
-                星期:'weekDay',
-                是否已签:'flag',
+                签到时间: 'recordTime',
+                星期: 'weekDay',
+                是否已签: 'flag'
             },
             weeks: {
                 0: '星期日',
@@ -361,7 +361,7 @@ export default {
             this.$axios
                 .get('/api/course/findAllCourse')
                 .then((res) => {
-                   // console.log(res);
+                    // console.log(res);
                     that.QueryConditions = res.data;
                 })
                 .catch((err) => {
@@ -446,6 +446,9 @@ export default {
             this.query.request = '';
             this.showOrNot = false;
             this.getData();
+        },
+        courseFunc(e) {
+            console.log('dddddddddddd' + e);
         },
         //监听事件-输入框
         inputFunc(e) {
