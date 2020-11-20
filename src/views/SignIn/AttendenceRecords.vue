@@ -6,7 +6,7 @@
             </el-breadcrumb>
         </div>
         <div class="container">
-            <div class="handle-box">
+            <div class="handle-box" ref="QueryConditions" :model="QueryConditions" :rules="rules">
                 <el-button type="danger" icon="el-icon-delete" class="handle-del mr10" @click="delAllSelection">批量删除</el-button>
 
                 <el-select v-model="QueryConditions.courseID" placeholder="课程号-课程名" class="mr10" v-on:input="courseFunc">
@@ -71,16 +71,15 @@
                 <div class="handle-weekday">
                     <el-col :span="7">
                         <el-date-picker
-                            type="date"
-                            placeholder="选择日期"
-                            v-model="QueryConditions.weekDay"
-                            value-format="yyyy-MM-dd"
-                            style="width: 100%"
+                            type="datetime"
+                            placeholder="选择日期时间"
+                            v-model="QueryConditions.recordTime"
+                            value-format="yyyy-MM-dd HH:mm:ss"
                             v-on:input="inputFuncDay"
                         ></el-date-picker>
                     </el-col>
                     <el-input v-model="QueryConditions.IsDay" placeholder="" class="handle-input mr10" disabled></el-input>
-                    <el-button class="" type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
+                    <el-button class="" type="primary" icon="el-icon-search" @click="handleSearchByInfo">搜索</el-button>
                     <!-- <el-button type="success" icon="el-icon-circle-plus" @click="handleAdd">添加课程</el-button> -->
                 </div>
 
@@ -308,6 +307,9 @@ export default {
                 5: '星期五',
                 6: '星期六'
             },
+            rules: {
+                recordTime: [{ required: true, message: '请输入密保答案', trigger: 'blur' }]
+            },
             requestAddr: '',
             selected: '0', //注意数据格式的转换，否则会导致不正常
             tableData: [],
@@ -449,8 +451,8 @@ export default {
             this.getData();
         },
         courseFunc(e) {
-            const url='/api/attendance/findAttendanceBycourseID'
-            this.getAttendanceBycourseID(url,e);
+            const url = '/api/attendance/findAttendanceBycourseID';
+            this.getAttendanceBycourseID(url, e);
         },
         // 获取课程BycourseID
         getAttendanceBycourseID(url, id) {
@@ -527,13 +529,40 @@ export default {
                     console.log(err);
                 });
         },
+                // 获取课程ByteacherName
+        getAttendanceByinfo(url, json) {
+            const that = this;
+            //axios的get请求,//使用spread方法处理响应数组结果
+            this.$axios
+                .get(url, json)
+                .then((res) => {
+                    this.form = res.data;
+                    //console.log('请求后台数据结果', this.form);
+                    this.dataTraversal(this.form);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        },
 
         //监听事件-输入框
         inputFunc(e) {
             this.handleSearch(e);
         },
+        handleSearchByInfo() {
+            // if( (!this.QueryConditions.courseID)&&(!this.QueryConditions.recordTime)) return  this.$message.error(`请选择时间和课程号查询`);
+            // if( (!this.QueryConditions.courseID)&&(!this.QueryConditions.recordTime)){
+            //     if(!this.QueryConditions.courseID) return  this.$message.error(`请选择时间`);
+
+            // }
+           console.log(this.QueryConditions.recordTime);
+            console.log(this.QueryConditions.courseID);
+           const url = '/api/attendance/findAttendanceInfo';
+            this.getAttendanceByinfo(url,this.QueryConditions);
+
+        },
         selectedFunc() {
-           this.query.request=''
+            this.query.request = '';
         },
 
         inputFuncDay(value) {
