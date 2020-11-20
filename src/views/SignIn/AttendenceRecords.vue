@@ -6,7 +6,7 @@
             </el-breadcrumb>
         </div>
         <div class="container">
-            <div class="handle-box" ref="QueryConditions" :model="QueryConditions" :rules="rules">
+            <div class="handle-box" ref="QueryConditions" :rules="rules">
                 <el-button type="danger" icon="el-icon-delete" class="handle-del mr10" @click="delAllSelection">批量删除</el-button>
 
                 <el-select v-model="QueryConditions.courseID" placeholder="课程号-课程名" class="mr10" v-on:input="courseFunc">
@@ -283,6 +283,10 @@ export default {
                 courseID: '',
                 courseName: ''
             },
+           queryInfo: {
+                courseID: '',
+                courseName: ''
+            },
             multipleSelection: [],
             list: [{}],
             json_fields: {
@@ -529,7 +533,7 @@ export default {
                     console.log(err);
                 });
         },
-                // 获取课程ByteacherName
+        // 获取课程ByteacherName
         getAttendanceByinfo(url, json) {
             const that = this;
             //axios的get请求,//使用spread方法处理响应数组结果
@@ -555,11 +559,15 @@ export default {
             //     if(!this.QueryConditions.courseID) return  this.$message.error(`请选择时间`);
 
             // }
-           console.log(this.QueryConditions.recordTime);
-            console.log(this.QueryConditions.courseID);
-           const url = '/api/attendance/findAttendanceInfo';
-            this.getAttendanceByinfo(url,this.QueryConditions);
 
+            console.log(this.QueryConditions.recordTime);
+            console.log(this.QueryConditions.courseID);
+            const url = '/api/attendance/findAttendanceInfo';
+            //const params={ params: { id: this.QueryConditions.courseID , recordTime:this.QueryConditions.recordTime}};
+            this.queryInfo.recordTime=this.QueryConditions.recordTime
+            this.queryInfo.courseID=this.QueryConditions.courseID
+            console.log(this.queryInfo);
+            this.getAttendanceByinfo(url,this.queryInfo);
         },
         selectedFunc() {
             this.query.request = '';
