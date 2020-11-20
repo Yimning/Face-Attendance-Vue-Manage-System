@@ -14,7 +14,7 @@
                         el-option
                         v-for="item in QueryConditions"
                         :key="item.courseID"
-                        :label="item.courseID + '-' + item.courseName"
+                        :label="item.courseID   +  item.courseName"
                         :value="item.courseID"
                     ></el-option>
                 </el-select>
@@ -297,8 +297,6 @@ export default {
                 签到时间:'recordTime',
                 星期:'weekDay',
                 是否已签:'flag',
-
-
             },
             weeks: {
                 0: '星期日',
