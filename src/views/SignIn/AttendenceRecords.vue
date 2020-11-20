@@ -9,12 +9,12 @@
             <div class="handle-box">
                 <el-button type="danger" icon="el-icon-delete" class="handle-del mr10" @click="delAllSelection">批量删除</el-button>
 
-                <el-select v-model="QueryConditions.courseID" placeholder="课程号-课程名" aria-label="课程号-课程名" class="mr10" v-on:input="courseFunc">
+                <el-select v-model="QueryConditions.courseID" placeholder="课程号-课程名" class="mr10" v-on:input="courseFunc">
                     <el-option
                         el-option
                         v-for="item in QueryConditions"
                         :key="item.courseID"
-                        :label="item.courseID +'-'+ item.courseName"
+                        :label="item.courseID + item.courseName"
                         :value="item.courseID"
                     ></el-option>
                 </el-select>
@@ -281,7 +281,8 @@ export default {
             newArray: [],
             QueryConditions: {
                 IsDay: '',
-                courseID: ''
+                courseID: '',
+                courseName: ''
             },
             multipleSelection: [],
             list: [{}],
@@ -448,8 +449,84 @@ export default {
             this.getData();
         },
         courseFunc(e) {
-            console.log('dddddddddddd' + e);
+            this.getAttendanceBycourseID(e);
         },
+        // 获取课程BycourseID
+        getAttendanceBycourseID(id) {
+            const that = this;
+            //axios的get请求,//使用spread方法处理响应数组结果
+            this.$axios
+                .get('/api/attendance/findAttendanceBycourseID', { params: { id: id } })
+                .then((res) => {
+                    this.form = res.data;
+                    //console.log('请求后台数据结果', this.form);
+                    this.dataTraversal(this.form);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        },
+        // 获取课程BystudentID
+        getAttendanceBystudentID(id) {
+            const that = this;
+            //axios的get请求,//使用spread方法处理响应数组结果
+            this.$axios
+                .get('/api/attendance/findAttendanceBystudentID', { params: { id: id } })
+                .then((res) => {
+                    this.form = res.data;
+                    //console.log('请求后台数据结果', this.form);
+                    this.dataTraversal(this.form);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        },
+        // 获取课程BystudentName
+        getAttendanceBystudentName(id) {
+            const that = this;
+            //axios的get请求,//使用spread方法处理响应数组结果
+            this.$axios
+                .get('/api/attendance/findAttendanceBystudentName', { params: { id: id } })
+                .then((res) => {
+                    this.form = res.data;
+                    //console.log('请求后台数据结果', this.form);
+                    this.dataTraversal(this.form);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        },
+        // 获取课程ByteacherID
+        getAttendanceByteacherID(id) {
+            const that = this;
+            //axios的get请求,//使用spread方法处理响应数组结果
+            this.$axios
+                .get('/api/attendance/findAttendanceByteacherID', { params: { id: id } })
+                .then((res) => {
+                    this.form = res.data;
+                    //console.log('请求后台数据结果', this.form);
+                    this.dataTraversal(this.form);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        },
+        // 获取课程ByteacherName
+        getAttendanceByteacherName(id) {
+            const that = this;
+            //axios的get请求,//使用spread方法处理响应数组结果
+            this.$axios
+                .get('/api/attendance/findAttendanceByteacherName', { params: { id: id } })
+                .then((res) => {
+                    this.form = res.data;
+                    //console.log('请求后台数据结果', this.form);
+                    this.dataTraversal(this.form);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        },
+
         //监听事件-输入框
         inputFunc(e) {
             if (this.query.request == '') {
