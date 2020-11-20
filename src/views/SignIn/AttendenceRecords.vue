@@ -452,11 +452,11 @@ export default {
             this.getAttendanceBycourseID(e);
         },
         // 获取课程BycourseID
-        getAttendanceBycourseID(id) {
+        getAttendanceBycourseID(url,id) {
             const that = this;
             //axios的get请求,//使用spread方法处理响应数组结果
             this.$axios
-                .get('/api/attendance/findAttendanceBycourseID', { params: { id: id } })
+                .get(url, { params: { id: id } })
                 .then((res) => {
                     this.form = res.data;
                     //console.log('请求后台数据结果', this.form);
@@ -467,11 +467,11 @@ export default {
                 });
         },
         // 获取课程BystudentID
-        getAttendanceBystudentID(id) {
+        getAttendanceBystudentID(url,id) {
             const that = this;
             //axios的get请求,//使用spread方法处理响应数组结果
             this.$axios
-                .get('/api/attendance/findAttendanceBystudentID', { params: { id: id } })
+                .get(url, { params: { id: id } })
                 .then((res) => {
                     this.form = res.data;
                     //console.log('请求后台数据结果', this.form);
@@ -482,11 +482,11 @@ export default {
                 });
         },
         // 获取课程BystudentName
-        getAttendanceBystudentName(id) {
+        getAttendanceBystudentName(url,id) {
             const that = this;
             //axios的get请求,//使用spread方法处理响应数组结果
             this.$axios
-                .get('/api/attendance/findAttendanceBystudentName', { params: { id: id } })
+                .get(url, { params: { id: id } })
                 .then((res) => {
                     this.form = res.data;
                     //console.log('请求后台数据结果', this.form);
@@ -497,11 +497,11 @@ export default {
                 });
         },
         // 获取课程ByteacherID
-        getAttendanceByteacherID(id) {
+        getAttendanceByteacherID(url,id) {
             const that = this;
             //axios的get请求,//使用spread方法处理响应数组结果
             this.$axios
-                .get('/api/attendance/findAttendanceByteacherID', { params: { id: id } })
+                .get(url, { params: { id: id } })
                 .then((res) => {
                     this.form = res.data;
                     //console.log('请求后台数据结果', this.form);
@@ -512,11 +512,11 @@ export default {
                 });
         },
         // 获取课程ByteacherName
-        getAttendanceByteacherName(id) {
+        getAttendanceByteacherName(url,id) {
             const that = this;
             //axios的get请求,//使用spread方法处理响应数组结果
             this.$axios
-                .get('/api/attendance/findAttendanceByteacherName', { params: { id: id } })
+                .get(url, { params: { id: id } })
                 .then((res) => {
                     this.form = res.data;
                     //console.log('请求后台数据结果', this.form);
@@ -530,12 +530,7 @@ export default {
         //监听事件-输入框
         inputFunc(e) {
             console.log('sssss' + e + this.selected);
-            if (this.query.request == '') {
-                this.showOrNot = false;
-                this.getData();
-            } else {
-                this.showOrNot = true;
-            }
+            this.handleSearch(e);
         },
 
         inputFuncDay(value) {
@@ -558,23 +553,23 @@ export default {
                 //
                 if (this.selected == 0) {
                     this.requestAddr = findByteacherID;
-                    this.findStudentRequest(this.requestAddr,value);
+                    this.getAttendanceByteacherID(this.requestAddr,value);
                 } else if (this.selected == 1) {
                     this.requestAddr = findByteacherName;
-                    this.findStudentRequest(this.requestAddr, value);
+                    this.getAttendanceByteacherName(this.requestAddr,value);
                 } else if (this.selected == 2) {
                     this.requestAddr = findBystudentID;
-                    this.findStudentRequest(this.requestAddr, value);
+                    this.getAttendanceBystudentNameID(this.requestAddr,value);
                 } else {
                     this.requestAddr = findBystudnetName;
-                    this.findStudentRequest(this.requestAddr, value);
+                    this.getAttendanceBystudentName(this.requestAddr,value);
                 }
             } else {
                 this.$message.error(`请正确输入查询内容`);
                 this.getData();
             }
         },
-        findStudentRequest(val, id) {
+        findStudentRequest(val) {
             // this.$set(this.query, 'currentPage', 1);
             const that = this;
             this.tableData = [];
