@@ -69,15 +69,18 @@
                     clearable
                 ></el-input>
                 <div class="handle-weekday">
-                    <el-col :span="7">
-                        <el-date-picker
-                            type="datetime"
-                            placeholder="选择日期时间"
-                            v-model="QueryConditions.recordTime"
-                            value-format="yyyy-MM-dd HH:mm:ss"
-                            v-on:input="inputFuncDay"
-                        ></el-date-picker>
-                    </el-col>
+                    <el-tooltip class="item" effect="dark" content="系统会以课程时间的前后十五分钟来查询，请注意选择" placement="top">
+                        <el-col :span="8">
+                            <el-date-picker
+                                type="datetime"
+                                placeholder="选择日期时间"
+                                v-model="QueryConditions.recordTime"
+                                value-format="yyyy-MM-dd HH:mm:ss"
+                                v-on:input="inputFuncDay"
+                                clearable
+                            ></el-date-picker>
+                        </el-col>
+                    </el-tooltip>
                     <el-input v-model="QueryConditions.IsDay" placeholder="" class="handle-input mr10" disabled></el-input>
                     <el-button class="" type="primary" icon="el-icon-search" @click="handleSearchByInfo">搜索</el-button>
                     <!-- <el-button type="success" icon="el-icon-circle-plus" @click="handleAdd">添加课程</el-button> -->
@@ -91,6 +94,7 @@
                     :before-finish="finishDownload"
                     type="xls"
                 >
+                <el-button type="info" icon="el-icon-edit" @click="handleFlag">未签</el-button>
                     <el-button type="info" icon="el-icon-download">导出</el-button>
                     <!-- <el-button type="info" icon="el-icon-download" @click="handleAllUpload">全部导出</el-button> -->
                 </download-excel>
@@ -283,7 +287,7 @@ export default {
                 courseID: '',
                 courseName: ''
             },
-           queryInfo: {
+            queryInfo: {
                 courseID: '',
                 courseName: ''
             },
@@ -383,7 +387,7 @@ export default {
                 this.$set(this.list, 'recordID', form[i].recordID);
                 this.$set(this.list, 'recordTime', form[i].recordTime);
                 this.$set(this.list, 'flag', form[i].flag);
-                this.$set(this.list, 'weekDay', this.dataDateChange(form[i].weekDay));
+                this.$set(this.list, 'weekDay', this.dataDateChange(form[i].recordTime));
 
                 for (const key in form[i].course) {
                     this.$set(this.list, key, form[i].course[key]); //对象新增属性(使用Vue.$set())
@@ -534,7 +538,7 @@ export default {
                 });
         },
         // 获取课程ByteacherName
-        getAttendanceByinfo(url, json) {
+        getAttendanceByInfo(url, json) {
             const that = this;
             //axios的get请求,//使用spread方法处理响应数组结果
             this.$axios
@@ -554,20 +558,15 @@ export default {
             this.handleSearch(e);
         },
         handleSearchByInfo() {
-            // if( (!this.QueryConditions.courseID)&&(!this.QueryConditions.recordTime)) return  this.$message.error(`请选择时间和课程号查询`);
-            // if( (!this.QueryConditions.courseID)&&(!this.QueryConditions.recordTime)){
-            //     if(!this.QueryConditions.courseID) return  this.$message.error(`请选择时间`);
+            if (!this.QueryConditions.courseID && !this.QueryConditions.recordTime) return this.$message.error(`请选择时间和课程号查询`);
+            if (!this.QueryConditions.courseID) return this.$message.error(`选择课程号-课程名`);
+            if (!this.QueryConditions.recordTime) return this.$message.error(`选择时间查询`);
 
-            // }
-
-            console.log(this.QueryConditions.recordTime);
-            console.log(this.QueryConditions.courseID);
-            const url = '/api/attendance/findAttendanceInfo';
-            //const params={ params: { id: this.QueryConditions.courseID , recordTime:this.QueryConditions.recordTime}};
-            this.queryInfo.recordTime=this.QueryConditions.recordTime
-            this.queryInfo.courseID=this.QueryConditions.courseID
-            console.log(this.queryInfo);
-            this.getAttendanceByinfo(url,this.queryInfo);
+            if (this.QueryConditions.courseID && this.QueryConditions.recordTime) {
+                const url = '/api/attendance/findAttendanceInfo';
+                const params = { params: { id: this.QueryConditions.courseID, time: this.QueryConditions.recordTime } };
+                this.getAttendanceByInfo(url, params);
+            }
         },
         selectedFunc() {
             this.query.request = '';
