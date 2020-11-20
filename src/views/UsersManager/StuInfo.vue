@@ -380,7 +380,7 @@ export default {
                     this.$axios
                         .post('/api/student/deleteOne/' + id)
                         .then((res) => {
-                            console.log(res);
+                           // console.log(res);
                             that.$message.success('删除成功');
                         })
                         .catch((err) => {
@@ -421,7 +421,7 @@ export default {
                         console.log(str);
                         this.$axios.post('/api/student/deleteMore', { studentNumber: str }).then((res) => {
                             if (res && res.status === 200) {
-                                console.log(res.data); // 服务器回包内容
+                               // console.log(res.data); // 服务器回包内容
                                 that.$message.error(`删除了${str}`);
                             }
                         });
@@ -482,12 +482,12 @@ export default {
             const that = this;
             this.editVisible = false;
             this.$set(this.tableData, this.idx, this.form);
-            console.log(this.tableData[this.idx]);
+            //console.log(this.tableData[this.idx]);
 
             this.$axios
                 .post('/api/student/updateOne', this.tableData[this.idx])
                 .then((res) => {
-                    console.log(res);
+                    //console.log(res);
                     that.$message.success(`修改第 ${this.idx + 1} 行成功`);
                 })
                 .catch((err) => {
