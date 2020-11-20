@@ -83,9 +83,10 @@
                     </el-tooltip>
                     <el-input v-model="QueryConditions.IsDay" placeholder="" class="handle-input mr10" disabled></el-input>
                     <el-button class="" type="primary" icon="el-icon-search" @click="handleSearchByInfo">搜索</el-button>
+                    <el-button type="info" icon="el-icon-edit" @click="handleFlag">未签</el-button>
                     <!-- <el-button type="success" icon="el-icon-circle-plus" @click="handleAdd">添加课程</el-button> -->
                 </div>
-                <el-button type="info" icon="el-icon-edit" @click="handleFlag">未签</el-button>
+
                 <download-excel
                     class="handleUpload"
                     :fields="json_fields"
