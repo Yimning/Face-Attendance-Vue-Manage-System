@@ -85,7 +85,7 @@
                     <el-button class="" type="primary" icon="el-icon-search" @click="handleSearchByInfo">搜索</el-button>
                     <!-- <el-button type="success" icon="el-icon-circle-plus" @click="handleAdd">添加课程</el-button> -->
                 </div>
-
+                <el-button type="info" icon="el-icon-edit" @click="handleFlag">未签</el-button>
                 <download-excel
                     class="handleUpload"
                     :fields="json_fields"
@@ -94,11 +94,12 @@
                     :before-finish="finishDownload"
                     type="xls"
                 >
-                <el-button type="info" icon="el-icon-edit" @click="handleFlag">未签</el-button>
                     <el-button type="info" icon="el-icon-download">导出</el-button>
                     <!-- <el-button type="info" icon="el-icon-download" @click="handleAllUpload">全部导出</el-button> -->
                 </download-excel>
             </div>
+
+
             <el-table
                 :data="tableData"
                 border
