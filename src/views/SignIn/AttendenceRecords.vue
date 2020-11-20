@@ -80,7 +80,6 @@
                         ></el-date-picker>
                     </el-col>
                     <el-input v-model="QueryConditions.IsDay" placeholder="" class="handle-input mr10" disabled></el-input>
-
                     <el-button class="" type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
                     <!-- <el-button type="success" icon="el-icon-circle-plus" @click="handleAdd">添加课程</el-button> -->
                 </div>
@@ -117,6 +116,7 @@
                 <el-table-column prop="teacherName" label="授课教师" align="center"></el-table-column>
                 <el-table-column prop="recordTime" label="签到时间" align="center"></el-table-column>
                 <el-table-column prop="weekDay" label="星期" align="center"></el-table-column>
+                
                 <el-table-column prop="flag" label="是否已签" align="center"></el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
@@ -294,7 +294,10 @@ export default {
                 专业: 'profession',
                 课程号: 'courseID',
                 课程名: 'courseName',
-                授课教师: 'teacherName'
+                授课教师: 'teacherName',
+                签到时间:'recordTime',
+                ,
+
             },
             weeks: {
                 0: '星期日',
