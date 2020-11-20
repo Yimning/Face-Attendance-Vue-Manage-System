@@ -116,7 +116,6 @@
                 <el-table-column prop="teacherName" label="授课教师" align="center"></el-table-column>
                 <el-table-column prop="recordTime" label="签到时间" align="center"></el-table-column>
                 <el-table-column prop="weekDay" label="星期" align="center"></el-table-column>
-                
                 <el-table-column prop="flag" label="是否已签" align="center"></el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
@@ -296,7 +295,9 @@ export default {
                 课程名: 'courseName',
                 授课教师: 'teacherName',
                 签到时间:'recordTime',
-                ,
+                星期:'weekDay',
+                是否已签:'flag',
+
 
             },
             weeks: {
