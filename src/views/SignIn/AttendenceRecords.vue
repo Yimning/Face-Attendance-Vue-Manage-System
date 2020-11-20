@@ -529,15 +529,15 @@ export default {
 
         //监听事件-输入框
         inputFunc(e) {
+            console.log('sssss' + e + this.selected);
             if (this.query.request == '') {
                 this.showOrNot = false;
                 this.getData();
             } else {
                 this.showOrNot = true;
             }
-            // this.inputData = { value }; //把数据存入inputData
-            // console.log('检测到变化'+this.query.request);
         },
+
         inputFuncDay(value) {
             if (!value) return;
             let date = new Date(value);
@@ -545,28 +545,36 @@ export default {
             this.QueryConditions.IsDay = weekArr[weekIndex];
         },
         // 触发搜索按钮
-        handleSearch() {
+        handleSearch(value) {
             // console.log(this.query.request);//打印输入搜索的值
             this.tableData = [];
             const that = this;
-            const findByID = '/api/scourse/findScourseBycourseID/';
-            const findByName = '/api/scourse/findScourseByName/';
+            const findBystudentID = '/api/attendance/findAttendanceBystudentID';
+            const findBystudnetName = '/api/attendance/findAttendanceByStudentName';
+            const findByteacherID = '/api/attendance/findAttendanceByteacherID';
+            const findByteacherName = '/api/attendance/findAttendanceByteacherName';
             //console.log(this.selected);
             if (this.query.request != '') {
                 //
                 if (this.selected == 0) {
-                    this.requestAddr = findByID;
-                    this.findStudentRequest(this.requestAddr);
+                    this.requestAddr = findByteacherID;
+                    this.findStudentRequest(this.requestAddr,value);
+                } else if (this.selected == 1) {
+                    this.requestAddr = findByteacherName;
+                    this.findStudentRequest(this.requestAddr, value);
+                } else if (this.selected == 2) {
+                    this.requestAddr = findBystudentID;
+                    this.findStudentRequest(this.requestAddr, value);
                 } else {
-                    this.requestAddr = findByName;
-                    this.findStudentRequest(this.requestAddr);
+                    this.requestAddr = findBystudnetName;
+                    this.findStudentRequest(this.requestAddr, value);
                 }
             } else {
                 this.$message.error(`请正确输入查询内容`);
                 this.getData();
             }
         },
-        findStudentRequest(val) {
+        findStudentRequest(val, id) {
             // this.$set(this.query, 'currentPage', 1);
             const that = this;
             this.tableData = [];
