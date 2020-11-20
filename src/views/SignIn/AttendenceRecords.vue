@@ -19,7 +19,7 @@
                     ></el-option>
                 </el-select>
 
-                <el-select v-model="selected" placeholder="查询条件" class="handle-select mr10">
+                <el-select v-model="selected" placeholder="查询条件" v-on:input="selectedFunc" class="handle-select mr10">
                     <el-option key="查教师号" label="教师号" value="0"></el-option>
                     <el-option key="查教师姓名" label="教师姓名" value="1"></el-option>
                     <el-option key="查查学生学号" label="查学生学号" value="2"></el-option>
@@ -449,10 +449,11 @@ export default {
             this.getData();
         },
         courseFunc(e) {
-            this.getAttendanceBycourseID(e);
+            const url='/api/attendance/findAttendanceBycourseID'
+            this.getAttendanceBycourseID(url,e);
         },
         // 获取课程BycourseID
-        getAttendanceBycourseID(url,id) {
+        getAttendanceBycourseID(url, id) {
             const that = this;
             //axios的get请求,//使用spread方法处理响应数组结果
             this.$axios
@@ -467,7 +468,7 @@ export default {
                 });
         },
         // 获取课程BystudentID
-        getAttendanceBystudentID(url,id) {
+        getAttendanceBystudentID(url, id) {
             const that = this;
             //axios的get请求,//使用spread方法处理响应数组结果
             this.$axios
@@ -482,7 +483,7 @@ export default {
                 });
         },
         // 获取课程BystudentName
-        getAttendanceBystudentName(url,id) {
+        getAttendanceBystudentName(url, id) {
             const that = this;
             //axios的get请求,//使用spread方法处理响应数组结果
             this.$axios
@@ -497,7 +498,7 @@ export default {
                 });
         },
         // 获取课程ByteacherID
-        getAttendanceByteacherID(url,id) {
+        getAttendanceByteacherID(url, id) {
             const that = this;
             //axios的get请求,//使用spread方法处理响应数组结果
             this.$axios
@@ -512,7 +513,7 @@ export default {
                 });
         },
         // 获取课程ByteacherName
-        getAttendanceByteacherName(url,id) {
+        getAttendanceByteacherName(url, id) {
             const that = this;
             //axios的get请求,//使用spread方法处理响应数组结果
             this.$axios
@@ -529,8 +530,10 @@ export default {
 
         //监听事件-输入框
         inputFunc(e) {
-            console.log('sssss' + e + this.selected);
             this.handleSearch(e);
+        },
+        selectedFunc() {
+           this.query.request=''
         },
 
         inputFuncDay(value) {
@@ -553,16 +556,16 @@ export default {
                 //
                 if (this.selected == 0) {
                     this.requestAddr = findByteacherID;
-                    this.getAttendanceByteacherID(this.requestAddr,value);
+                    this.getAttendanceByteacherID(this.requestAddr, value);
                 } else if (this.selected == 1) {
                     this.requestAddr = findByteacherName;
-                    this.getAttendanceByteacherName(this.requestAddr,value);
+                    this.getAttendanceByteacherName(this.requestAddr, value);
                 } else if (this.selected == 2) {
                     this.requestAddr = findBystudentID;
-                    this.getAttendanceBystudentNameID(this.requestAddr,value);
+                    this.getAttendanceBystudentID(this.requestAddr, value);
                 } else {
                     this.requestAddr = findBystudnetName;
-                    this.getAttendanceBystudentName(this.requestAddr,value);
+                    this.getAttendanceBystudentName(this.requestAddr, value);
                 }
             } else {
                 this.$message.error(`请正确输入查询内容`);
