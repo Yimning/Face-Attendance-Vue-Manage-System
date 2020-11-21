@@ -777,7 +777,11 @@ export default {
         handleNotFlag() {
             const url = '/api/attendance/findAllAttendanceNotflag';
             const params = { params: { flag: 0, cID: this.QueryConditions.courseID } };
-            this.requestHandleFlag(url, params);
+            if (!this.QueryConditions.courseID) {
+                return this.$message.error(`请选择课程号-课程名`);
+            } else {
+                this.requestHandleFlag(url, params);
+            }
         },
         requestHandleFlag(url, params) {
             const that = this;
