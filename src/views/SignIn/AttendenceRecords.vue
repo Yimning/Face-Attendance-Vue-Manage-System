@@ -119,6 +119,7 @@
                 <el-table-column prop="profession" label="专业" align="center"></el-table-column>
                 <el-table-column prop="courseID" label="课程号" width="55" align="center"></el-table-column>
                 <el-table-column prop="courseName" label="课程名" align="center"></el-table-column>
+                <!-- <el-table-column prop="teacherNumber" label="教师号" align="center"></el-table-column> -->
                 <el-table-column prop="teacherName" label="授课教师" align="center"></el-table-column>
                 <el-table-column prop="recordTime" label="签到时间" align="center"></el-table-column>
                 <el-table-column prop="weekDay" label="星期" align="center"></el-table-column>
@@ -758,29 +759,39 @@ export default {
             });
         },
 
-        handleAllUpload() {
+        handleAllUpload() {},
+        handleAdd() {
+            this.$router.push('/addCourse');
+        },
+
+        handleFlag() {
+            const url = '/api/attendance/findAllAttendanceIsflag';
+            const params = { params: { flag: 1, cID: this.QueryConditions.courseID } };
+            if (!this.QueryConditions.courseID) {
+                return this.$message.error(`请选择课程号-课程名`);
+            } else {
+                this.requestHandleFlag(url, params);
+            }
+        },
+
+        handleNotFlag() {
+            const url = '/api/attendance/findAllAttendanceNotflag';
+            const params = { params: { flag: 0, cID: this.QueryConditions.courseID } };
+            this.requestHandleFlag(url, params);
+        },
+        requestHandleFlag(url, params) {
             const that = this;
             //axios的get请求,//使用spread方法处理响应数组结果
             this.$axios
-                .get('/api/student/findAllStudent')
+                .get(url, params)
                 .then((res) => {
-                    //console.log(res);
-                    that.tableData = res.data;
-                    that.query.currentPage = 1;
-                    that.query.pageTotal = res.data.length;
-                    that.query.pageSize = res.data.length;
+                    this.form = res.data;
+                    this.dataTraversal(this.form);
                 })
                 .catch((err) => {
                     console.log(err);
                 });
         },
-        handleAdd() {
-            this.$router.push('/addCourse');
-        },
-
-        handleFlag() {},
-
-        handleNotFlag() {},
         // 分页导航
         handlePageChange(val) {
             //console.log(val);
