@@ -620,13 +620,20 @@ export default {
         // 补签操作
         handleEdit(index, row) {
             this.idx = index;
-            // this.tableData = row;
-            console.log({ row });
-            this.paramsData = { row }.row;
-            console.log(this.paramsData);
+            console.log(row);
+            // let ja = Object.fromEntries(row);
+            var obj = {};
+            //for in 循环方式
+            for (var item in row) {
+                obj[row[item].name] = row[item].value;
+            }
+            console.log(obj);
             const that = this;
             const url = '/api/attendance/updateAttendanceInfo';
-            const params = '';
+            //const params = this.paramsData;
+            const params = JSON.stringify({ row });
+            console.log({ row });
+            console.log(params);
             //axios的get请求
             this.$axios
                 .post(url, params)
@@ -637,6 +644,7 @@ export default {
                     console.log(err);
                 });
         },
+        dataConvert(data) {},
 
         // 删除操作
         handleDelete(index, row) {
