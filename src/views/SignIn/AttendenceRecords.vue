@@ -127,7 +127,7 @@
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
                         <el-button type="text" icon="el-icon-more" class="blue" @click="handleMore(scope.$index, scope.row)"
-                            >详情</el-button
+                            >统计</el-button
                         >
                         <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">补签</el-button>
                         <el-button type="text" icon="el-icon-delete" class="red" @click="handleDelete(scope.$index, scope.row)"
@@ -147,32 +147,38 @@
                 ></el-pagination>
             </div>
         </div>
-        <!-- 编辑详情框 -->
-        <el-dialog title="个人信息" :visible.sync="moreVisible" width="30%">
-            <el-form ref="form" :model="form" label-width="70px">
+        <!-- 统计 -->
+        <el-dialog title="" :visible.sync="moreVisible" width="30%">
+            <el-form ref="count" :model="{ count }" label-width="70px">
                 <el-form-item label="班号">
-                    <el-input v-model="form.studentClass" readonly="readonly"></el-input>
+                    <el-input v-model="count.studentClass" readonly="readonly"></el-input>
                 </el-form-item>
                 <el-form-item label="学号">
-                    <el-input v-model="form.studentNumber" readonly="readonly"></el-input>
+                    <el-input v-model="count.studentNumber" readonly="readonly"></el-input>
                 </el-form-item>
                 <el-form-item label="姓名">
-                    <el-input v-model="form.studentName" readonly="readonly"></el-input>
+                    <el-input v-model="count.studentName" readonly="readonly"></el-input>
                 </el-form-item>
                 <el-form-item label="性别">
-                    <el-input v-model="form.studentSex" readonly="readonly"></el-input>
+                    <el-input v-model="count.studentSex" readonly="readonly"></el-input>
                 </el-form-item>
                 <el-form-item label="专业">
-                    <el-input v-model="form.profession" readonly="readonly"></el-input>
+                    <el-input v-model="count.profession" readonly="readonly"></el-input>
                 </el-form-item>
-                <el-form-item label="身份证号">
-                    <el-input v-model="form.cardNo" readonly="readonly"></el-input>
+                <el-form-item label="课程号">
+                    <el-input v-model="count.courseID" readonly="readonly"></el-input>
                 </el-form-item>
-                <el-form-item label="加入时间">
-                    <el-input v-model="form.joinTime" readonly="readonly"></el-input>
+                <el-form-item label="课程名">
+                    <el-input v-model="count.courseName" readonly="readonly"></el-input>
                 </el-form-item>
-                <el-form-item label="头像">
-                    <el-input v-model="form.studentAvatar" readonly="readonly"></el-input>
+                <el-form-item label="课程时间">
+                    <el-input v-model="count.courseTime" readonly="readonly"></el-input>
+                </el-form-item>
+                <el-form-item label="出勤次数">
+                    <el-input v-model="count.isFlag" readonly="readonly"></el-input>
+                </el-form-item>
+                <el-form-item label="缺勤次数">
+                    <el-input v-model="count.notFlag" readonly="readonly"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -325,6 +331,7 @@ export default {
             requestAddr: '',
             selected: '0', //注意数据格式的转换，否则会导致不正常
             tableData: [],
+            count: [],
             multipleSelection: [],
             delList: [],
             editVisible: false,
@@ -356,7 +363,7 @@ export default {
         // 获取后台数据
         getData() {
             const that = this;
-            //axios的get请求,//使用spread方法处理响应数组结果
+            //axios的get请求
             this.$axios
                 .get('/api/attendance/findAllAttendance')
                 .then((res) => {
@@ -372,7 +379,7 @@ export default {
         // 获取全部课程数据
         getAllCourse() {
             const that = this;
-            //axios的get请求,//使用spread方法处理响应数组结果
+            //axios的get请求
             this.$axios
                 .get('/api/course/findAllCourse')
                 .then((res) => {
@@ -469,7 +476,7 @@ export default {
         // 获取课程BycourseID
         getAttendanceBycourseID(url, id) {
             const that = this;
-            //axios的get请求,//使用spread方法处理响应数组结果
+            //axios的get请求
             this.$axios
                 .get(url, { params: { id: id } })
                 .then((res) => {
@@ -484,7 +491,7 @@ export default {
         // 获取课程BystudentID
         getAttendanceBystudentID(url, id) {
             const that = this;
-            //axios的get请求,//使用spread方法处理响应数组结果
+            //axios的get请求
             this.$axios
                 .get(url, { params: { id: id } })
                 .then((res) => {
@@ -499,7 +506,7 @@ export default {
         // 获取课程BystudentName
         getAttendanceBystudentName(url, id) {
             const that = this;
-            //axios的get请求,//使用spread方法处理响应数组结果
+            //axios的get请求
             this.$axios
                 .get(url, { params: { id: id } })
                 .then((res) => {
@@ -514,7 +521,7 @@ export default {
         // 获取课程ByteacherID
         getAttendanceByteacherID(url, id) {
             const that = this;
-            //axios的get请求,//使用spread方法处理响应数组结果
+            //axios的get请求
             this.$axios
                 .get(url, { params: { id: id } })
                 .then((res) => {
@@ -529,7 +536,7 @@ export default {
         // 获取课程ByteacherName
         getAttendanceByteacherName(url, id) {
             const that = this;
-            //axios的get请求,//使用spread方法处理响应数组结果
+            //axios的get请求
             this.$axios
                 .get(url, { params: { id: id } })
                 .then((res) => {
@@ -544,7 +551,7 @@ export default {
         // 获取课程ByteacherName
         getAttendanceByInfo(url, json) {
             const that = this;
-            //axios的get请求,//使用spread方法处理响应数组结果
+            //axios的get请求
             this.$axios
                 .get(url, json)
                 .then((res) => {
@@ -662,6 +669,39 @@ export default {
                     }
                 });
         },
+        //详情信息
+        handleMore(index, row) {
+            this.idx = index;
+        const that = this;
+        this.findUserUrl = '/api/course/findAllCourse';
+        this.updateOneUrl = '/api/scourse/add';
+
+        var r0 = this.$axios.get(this.findUserUrl);
+        var r1 = this.$axios.get('/api/student/findAllStudent');
+        //并发请求
+            this.$axios
+                .all([r0, r1])
+                .then(
+                    that.$axios.spread((res1, res2) => {
+                       // console.log(res1);
+                        that.form.options = res1.data;
+                       // console.log(res2);
+                        that.form.studentOptions = res2.data;
+                    })
+                )
+                .catch((err) => {
+                    console.log(err);
+                });
+
+            this.count = row;
+            this.moreVisible = true;
+        },
+        // 编辑操作
+        handleEdit(index, row) {
+            this.idx = index;
+            this.tableData = row;
+            this.editVisible = true;
+        },
         // 保存编辑
         saveEdit() {
             const that = this;
@@ -770,7 +810,7 @@ export default {
             if (!this.QueryConditions.courseID) {
                 return this.$message.error(`请选择课程号-课程名`);
             } else {
-                this.requestHandleFlag(url, params);
+                this.requestHandle(url, params);
             }
         },
 
@@ -780,12 +820,12 @@ export default {
             if (!this.QueryConditions.courseID) {
                 return this.$message.error(`请选择课程号-课程名`);
             } else {
-                this.requestHandleFlag(url, params);
+                this.requestHandle(url, params);
             }
         },
-        requestHandleFlag(url, params) {
+        requestHandle(url, params) {
             const that = this;
-            //axios的get请求,//使用spread方法处理响应数组结果
+            //axios的get请求
             this.$axios
                 .get(url, params)
                 .then((res) => {
