@@ -624,7 +624,7 @@ export default {
             // let ja = Object.fromEntries(row);
             var obj = {};
             //for in 循环方式
-            for (var item in row) {
+            for (var item in row) { 
                 obj[row[item].name] = row[item].value;
             }   
             console.log(obj);    
