@@ -186,87 +186,6 @@
                 <el-button type="primary" @click="moreVisible = false">确 定</el-button>
             </span>
         </el-dialog>
-
-        <!-- 编辑弹出框 -->
-        <el-dialog title="编辑" :visible.sync="editVisible" width="30%">
-            <el-form ref="form" :model="form" label-width="70px">
-                <el-form-item label="班号">
-                    <el-input v-model="form.studentClass"></el-input>
-                </el-form-item>
-                <el-form-item label="学号">
-                    <el-input v-model="form.studentNumber" readonly="readonly"></el-input>
-                </el-form-item>
-                <el-form-item label="姓名">
-                    <el-input v-model="form.studentName"></el-input>
-                </el-form-item>
-                <el-form-item label="性别">
-                    <!-- <el-input v-model="formAdd.studentSex"></el-input> -->
-                    <el-radio v-model="form.studentSex" label="男">男</el-radio>
-                    <el-radio v-model="form.studentSex" label="女">女</el-radio>
-                </el-form-item>
-                <el-form-item label="专业">
-                    <el-input v-model="form.profession"></el-input>
-                </el-form-item>
-                <el-form-item label="身份证号">
-                    <el-input v-model="form.cardNo"></el-input>
-                </el-form-item>
-                <el-form-item label="加入时间">
-                    <div class="block">
-                        <span class="demonstration"></span>
-                        <el-date-picker v-model="form.joinTime" type="datetime" placeholder="选择日期时间"></el-date-picker>
-                    </div>
-                </el-form-item>
-                <el-form-item label="头像">
-                    <el-input v-model="form.studentAvatar" readonly="readonly"></el-input>
-                </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="editVisible = false">取 消</el-button>
-                <el-button type="primary" @click="saveEdit">确 定</el-button>
-            </span>
-        </el-dialog>
-
-        <!--添加弹出框 -->
-        <el-dialog title="添加" :visible.sync="addVisible" width="30%">
-            <el-form ref="formAdd" :model="formAdd" label-width="70px">
-                <el-form-item label="班号">
-                    <el-input v-model="formAdd.studentClass"></el-input>
-                </el-form-item>
-                <el-form-item label="学号">
-                    <el-input v-model="formAdd.studentNumber" placeholder="必填项"></el-input>
-                </el-form-item>
-                <el-form-item label="姓名">
-                    <el-input v-model="formAdd.studentName" placeholder="必填项"></el-input>
-                </el-form-item>
-                <el-form-item label="性别">
-                    <!-- <el-input v-model="formAdd.studentSex"></el-input> -->
-                    <el-radio v-model="formAdd.studentSex" label="男">男</el-radio>
-                    <el-radio v-model="formAdd.studentSex" label="女">女</el-radio>
-                </el-form-item>
-                <el-form-item label="专业">
-                    <el-input v-model="formAdd.profession"></el-input>
-                </el-form-item>
-                <el-form-item label="身份证号">
-                    <el-input v-model="formAdd.cardNo"></el-input>
-                </el-form-item>
-                <el-form-item label="加入时间">
-                    <div class="block">
-                        <span class="demonstration"></span>
-                        <el-date-picker v-model="formAdd.joinTime" type="datetime" placeholder="选择日期时间"></el-date-picker>
-                    </div>
-                </el-form-item>
-                <el-form-item label="初始密码">
-                    <el-input v-model="formAdd.studentPassword" placeholder="必填项"></el-input>
-                </el-form-item>
-                <el-form-item label="默认头像">
-                    <el-input v-model="form.studentAvatar" readonly="readonly" placeholder="后台会选择默认头像,此项无需操作"></el-input>
-                </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="addVisible = false">取 消</el-button>
-                <el-button type="primary" @click="saveAdd">确 定</el-button>
-            </span>
-        </el-dialog>
     </div>
 </template>
 
@@ -331,6 +250,7 @@ export default {
             requestAddr: '',
             selected: '0', //注意数据格式的转换，否则会导致不正常
             tableData: [],
+            paramsData: [],
             count: {
                 isFlag: '',
                 notFlag: ''
@@ -687,9 +607,7 @@ export default {
                 .all([r0, r1])
                 .then(
                     that.$axios.spread((res1, res2) => {
-                        // console.log(res1.data.length);
                         this.count.notFlag = res1.data.length;
-                        // console.log(res2.data.length);
                         this.count.isFlag = res2.data.length;
                     })
                 )
@@ -699,23 +617,25 @@ export default {
             this.count = row;
             this.moreVisible = true;
         },
-        // 编辑操作
+        // 补签操作
         handleEdit(index, row) {
             this.idx = index;
-            this.tableData = row;
-            this.editVisible = true;
-        },
-        // 保存编辑
-        saveEdit() {
+            // this.tableData = row;
+            console.log({ row });
+            this.paramsData = { row }.row;
+            console.log(this.paramsData);
             const that = this;
-            this.editVisible = false;
-            this.$set(this.tableData, this.idx, this.form);
-            console.log(this.tableData[this.idx]);
-        },
-        // 保存编辑
-        saveAdd() {
-            const that = this;
-            this.addisible = false;
+            const url = '/api/attendance/updateAttendanceInfo';
+            const params = '';
+            //axios的get请求
+            this.$axios
+                .post(url, params)
+                .then((res) => {
+                    console.log('请求后台数据结果', res);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
         },
 
         // 删除操作
