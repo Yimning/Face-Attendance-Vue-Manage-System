@@ -331,7 +331,10 @@ export default {
             requestAddr: '',
             selected: '0', //注意数据格式的转换，否则会导致不正常
             tableData: [],
-            count: [],
+            count: {
+                isFlag: '',
+                notFlag: ''
+            },
             multipleSelection: [],
             delList: [],
             editVisible: false,
@@ -672,27 +675,27 @@ export default {
         //详情信息
         handleMore(index, row) {
             this.idx = index;
-        const that = this;
-        this.findUserUrl = '/api/course/findAllCourse';
-        this.updateOneUrl = '/api/scourse/add';
-
-        var r0 = this.$axios.get(this.findUserUrl);
-        var r1 = this.$axios.get('/api/student/findAllStudent');
-        //并发请求
+            const that = this;
+            const url = '/api/attendance/countAttendanceNotflag';
+            const params = { params: { flag: 0, cID: row.courseID, sID: row.studentNumber } };
+            const url1 = '/api/attendance/countAttendanceIsflag';
+            const params1 = { params: { flag: 1, cID: row.courseID, sID: row.studentNumber } };
+            var r0 = this.$axios.get(url, params);
+            var r1 = this.$axios.get(url1, params1);
+            //并发请求
             this.$axios
                 .all([r0, r1])
                 .then(
                     that.$axios.spread((res1, res2) => {
-                       // console.log(res1);
-                        that.form.options = res1.data;
-                       // console.log(res2);
-                        that.form.studentOptions = res2.data;
+                        // console.log(res1.data.length);
+                        this.count.notFlag = res1.data.length;
+                        // console.log(res2.data.length);
+                        this.count.isFlag = res2.data.length;
                     })
                 )
                 .catch((err) => {
                     console.log(err);
                 });
-
             this.count = row;
             this.moreVisible = true;
         },
