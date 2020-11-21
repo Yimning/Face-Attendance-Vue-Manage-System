@@ -86,8 +86,8 @@
                 </div>
                 <el-button class="handle-line" type="success" icon="el-icon-circle-check" @click="handleFlag">已签</el-button>
                 <!-- <el-button type="success" icon="el-icon-circle-plus" @click="handleAdd">添加课程</el-button> -->
-                <el-button type="warning" icon="el-icon-circle-close" @click="handleFlag">未签</el-button>
-                <div handleUpload>
+                <el-button type="warning" icon="el-icon-circle-close" @click="handleNotFlag">未签</el-button>
+                <div>
                     <download-excel
                         class="handleUpload"
                         :fields="json_fields"
@@ -668,57 +668,12 @@ export default {
             this.$set(this.tableData, this.idx, this.form);
             console.log(this.tableData[this.idx]);
 
-            this.$axios
-                .post('/api/student/updateOne', this.tableData[this.idx])
-                .then((res) => {
-                    console.log(res);
-                    that.$message.success(`修改第 ${this.idx + 1} 行成功`);
-                    // if (res && res.status === 200) {
-                    //     this.loadLogInfo();
-                    // }
-                })
-                .catch((err) => {
-                    console.error();
-                    that.$message.error(`修改失败`);
-
-                    // message:“请添加记录”,
-                    // type:‘warning’
-                    // })
-                    // type 取值 ‘success’ /warning/info/error/;
-                });
-            // .catch((err) => {
-            //     console.log(err);
-            // });
         },
         // 保存编辑
         saveAdd() {
             const that = this;
             this.addisible = false;
-            // this.$set(this.tableData, this.idx, this.form);
-            this.formAdd.studentAvatar = this.defaultAvatar;
-            if (this.formAdd.studentName && this.formAdd.studentPassword && this.formAdd.studentNumber != null) {
-                console.log(this.formAdd);
-                this.$axios
-                    .post('/api/student/add', this.formAdd)
-                    .then((res) => {
-                        console.log(res);
-                        if (res.status === 200) {
-                            that.$message.success(`添加成功！`);
-                            this.formAdd = {};
-                            this.addVisible = false;
-                        }
 
-                        // if (res && res.status === 200) {
-                        //     this.loadLogInfo();
-                        // }
-                    })
-                    .catch((err) => {
-                        console.error();
-                        that.$message.error(`添加失败，账号已存在，请重新添加!`);
-                    });
-            } else {
-                that.$message.error(`必填项未填`);
-            }
         },
 
         // 删除操作
@@ -729,8 +684,6 @@ export default {
                 type: 'warning'
             })
                 .then(() => {
-                    // this.$message.success('删除成功');
-                    // this.tableData.splice(index, 1);
                     const id = this.tableData.splice(index, 1)[0].studentNumber;
                     console.log(id);
                     this.$axios
@@ -823,13 +776,17 @@ export default {
                     console.log(err);
                 });
         },
-
         handleAdd() {
             this.$router.push('/addCourse');
         },
 
-        handleUpload() {},
+        handleFlag() {
 
+        },
+
+        handleNotFlag() {
+            
+        },
         // 分页导航
         handlePageChange(val) {
             //console.log(val);
