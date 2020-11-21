@@ -627,7 +627,7 @@ export default {
             for (var item in row) {
                 obj[row[item].name] = row[item].value;
             }
-            console.log(obj);
+            console.log(obj);  
             const that = this;
             const url = '/api/attendance/updateAttendanceInfo';
             //const params = this.paramsData;
