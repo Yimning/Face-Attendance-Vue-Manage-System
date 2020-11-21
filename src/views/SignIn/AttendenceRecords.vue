@@ -626,9 +626,9 @@ export default {
             //for in 循环方式
             for (var item in row) {
                 obj[row[item].name] = row[item].value;
-            }
+            }   
             console.log(obj);  
-            const that = this;
+            const that = this; 
             const url = '/api/attendance/updateAttendanceInfo';
             //const params = this.paramsData;
             const params = JSON.stringify({ row });
