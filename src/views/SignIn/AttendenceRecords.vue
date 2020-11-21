@@ -667,13 +667,11 @@ export default {
             this.editVisible = false;
             this.$set(this.tableData, this.idx, this.form);
             console.log(this.tableData[this.idx]);
-
         },
         // 保存编辑
         saveAdd() {
             const that = this;
             this.addisible = false;
-
         },
 
         // 删除操作
@@ -780,13 +778,9 @@ export default {
             this.$router.push('/addCourse');
         },
 
-        handleFlag() {
+        handleFlag() {},
 
-        },
-
-        handleNotFlag() {
-            
-        },
+        handleNotFlag() {},
         // 分页导航
         handlePageChange(val) {
             //console.log(val);
