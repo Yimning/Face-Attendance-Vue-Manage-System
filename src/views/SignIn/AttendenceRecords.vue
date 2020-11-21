@@ -83,21 +83,23 @@
                     </el-tooltip>
                     <el-input v-model="QueryConditions.IsDay" placeholder="" class="handle-input mr10" disabled></el-input>
                     <el-button class="" type="primary" icon="el-icon-search" @click="handleSearchByInfo">搜索</el-button>
-                    <el-button type="info" icon="el-icon-edit" @click="handleFlag">未签</el-button>
-                    <!-- <el-button type="success" icon="el-icon-circle-plus" @click="handleAdd">添加课程</el-button> -->
                 </div>
-
-                <download-excel
-                    class="handleUpload"
-                    :fields="json_fields"
-                    :data="multipleSelection"
-                    :before-generate="startDownload"
-                    :before-finish="finishDownload"
-                    type="xls"
-                >
-                    <el-button type="info" icon="el-icon-download">导出</el-button>
-                    <!-- <el-button type="info" icon="el-icon-download" @click="handleAllUpload">全部导出</el-button> -->
-                </download-excel>
+                <el-button class="handle-line" type="success" icon="el-icon-circle-check" @click="handleFlag">已签</el-button>
+                <!-- <el-button type="success" icon="el-icon-circle-plus" @click="handleAdd">添加课程</el-button> -->
+                <el-button type="warning" icon="el-icon-circle-close" @click="handleFlag">未签</el-button>
+                <div handleUpload>
+                    <download-excel
+                        class="handleUpload"
+                        :fields="json_fields"
+                        :data="multipleSelection"
+                        :before-generate="startDownload"
+                        :before-finish="finishDownload"
+                        type="xls"
+                    >
+                        <el-button type="info" icon="el-icon-download">导出</el-button>
+                        <!-- <el-button type="info" icon="el-icon-download" @click="handleAllUpload">全部导出</el-button> -->
+                    </download-excel>
+                </div>
             </div>
 
             <el-table
@@ -841,11 +843,16 @@ export default {
 <style scoped>
 .handleUpload {
     position: relative;
-    margin-left: 950px;
+    margin-left: 850px;
     margin-top: -32px;
 }
 .handle-box {
     margin-bottom: 20px;
+    display: block;
+}
+.handle-line {
+    position: relative;
+    margin-top: 8px;
 }
 .handle-weekday {
     position: relative;
