@@ -482,7 +482,7 @@ export default {
             const that = this;
             this.editVisible = false;
             this.$set(this.tableData, this.idx, this.form);
-            //console.log(this.tableData[this.idx]);
+            //console.log(this.tableData[this.idx]);  //object
 
             this.$axios
                 .post('/api/student/updateOne', this.tableData[this.idx])
@@ -502,7 +502,7 @@ export default {
             // this.$set(this.tableData, this.idx, this.form);
             this.formAdd.studentAvatar = this.defaultAvatar;
             if (this.formAdd.studentName && this.formAdd.studentPassword && this.formAdd.studentNumber != null) {
-                console.log(this.formAdd);
+               // console.log(this.formAdd);
                 this.$axios
                     .post('/api/student/add', this.formAdd)
                     .then((res) => {
