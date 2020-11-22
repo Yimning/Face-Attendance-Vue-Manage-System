@@ -86,8 +86,8 @@
                 </div>
                 <el-button class="handle-line" type="primary" plain icon="el-icon-refresh" @click="handleFresh">条件重置</el-button>
                 <el-button class="handle-line" type="success" icon="el-icon-circle-check" @click="handleFlag">已签</el-button>
-                <!-- <el-button type="success" icon="el-icon-circle-plus" @click="handleAdd">添加课程</el-button> -->
                 <el-button type="warning" icon="el-icon-circle-close" @click="handleNotFlag">未签</el-button>
+                    <el-button type="success" icon="el-icon-circle-plus" @click="handleCheck">出勤率查询</el-button>
                 <div>
                     <download-excel
                         class="handleUpload"
@@ -184,7 +184,7 @@
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="moreVisible = false">取 消</el-button>
-                <el-button type="primary" @click="moreVisible = false">确 定</el-button>
+                <el-button type="primary" @click="handleDetails">详情信息</el-button>
             </span>
         </el-dialog>
     </div>
@@ -697,10 +697,10 @@ export default {
                 type: 'warning'
             })
                 .then(() => {
-                    const id = this.tableData.splice(index, 1)[0].studentNumber;
-                    console.log(id);
+                    const id = this.tableData.splice(index, 1)[0].recordID;
+                    //console.log(id);
                     this.$axios
-                        .post('/api/student/deleteOne/' + id)
+                        .post('/api/attendance/deleteOne/' + id)
                         .then((res) => {
                             console.log(res);
                             that.$message.success('删除成功');
@@ -743,8 +743,9 @@ export default {
                         console.log(str);
                         this.$axios.post('/api/attendance/deleteMore', { recordID: str }).then((res) => {
                             if (res && res.status === 200) {
-                                console.log(res.data); // 服务器回包内容
+                               // console.log(res.data); // 服务器回包内容
                                 that.$message.error(`删除了${str}`);
+                                  return that.reload(); //刷新 ----推荐
                             }
                         });
                     })
@@ -774,8 +775,11 @@ export default {
         },
 
         handleAllUpload() {},
-        handleAdd() {
-            this.$router.push('/addCourse');
+        handleDetails() {
+
+        },
+        handleCheck() {
+           // this.$router.push('/addCourse');
         },
         handleFresh() {
             return this.reload(); //刷新 ----推荐
