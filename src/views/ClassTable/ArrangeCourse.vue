@@ -146,12 +146,12 @@ export default {
             updateOneUrl: '',
             rules: {
                 courseID: [{ required: true, message: '必填', trigger: 'blur' }],
-             //   courseName: [{ required: true, message: '必填', trigger: 'blur' }],
+                //   courseName: [{ required: true, message: '必填', trigger: 'blur' }],
                 teacherNumber: [{ required: true, message: '必填', trigger: 'blur' }],
-             //   teacherName: [{ required: true, message: '必填', trigger: 'blur' }],
-              //  studentClass: [{ required: true, message: '必填', trigger: 'blur' }],
-                studentNumber: [{ required: true, message: '必填', trigger: 'blur' }],
-               // studentName: [{ required: true, message: '必填', trigger: 'blur' }]
+                //   teacherName: [{ required: true, message: '必填', trigger: 'blur' }],
+                //  studentClass: [{ required: true, message: '必填', trigger: 'blur' }],
+                studentNumber: [{ required: true, message: '必填', trigger: 'blur' }]
+                // studentName: [{ required: true, message: '必填', trigger: 'blur' }]
             },
             Successdialog: false, //控制弹出
             Sencond: 5, //设置初始倒计时
@@ -173,9 +173,9 @@ export default {
                 .all([r0, r1, r2])
                 .then(
                     that.$axios.spread((res1, res2, res3) => {
-                       // console.log(res1);
+                        // console.log(res1);
                         that.form.options = res1.data;
-                       // console.log(res2);
+                        // console.log(res2);
                         that.form.studentOptions = res2.data;
                         //console.log(res3);
                         that.form.teacherOptions = res3.data;
@@ -204,6 +204,7 @@ export default {
                                 .post(that.updateOneUrl, that.form)
                                 .then((res) => {
                                     // console.log(res);
+                                    that.addAttendance(that.form);
                                     that.getSencond();
                                 })
                                 .catch((err) => {
@@ -264,6 +265,18 @@ export default {
         },
         sendMsg() {
             this.reload(); //刷新 ----推荐
+        },
+        addAttendance(data) {
+            const that = this;
+            const url = '/api/attendance/add';
+            this.$axios
+                .post(url, data)
+                .then((res) => {
+                 console.log(res);
+                })
+                .catch((err) => {
+                    console.error();
+                });
         }
     }
 };
