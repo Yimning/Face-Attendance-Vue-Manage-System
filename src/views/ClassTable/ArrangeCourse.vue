@@ -204,10 +204,10 @@ export default {
                                 .post(that.updateOneUrl, that.form)
                                 .then((res) => {
                                     // console.log(res);
-                                   // that.addAttendance(that.form);
+                                    that.addAttendance(that.form);
                                     that.getSencond();
                                 })
-                                .catch((err) => {
+                                .catch((err) => {    
                                     console.error();
                                     that.$message.error(`修改失败`);
                                 });
