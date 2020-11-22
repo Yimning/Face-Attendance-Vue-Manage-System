@@ -84,6 +84,7 @@
                     <el-input v-model="QueryConditions.IsDay" placeholder="" class="handle-input mr10" disabled></el-input>
                     <el-button class="" type="primary" icon="el-icon-search" @click="handleSearchByInfo">搜索</el-button>
                 </div>
+                <el-button class="handle-line" type="primary" plain icon="el-icon-refresh" @click="handleFresh">条件重置</el-button>
                 <el-button class="handle-line" type="success" icon="el-icon-circle-check" @click="handleFlag">已签</el-button>
                 <!-- <el-button type="success" icon="el-icon-circle-plus" @click="handleAdd">添加课程</el-button> -->
                 <el-button type="warning" icon="el-icon-circle-close" @click="handleNotFlag">未签</el-button>
@@ -130,8 +131,8 @@
                             >统计</el-button
                         >
                         <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">补签</el-button>
-                        <el-button type="text" icon="el-icon-delete" class="red" @click="handleDelete(scope.$index, scope.row)"
-                            >删除</el-button
+                        <el-button type="text" icon="el-icon-delete" class="red" @click="handleEdit1(scope.$index, scope.row)"
+                            >缺勤</el-button
                         >
                     </template>
                 </el-table-column>
@@ -622,6 +623,7 @@ export default {
         handleEdit(index, row) {
             this.idx = index;
             const that = this;
+            console.log(row);
             const url = '/api/attendance/updateAttendanceInfo';
             var obj = {};
             for (var i in row) {
@@ -640,11 +642,50 @@ export default {
                         this.$message.success(`补签成功`);
                         return this.reload(); //刷新 ----推荐
                     }
-                    if (res.data === 2) return this.$message.success(`已签,无需重复`);
+                    if (res.data === 2) return this.$message.success(`已签,无需重复操作`);
                 })
                 .catch((err) => {
                     console.log(err);
                 });
+        },
+        // 记未签操作
+        handleEdit1(index, row) {
+            this.idx = index;
+            const that = this;
+            console.log(row);
+            const url = '/api/attendance/updateAttendanceInfo1';
+            var obj = {};
+            for (var i in row) {
+                obj[i] = row[i];
+            }
+            const params = obj;
+            this.$confirm('确定要操作吗？', '提示', {
+                type: 'warning'
+            })
+                .then(() => {
+                    that.$axios
+                        .post(url, params)
+                        .then((res) => {
+                            //console.log('请求后台数据结果', res);
+                            if (res.data === 0) return that.$message.error(`记缺勤失败,请重试！`);
+                            if (res.data === 1) {
+                                that.$message.success(`记缺勤成功`);
+                                return that.reload(); //刷新 ----推荐
+                            }
+                            if (res.data === 2) return this.$message.error(`已缺勤,无需重复操作`);
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
+                })
+                .catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消'
+                    });
+                });
+
+            //axios的get请求
         },
         arrayToObject(data) {},
 
@@ -691,7 +732,7 @@ export default {
                 console.log(this.delList);
 
                 for (let i = 0; i < length; i++) {
-                    str += this.multipleSelection[i].studentNumber + ',';
+                    str += this.multipleSelection[i].recordID + ',';
                 }
                 this.$confirm('此操作将批量删除日志信息, 是否继续?', '提示', {
                     confirmButtonText: '确定',
@@ -700,7 +741,7 @@ export default {
                 })
                     .then(() => {
                         console.log(str);
-                        this.$axios.post('/api/student/deleteMore', { studentNumber: str }).then((res) => {
+                        this.$axios.post('/api/attendance/deleteMore', { recordID: str }).then((res) => {
                             if (res && res.status === 200) {
                                 console.log(res.data); // 服务器回包内容
                                 that.$message.error(`删除了${str}`);
@@ -736,7 +777,9 @@ export default {
         handleAdd() {
             this.$router.push('/addCourse');
         },
-
+        handleFresh() {
+            return this.reload(); //刷新 ----推荐
+        },
         handleFlag() {
             const url = '/api/attendance/findAllAttendanceIsflag';
             const params = { params: { flag: 1, cID: this.QueryConditions.courseID } };
