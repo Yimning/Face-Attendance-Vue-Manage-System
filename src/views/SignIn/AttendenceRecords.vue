@@ -621,19 +621,20 @@ export default {
         handleEdit(index, row) {
             this.idx = index;
             console.log(row);
-            // let ja = Object.fromEntries(row);
+            //let ja = Object.fromEntries(row);
+
+          //Array转成Object
             var obj = {};
-            //for in 循环方式
-            for (var item in row) { 
-                obj[row[item].name] = row[item].value;
-            }   
-            console.log(obj);    
-            const that = this; 
+            for (var i in row) {
+               obj[i] = row[i];
+            }
+
+            const that = this;
             const url = '/api/attendance/updateAttendanceInfo';
             //const params = this.paramsData;
-            const params = JSON.stringify({ row });
-            console.log({ row });
-            console.log(params);
+            const params = obj;
+            // console.log({ row });
+            //console.log(params);
             //axios的get请求
             this.$axios
                 .post(url, params)
@@ -644,7 +645,7 @@ export default {
                     console.log(err);
                 });
         },
-        dataConvert(data) {},
+        arrayToObject(data) {},
 
         // 删除操作
         handleDelete(index, row) {
