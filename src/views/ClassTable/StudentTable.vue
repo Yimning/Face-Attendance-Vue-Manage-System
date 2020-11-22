@@ -143,7 +143,7 @@ export default {
             this.$axios
                 .get('/api/scourse/findAllScourse')
                 .then((res) => {
-                    console.log(res);
+                   // console.log(res);
                     // this.tableData = res.data.data;
                     // // console.log('请求后台数据结果', res.data.data);
                     this.list = [];
@@ -358,9 +358,6 @@ export default {
         handleAdd() {
              this.$router.push('/addCourse');
         },
-
-
-        
 
         handleUpload() {},
 
