@@ -204,7 +204,7 @@ export default {
                                 .post(that.updateOneUrl, that.form)
                                 .then((res) => {
                                     // console.log(res);
-                                    that.addAttendance(that.form);
+                                   // that.addAttendance(that.form);
                                     that.getSencond();
                                 })
                                 .catch((err) => {
@@ -269,8 +269,10 @@ export default {
         addAttendance(data) {
             const that = this;
             const url = '/api/attendance/add';
+            console.log(data)
+            //data={recordID:11,studentNumber:"fff"};
             this.$axios
-                .post(url, data)
+                .post(url,data)
                 .then((res) => {
                  console.log(res);
                 })
