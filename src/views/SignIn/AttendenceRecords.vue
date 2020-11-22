@@ -620,26 +620,23 @@ export default {
         // 补签操作
         handleEdit(index, row) {
             this.idx = index;
-            console.log(row);
-            //let ja = Object.fromEntries(row);
-
-          //Array转成Object
-            var obj = {};
-            for (var i in row) {
-               obj[i] = row[i];
-            }
-
             const that = this;
             const url = '/api/attendance/updateAttendanceInfo';
-            //const params = this.paramsData;
+            var obj = {};
+            for (var i in row) {
+                obj[i] = row[i];
+            }
+            // console.log(Object.keys(row)[0]);
+            // console.log(Object.values(row)[0]);
             const params = obj;
-            // console.log({ row });
-            //console.log(params);
             //axios的get请求
             this.$axios
                 .post(url, params)
                 .then((res) => {
                     console.log('请求后台数据结果', res);
+                    if (res.data === 0) return this.$message.error(`补签失败,请重试！`);
+                    if (res.data === 1) return this.$message.success(`补签成功`);
+                    if (res.data === 2) return this.$message.success(`已签,无需重复`);
                 })
                 .catch((err) => {
                     console.log(err);
