@@ -195,6 +195,7 @@ import JsonExcel from 'vue-json-excel';
 const weekArr = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
 export default {
     name: 'basetable',
+    inject: ['reload'],
     data() {
         return {
             query: {
@@ -633,9 +634,12 @@ export default {
             this.$axios
                 .post(url, params)
                 .then((res) => {
-                    console.log('请求后台数据结果', res);
+                    //console.log('请求后台数据结果', res);
                     if (res.data === 0) return this.$message.error(`补签失败,请重试！`);
-                    if (res.data === 1) return this.$message.success(`补签成功`);
+                    if (res.data === 1) {
+                        this.$message.success(`补签成功`);
+                        return this.reload(); //刷新 ----推荐
+                    }
                     if (res.data === 2) return this.$message.success(`已签,无需重复`);
                 })
                 .catch((err) => {
