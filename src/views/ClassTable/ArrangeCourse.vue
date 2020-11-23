@@ -203,14 +203,14 @@ export default {
                             that.$axios
                                 .post(that.updateOneUrl, that.form)
                                 .then((res) => {
-                                     console.log(res);
-                                     if(res.data==="exist") return  that.$message.error(`选课已存在`);
-                                   if(res.data==="success") return  that.$message.error(`选课成功`);
-                                   if(res.data==="fail") return  that.$message.error(`选课失败`);
-                                  // that.addAttendance(that.form);
+                                    console.log(res);
+                                    if (res.data === 'exist') return that.$message.error(`选课已存在`);
+                                    if (res.data === 'success') return that.$message.error(`选课成功`);
+                                    if (res.data === 'fail') return that.$message.error(`选课失败`);
+                                    // that.addAttendance(that.form);
                                     that.getSencond();
                                 })
-                                .catch((err) => {    
+                                .catch((err) => {
                                     console.error();
                                     that.$message.error(`修改失败`);
                                 });
@@ -272,12 +272,12 @@ export default {
         addAttendance(data) {
             const that = this;
             const url = '/api/attendance/add';
-            console.log(data)
+            console.log(data);
             //data={recordID:11,studentNumber:"fff"};
             this.$axios
-                .post(url,data)
+                .post(url, data)
                 .then((res) => {
-                 console.log(res);
+                    console.log(res);
                 })
                 .catch((err) => {
                     console.error();
