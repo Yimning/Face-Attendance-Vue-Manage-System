@@ -53,7 +53,7 @@ export default {
                 bgColor: '#fbfbfb',
                 labels: ['周一', '周二', '周三', '周四', '周五'],
                 datasets: [
-                    {
+                    { 
                         label: '家电',
                         fillColor: 'rgba(241, 49, 74, 0.5)',
                         data: [234, 278, 270, 190, 230]
