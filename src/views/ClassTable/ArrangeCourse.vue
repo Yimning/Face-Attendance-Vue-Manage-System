@@ -205,7 +205,7 @@ export default {
                                 .then((res) => {
                                     console.log(res);
                                     if (res.data === 'exist') return that.$message.error(`选课已存在`);
-                                    if (res.data === 'success') return that.$message.error(`选课成功`);
+                                    if (res.data === 'success') return that.$message.success(`选课成功`);
                                     if (res.data === 'fail') return that.$message.error(`选课失败`);
                                     // that.addAttendance(that.form);
                                     that.getSencond();
