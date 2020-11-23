@@ -789,7 +789,7 @@ export default {
                 return this.$message.error(`请选择课程号-课程名`);
             } else {
                 this.requestHandle(url, params);
-            }
+            }   
         },
 
         handleNotFlag() {
