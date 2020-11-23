@@ -311,7 +311,7 @@ export default {
         },
         //清除搜索框
         handleClear() {
-            this.query.request = '';
+            this.query.request = ''; 
             this.showOrNot = false;
             this.getData();
         },
