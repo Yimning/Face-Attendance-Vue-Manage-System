@@ -194,7 +194,7 @@ export default {
             const that = this;
             this.$refs.form.validate((valid) => {
                 if (valid) {
-                    this.$confirm('确定修改?', '提示', {
+                    this.$confirm('确定操作?', '提示', {
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',
                         type: 'info'
@@ -203,8 +203,11 @@ export default {
                             that.$axios
                                 .post(that.updateOneUrl, that.form)
                                 .then((res) => {
-                                    // console.log(res);
-                                   // that.addAttendance(that.form);
+                                     console.log(res);
+                                     if(res.data==="exist") return  that.$message.error(`选课已存在`);
+                                   if(res.data==="success") return  that.$message.error(`选课成功`);
+                                   if(res.data==="fail") return  that.$message.error(`选课失败`);
+                                  // that.addAttendance(that.form);
                                     that.getSencond();
                                 })
                                 .catch((err) => {    
