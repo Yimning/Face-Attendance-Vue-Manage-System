@@ -202,7 +202,7 @@ export default {
                         .then(() => {
                             that.$axios
                                 .post(that.updateOneUrl, that.form)
-                                .then((res) => {
+                                .then((res) => {   
                                     console.log(res);
                                     if (res.data === 'exist') return that.$message.error(`选课已存在`);
                                     if (res.data === 'success') return that.$message.success(`选课成功`);
