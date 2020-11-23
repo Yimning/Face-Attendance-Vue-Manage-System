@@ -103,7 +103,7 @@ export default {
                         context.strokeRect(rect.x, rect.y, rect.width, rect.height);
                     });
                     if (event.data.length) {
-                        // 会不停的去检测人脸，所以这里需要做个锁
+                        // 会不停的去检测人脸，所以这里需要做个锁   
                         if (flag) {
                             // 裁剪出人脸并绘制下来
                             const canvasUpload = document.getElementById('canvas');
