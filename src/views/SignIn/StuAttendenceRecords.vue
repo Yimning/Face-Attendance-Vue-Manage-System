@@ -19,16 +19,11 @@
                     ></el-option>
                 </el-select>
 
-                <el-select v-model="selected"  v-on:input="selectedFunc" class="handle-select mr10">
+                <el-select v-model="selected" v-on:input="selectedFunc" class="handle-select mr10">
                     <el-option key="查查学生学号" label="查学生学号" value="2"></el-option>
                 </el-select>
 
-                <el-input
-                    v-model="query.request"
-                    class="handle-input mr10"
-                    id="messageInput"
-                    disabled
-                ></el-input>
+                <el-input v-model="query.request" class="handle-input mr10" id="messageInput" disabled></el-input>
 
                 <div class="handle-weekday">
                     <el-tooltip class="item" effect="dark" content="系统会以课程时间的前后十五分钟来查询，请注意选择" placement="top">
@@ -95,7 +90,7 @@
                         <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">出勤率</el-button>
                         <!-- <el-button type="text" icon="el-icon-delete" class="red" @click="handleEdit1(scope.$index, scope.row)"
                             >缺勤</el-button
-                        > -->  
+                        > -->
                     </template>
                 </el-table-column>
             </el-table>
@@ -178,6 +173,7 @@ export default {
             timeValue: '',
             input: '',
             newArray: [],
+            courseArray: [],
             QueryConditions: {
                 IsDay: '',
                 courseID: '',
@@ -235,7 +231,7 @@ export default {
             formAdd: {},
             defaultAvatar: {},
             idx: -1,
-            row:{},
+            row: {},
             id: -1
         };
     },
@@ -243,14 +239,13 @@ export default {
         'download-excel': JsonExcel
     },
     created() {
-        this.query.request=this.$store.getters.getUser.userID;
+        this.query.request = this.$store.getters.getUser.userID;
         this.getData(); //渲染
         this.getAllCourse();
         AvatarData(this.defaultAvatar).then((res) => {
             // console.log(res.avatar[0]);
             this.defaultAvatar = res.avatar[0].base64;
         });
-        
     },
 
     methods: {
@@ -259,7 +254,7 @@ export default {
             const that = this;
             //axios的get请求
             this.$axios
-                .get('/api/attendance/findAttendanceBystudentID',{ params: { id: this.query.request } })
+                .get('/api/attendance/findAttendanceBystudentID', { params: { id: this.query.request } })
                 .then((res) => {
                     //console.log(res);
                     this.form = res.data;
@@ -275,10 +270,16 @@ export default {
             const that = this;
             //axios的get请求
             this.$axios
-                .get('/api/course/findAllCourse')
+                .get('/api/scourse/findScourseBystudentNumber', { params: { id: this.query.request } })
                 .then((res) => {
-                    // console.log(res);
-                    that.QueryConditions = res.data;
+                    for (const i in res.data) {
+                        for (const key in res.data[i].course) {
+                            this.$set(this.list, key, res.data[i].course[key]); //对象新增属性(使用Vue.$set())
+                            this.courseArray[i] = this.list; //新建数组存放
+                        }
+                        this.list = []; //循环完必须清空,否则可能会覆盖
+                    }
+                    that.QueryConditions = this.courseArray;
                 })
                 .catch((err) => {
                     console.log(err);
@@ -474,7 +475,7 @@ export default {
             }
         },
         selectedFunc() {
-           // this.query.request = '';
+            // this.query.request = '';
         },
 
         inputFuncDay(value) {
@@ -566,8 +567,9 @@ export default {
         //详情信息
         handleMore(index, row) {
             this.idx = index;
-            this.row=row;
+            this.row = row;
             const that = this;
+            //console.log(row);
             const url = '/api/attendance/countAttendanceNotflag';
             const params = { params: { flag: 0, cID: row.courseID, sID: row.studentNumber } };
             const url1 = '/api/attendance/countAttendanceIsflag';
@@ -587,6 +589,14 @@ export default {
                 .catch((err) => {
                     console.log(err);
                 });
+            // let oneArray = [];
+            // let one = {}; //添加的对象
+            // one['notFlag'] = this.count.notFlag;
+            // one['isFlag'] = this.count.isFlag;
+            // one['flagPercent'] = this.count.flagPercent;
+            // oneArray.push(one);
+
+
             this.count = row;
             this.moreVisible = true;
         },

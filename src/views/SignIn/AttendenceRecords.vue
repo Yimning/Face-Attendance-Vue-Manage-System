@@ -779,7 +779,7 @@ export default {
         handleAllUpload() {},
         handleDetails() {},
         handleCheck() {
-           this.$router.push('/AttendenceQuery');
+            // this.$router.push('/addCourse');
         },
         handleFresh() {
             return this.reload(); //刷新 ----推荐
