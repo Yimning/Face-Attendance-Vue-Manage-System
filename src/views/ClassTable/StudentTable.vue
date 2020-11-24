@@ -22,6 +22,7 @@
                     @keyup.enter.native="handleSearch"
                     id="messageInput"
                     v-on:input="inputFunc"
+                    clearable
                 ></el-input>
                 <!-- @keyup.enter 但是若在组件框架中写需要加.native -->
                 <el-input
@@ -32,6 +33,7 @@
                     @keyup.enter.native="handleSearch"
                     id="messageInput"
                     v-on:input="inputFunc"
+                    clearable
                 ></el-input>
 
                 <el-button v-if="showOrNot" type="warning" icon="el-icon-close" @click="handleClear">清除</el-button>
@@ -186,14 +188,7 @@ export default {
         },
         //监听事件-输入框
         inputFunc(e) {
-            if (this.query.request == '') {
-                this.showOrNot = false;
-                this.getData();
-            } else {
-                this.showOrNot = true;
-            }
-            // this.inputData = { value }; //把数据存入inputData
-            // console.log('检测到变化'+this.query.request);
+            this.handleSearch();
         },
         // 触发搜索按钮
         handleSearch() {
