@@ -98,11 +98,11 @@
                     <div>上课教师： {{ selectedCourse.teacherName }}</div>
                     <div>上课周期： {{ selectedCourse.courseWeekF + '-' + selectedCourse.courseWeekB + '周' }}</div>
                 </div>
-                <div v-else class="tip">本学期没有课哦！</div> 
+                <div v-else class="tip">本学期没有课哦！</div>
             </div>
             <span slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="showUsualCourseDialog = false">确 定</el-button>
-                 <el-button type="primary" @click="signIn">进行签到</el-button>
+                <el-button v-if="isTeacher" type="primary" @click="signIn">进行签到</el-button>
             </span>
         </el-dialog>
     </div>
@@ -122,7 +122,8 @@ export default {
             CourseInfo: [{}],
             list: [{}],
             catalogArr: [], //类目数组
-            catalogObj: {} //嵌套对象
+            catalogObj: {}, //嵌套对象
+            isTeacher: false
         };
     },
 
@@ -152,7 +153,7 @@ export default {
             type: Array,
             default: () => ['#ef5b9c', '#f15b6c', '#f26522', '#ffd400', '#8552a1', '#7fb80e', '#65c294', '#78cdd1', '#33a3dc']
         }
-    },   
+    },
     computed: {
         courseWidth() {
             return Math.max((this.width - 35) / this.weekTable.length, 150);
@@ -170,6 +171,7 @@ export default {
         if (this.$store.getters.getUser.roseID == '0') {
             this.findUserUrl = '/api/scourse/findScourseBystudentNumber';
         } else if (this.$store.getters.getUser.roseID == '1') {
+            this.isTeacher = true;  //只有教师显示
             this.findUserUrl = '/api/scourse/findScourseByteacherNumber';
         } else {
         }
@@ -214,9 +216,7 @@ export default {
     },
     mounted() {},
     methods: {
-        signIn(){
-
-        }
+        signIn() {}
     }
 };
 </script>
