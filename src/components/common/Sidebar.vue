@@ -113,7 +113,13 @@ export default {
                 {
                     icon: 'el-icon-edit-outline',
                     index: 'records',
-                    title: '考勤记录'
+                    title: '考勤管理',
+                    subs: [
+                        {
+                            index: 'stuAttendenceRecords',
+                            title: '考勤记录'
+                        }
+                    ]
                 },
                 {
                     icon: 'el-icon-s-tools',
