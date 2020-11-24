@@ -19,7 +19,7 @@
                     ></el-option>
                 </el-select>
 
-                <el-select v-model="selected" placeholder="查询条件" v-on:input="selectedFunc" class="handle-select mr10">
+                <el-select v-model="selected"  v-on:input="selectedFunc" class="handle-select mr10">
                     <el-option key="查查学生学号" label="查学生学号" value="2"></el-option>
                 </el-select>
 
@@ -474,7 +474,7 @@ export default {
             }
         },
         selectedFunc() {
-            this.query.request = '';
+           // this.query.request = '';
         },
 
         inputFuncDay(value) {
