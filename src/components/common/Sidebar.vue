@@ -96,10 +96,10 @@ export default {
                     title: '课程表',
                     title: '课程管理',
                     subs: [
-                        {
-                            index: 'addcourse',
-                            title: '添加课程'
-                        },
+                        // {
+                        //     index: 'addcourse',
+                        //     title: '添加课程'
+                        // },
                         {
                             index: 'courses',
                             title: '课程表'
