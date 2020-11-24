@@ -269,6 +269,7 @@ export default {
             formAdd: {},
             defaultAvatar: {},
             idx: -1,
+            row:'',
             id: -1
         };
     },
@@ -597,6 +598,7 @@ export default {
         //详情信息
         handleMore(index, row) {
             this.idx = index;
+                        this.row=row;
             const that = this;
             const url = '/api/attendance/countAttendanceNotflag';
             const params = { params: { flag: 0, cID: row.courseID, sID: row.studentNumber } };
