@@ -222,6 +222,13 @@ export default new Router({
                     }
                 },
                 {
+                    path: '/attendenceQuery',
+                    component: () => import( /* webpackChunkName: "attendenceQuery" */ '../views/SignIn/AttendenceQuery.vue'),
+                    meta: {
+                        title: '出勤率'
+                    }
+                },
+                {
                     // vue-schart组件
                     path: '/charts',
                     component: () => import( /* webpackChunkName: "chart" */ '../views/BaseCharts.vue'),
