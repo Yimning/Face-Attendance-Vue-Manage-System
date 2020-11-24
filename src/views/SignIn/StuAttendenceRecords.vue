@@ -20,54 +20,16 @@
                 </el-select>
 
                 <el-select v-model="selected" placeholder="查询条件" v-on:input="selectedFunc" class="handle-select mr10">
-                    <el-option key="查教师号" label="教师号" value="0"></el-option>
-                    <el-option key="查教师姓名" label="教师姓名" value="1"></el-option>
                     <el-option key="查查学生学号" label="查学生学号" value="2"></el-option>
-                    <el-option key="查学生姓名" label="学生姓名" value="3"></el-option>
                 </el-select>
 
                 <el-input
                     v-model="query.request"
-                    v-if="selected === '0'"
-                    placeholder="教师号"
                     class="handle-input mr10"
-                    @keyup.enter.native="handleSearch"
                     id="messageInput"
-                    v-on:input="inputFunc"
-                    clearable
+                    disabled
                 ></el-input>
-                <!-- @keyup.enter 但是若在组件框架中写需要加.native -->
-                <el-input
-                    v-model="query.request"
-                    v-else-if="selected === '1'"
-                    placeholder="输入教师姓名"
-                    class="handle-input mr10"
-                    @keyup.enter.native="handleSearch"
-                    id="messageInput"
-                    v-on:input="inputFunc"
-                    clearable
-                ></el-input>
-                <el-input
-                    v-model="query.request"
-                    v-else-if="selected === '2'"
-                    placeholder="学生学号"
-                    class="handle-input mr10"
-                    @keyup.enter.native="handleSearch"
-                    id="messageInput"
-                    v-on:input="inputFunc"
-                    clearable
-                ></el-input>
-                <!-- @keyup.enter 但是若在组件框架中写需要加.native -->
-                <el-input
-                    v-model="query.request"
-                    v-else
-                    placeholder="输入学生姓名"
-                    class="handle-input mr10"
-                    @keyup.enter.native="handleSearch"
-                    id="messageInput"
-                    v-on:input="inputFunc"
-                    clearable
-                ></el-input>
+
                 <div class="handle-weekday">
                     <el-tooltip class="item" effect="dark" content="系统会以课程时间的前后十五分钟来查询，请注意选择" placement="top">
                         <el-col :span="8">
@@ -253,7 +215,7 @@ export default {
                 recordTime: [{ required: true, message: '请输入密保答案', trigger: 'blur' }]
             },
             requestAddr: '',
-            selected: '0', //注意数据格式的转换，否则会导致不正常
+            selected: '2', //注意数据格式的转换，否则会导致不正常
             tableData: [],
             paramsData: [],
             count: {
@@ -281,12 +243,14 @@ export default {
         'download-excel': JsonExcel
     },
     created() {
+        this.query.request=this.$store.getters.getUser.userID;
         this.getData(); //渲染
         this.getAllCourse();
         AvatarData(this.defaultAvatar).then((res) => {
             // console.log(res.avatar[0]);
             this.defaultAvatar = res.avatar[0].base64;
         });
+        
     },
 
     methods: {
@@ -295,7 +259,7 @@ export default {
             const that = this;
             //axios的get请求
             this.$axios
-                .get('/api/attendance/findAllAttendance')
+                .get('/api/attendance/findAttendanceBystudentID',{ params: { id: this.query.request } })
                 .then((res) => {
                     //console.log(res);
                     this.form = res.data;
@@ -504,7 +468,7 @@ export default {
             if (!this.QueryConditions.recordTime) return this.$message.error(`选择时间查询`);
 
             if (this.QueryConditions.courseID && this.QueryConditions.recordTime) {
-                const url = '/api/attendance/findAttendanceInfo';
+                const url = '/api/attendance/findAttendanceBystudentID';
                 const params = { params: { id: this.QueryConditions.courseID, time: this.QueryConditions.recordTime } };
                 this.getAttendanceByInfo(url, params);
             }
