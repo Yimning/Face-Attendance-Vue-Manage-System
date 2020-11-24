@@ -130,10 +130,10 @@
                         <el-button type="text" icon="el-icon-more" class="blue" @click="handleMore(scope.$index, scope.row)"
                             >统计</el-button
                         >
-                        <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">补签</el-button>
-                        <el-button type="text" icon="el-icon-delete" class="red" @click="handleEdit1(scope.$index, scope.row)"
+                        <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">出勤率</el-button>
+                        <!-- <el-button type="text" icon="el-icon-delete" class="red" @click="handleEdit1(scope.$index, scope.row)"
                             >缺勤</el-button
-                        >
+                        > -->
                     </template>
                 </el-table-column>
             </el-table>
@@ -180,6 +180,9 @@
                 </el-form-item>
                 <el-form-item label="缺勤次数">
                     <el-input v-model="count.notFlag" readonly="readonly"></el-input>
+                </el-form-item>
+                <el-form-item label="出勤率">
+                    <el-input v-model="count.flagPercent" readonly="readonly"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -255,7 +258,8 @@ export default {
             paramsData: [],
             count: {
                 isFlag: '',
-                notFlag: ''
+                notFlag: '',
+                flagPercent: ''
             },
             multipleSelection: [],
             delList: [],
@@ -269,6 +273,7 @@ export default {
             formAdd: {},
             defaultAvatar: {},
             idx: -1,
+            row:{},
             id: -1
         };
     },
@@ -597,6 +602,7 @@ export default {
         //详情信息
         handleMore(index, row) {
             this.idx = index;
+            this.row=row;
             const that = this;
             const url = '/api/attendance/countAttendanceNotflag';
             const params = { params: { flag: 0, cID: row.courseID, sID: row.studentNumber } };
@@ -611,6 +617,7 @@ export default {
                     that.$axios.spread((res1, res2) => {
                         this.count.notFlag = res1.data.length;
                         this.count.isFlag = res2.data.length;
+                        this.count.flagPercent = res2.data.length / (res1.data.length + res2.data.length);
                     })
                 )
                 .catch((err) => {
@@ -621,38 +628,13 @@ export default {
         },
         // 补签操作
         handleEdit(index, row) {
-            this.idx = index;
-            const that = this;
-            //console.log(row);
-            const url = '/api/attendance/updateAttendanceInfo';
-            var obj = {};
-            for (var i in row) {
-                obj[i] = row[i];
-            }
-            // console.log(Object.keys(row)[0]);
-            // console.log(Object.values(row)[0]);
-            const params = obj;
-            //axios的get请求
-            this.$axios
-                .post(url, params)
-                .then((res) => {
-                    //console.log('请求后台数据结果', res);
-                    if (res.data === 0) return this.$message.error(`补签失败,请重试！`);
-                    if (res.data === 1) {
-                        this.$message.success(`补签成功`);
-                        return this.reload(); //刷新 ----推荐
-                    }
-                    if (res.data === 2) return this.$message.success(`已签,无需重复操作`);
-                })
-                .catch((err) => {
-                    this.$message.error(` Request failed with status code 400`);
-                });
+            this.handleMore(index, row);
         },
         // 记未签操作
         handleEdit1(index, row) {
             this.idx = index;
             const that = this;
-           // console.log(row);
+            // console.log(row);
             const url = '/api/attendance/updateAttendanceInfo1';
             var obj = {};
             for (var i in row) {
@@ -775,9 +757,11 @@ export default {
         },
 
         handleAllUpload() {},
-        handleDetails() {},
+        handleDetails() {
+            this.handleEdit(this.index, this.row);
+        },
         handleCheck() {
-            // this.$router.push('/addCourse');
+            this.$router.push('/AttendenceQuery');
         },
         handleFresh() {
             return this.reload(); //刷新 ----推荐
@@ -789,7 +773,7 @@ export default {
                 return this.$message.error(`请选择课程号-课程名`);
             } else {
                 this.requestHandle(url, params);
-            }   
+            }
         },
 
         handleNotFlag() {
