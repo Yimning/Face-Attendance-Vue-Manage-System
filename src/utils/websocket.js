@@ -78,7 +78,7 @@ function websocketClose(e) {
   if (e && e.code !== 1000) {
     Message.error('WebSocket连接异常，请稍候重试')
     errorCallback()
-  }
+  }  
 } 
 
 
