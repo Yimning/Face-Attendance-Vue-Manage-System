@@ -1,40 +1,40 @@
-<template>    
-	<div>       
-		<h1>测试webSocket</h1>      
-		<button @click="getWebsocket">点击请求后台数据</button>    
-	</div>    
+<template>
+  <div>
+    <button @click="requstWs">点击发起websocket请求</button>
+	<button @click="closeWebSocket">关闭</button>
+  </div>
 </template>
 <script>
-export default {        
-	created() { // 页面创建生命周期函数              
-		this.initWebSocket()        
-	},        
-	destroyed: function () { // 离开页面生命周期函数              
-		this.websocketclose();        
-	},        
-	methods: {            
-		initWebSocket: function () {                
-			// WebSocket与普通的请求所用协议有所不同，ws等同于http，wss等同于https                
-			this.websock = new WebSocket("ws://localhost:8082/websocket/DPS007");                
-			this.websock.onopen = this.websocketonopen;                
-			this.websock.onerror = this.websocketonerror;                
-			this.websock.onmessage = this.websocketonmessage;                
-			this.websock.onclose = this.websocketclose;              
-		},              
-		websocketonopen: function () {                
-			console.log("WebSocket连接成功");              
-		},              
-		websocketonerror: function (e) {                
-			console.log("WebSocket连接发生错误" + e);              
-		},              
-		websocketonmessage: function (e) {                
-			console.log(e.data);                // console.log(e);              
-		},              
-		websocketclose: function (e) {                
-			console.log("connection closed ");              
-		},              
-		getWebsocket:function() {                
-			let url = "http://localhost:8082/xdx/text?shipId=DPS007"                
+import { sendWebSocket, closeWebSocket } from '@/utils/websocket.js'
+
+export default {
+  beforeDestroy () {
+    // 页面销毁时关闭ws。因为有可能ws连接接收数据尚未完成，用户就跳转了页面
+    // 在需要主动关闭ws的地方都可以调用该方法
+    closeWebSocket()
+  },
+  methods: {
+    // ws连接成功，后台返回的ws数据，组件要拿数据渲染页面等操作
+    wsMessage (data) {
+      const dataJson = data
+      console.log(dataJson)
+      // 这里写拿到数据后的业务代码
+    },
+    // ws连接失败，组件要执行的代码
+    wsError () {
+      // 比如取消页面的loading
+    },
+    requstWs () {
+      // 防止用户多次连续点击发起请求，所以要先关闭上次的ws请求。
+      //closeWebSocket();
+      // 跟后端协商，需要什么参数数据给后台
+      const obj = {
+        monitorUrl: '',
+        userName: ''
+      }
+      // 发起ws请求
+	  sendWebSocket('ws://localhost:8082/websocket/DPS007', "", this.wsMessage, this.wsError);
+	  			let url = "http://localhost:8082/xdx/text?shipId=DPS007"                
 			// 这里只是一个基于axios的ajax请求，你可以换成你的请求格式                
 			// this.$ajax.get(url)        
 
@@ -42,11 +42,13 @@ export default {
 			var xhr = new XMLHttpRequest () ;
 			xhr.open('get',url,true);
 			xhr.send("fff");      
-		}       
-	}    
+	  
+	},
+	closeWebSocket(){
+		closeWebSocket();
+	}
+  }
 }
 </script>
-<style >
-</style>
 
 
