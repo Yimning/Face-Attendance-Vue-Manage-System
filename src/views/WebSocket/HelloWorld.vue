@@ -11,7 +11,7 @@ export default {
 	},        
 	destroyed: function () { // 离开页面生命周期函数              
 		this.websocketclose();        
-	},        
+	},           
 	methods: {            
 		initWebSocket: function () {                
 			// WebSocket与普通的请求所用协议有所不同，ws等同于http，wss等同于https                
