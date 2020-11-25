@@ -31,14 +31,14 @@ export default {
       const obj = {
         monitorUrl: '',
         userName: ''   
-      }
+      }  
       // 发起ws请求
 	  sendWebSocket('ws://localhost:8082/websocket/DPS007', "", this.wsMessage, this.wsError);
 	  			let url = "http://localhost:8082/xdx/text?shipId=DPS007"                
 			// 这里只是一个基于axios的ajax请求，你可以换成你的请求格式                
 			// this.$ajax.get(url)        
 
-			// 不想安装axios了，这里使用最原始的 js去请求
+			// 不想安装axios了，这里使用最原始的 js去请求 
 			var xhr = new XMLHttpRequest () ;
 			xhr.open('get',url,true);
 			xhr.send("fff");      
