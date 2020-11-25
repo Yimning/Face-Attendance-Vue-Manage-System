@@ -118,9 +118,14 @@ export default {
                         {
                             index: 'stuAttendenceRecords',
                             title: '考勤记录'
+                        },
+                        {
+                            index: 'webSocket',
+                            title: 'webSocket'
                         }
                     ]
                 },
+
                 {
                     icon: 'el-icon-s-tools',
                     index: 'account',

@@ -545,56 +545,7 @@ export default {
                 this.getData();
             }
         },
-        findStudentRequest(val) {
-            // this.$set(this.query, 'currentPage', 1);
-            const that = this;
-            this.tableData = [];
-            this.$axios
-                .get(val, { params: { id: this.query.request } })
-                .then((res) => {
-                    //console.log(res);
-                    if (res.data[0] == null) {
-                        this.$message.error(`无记录`);
-                        that.query.currentPage = 0;
-                        that.query.pageTotal = res.data.length;
-                        that.query.pageSize = res.data.length;
-                    } else {
-                        this.list = [];
-                        this.newArray = [];
-                        for (const i in res.data) {
-                            for (const key in res.data[i].course) {
-                                //console.log("属性:"+key);
-                                this.$set(this.list, key, res.data[i].course[key]); //对象新增属性(使用Vue.$set())
-                                this.newArray[i] = this.list; //新建数组存放
-                                // this.list.push(i + ':' + JSON.stringify(res.data[k].course[i]));
-                            }
-                            for (const key in res.data[i].student) {
-                                //console.log("属性:"+key);
-                                this.$set(this.list, key, res.data[i].student[key]); //对象新增属性(使用Vue.$set())
-                                this.newArray[i] = this.list; //新建数组存放
-                                // this.list.push(i + ':' + JSON.stringify(res.data[k].course[i]));
-                            }
-                            for (const key in res.data[i].teacher) {
-                                //console.log("属性:"+key);
-                                this.$set(this.list, key, res.data[i].teacher[key]); //对象新增属性(使用Vue.$set())
-                                this.newArray[i] = this.list; //新建数组存放
-                                // this.list.push(i + ':' + JSON.stringify(res.data[k].course[i]));
-                            }
-                            this.list = []; //循环完必须清空,否则可能会覆盖
-                        }
-                        this.tableData = this.newArray;
-                        this.query.currentPage = 1;
-                        this.query.pageTotal = res.data.length;
-                        this.query.pageSize = res.data.length;
-                    }
-                })
-                .catch((err) => {
-                    console.log(err);
-                    if (err.response.status === 400) {
-                        this.$message.error(`请求错误！请正确输入查询内容`);
-                    }
-                });
-        },
+
         //详情信息
         handleMore(index, row) {
             this.idx = index;

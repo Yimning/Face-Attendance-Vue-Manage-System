@@ -236,6 +236,13 @@ export default new Router({
                     }
                 },
                 {
+                    path: '/webSocket',
+                    component: () => import( /* webpackChunkName: "webSocket" */ '../views/WebSocket/WebSocket.vue'),
+                    meta: {
+                        title: 'WebSocket'
+                    }
+                },
+                {
                     // vue-schart组件
                     path: '/charts',
                     component: () => import( /* webpackChunkName: "chart" */ '../views/BaseCharts.vue'),

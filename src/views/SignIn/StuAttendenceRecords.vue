@@ -596,7 +596,6 @@ export default {
             // one['flagPercent'] = this.count.flagPercent;
             // oneArray.push(one);
 
-
             this.count = row;
             this.moreVisible = true;
         },
