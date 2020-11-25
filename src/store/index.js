@@ -13,7 +13,7 @@ export default new Vuex.Store({
     // set
     SET_TOKEN: (state, token) => {
       state.token = token,
-        localStorage.setItem("token", token)
+      localStorage.setItem("token", token)
     },
     SET_USERINFO: (state, userInfo) => {
       state.userInfo = userInfo
