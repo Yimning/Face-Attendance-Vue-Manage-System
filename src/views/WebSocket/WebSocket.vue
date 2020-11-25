@@ -30,7 +30,7 @@ export default {
       // 跟后端协商，需要什么参数数据给后台
       const obj = {
         monitorUrl: '',
-        userName: ''
+        userName: ''   
       }
       // 发起ws请求
 	  sendWebSocket('ws://localhost:8082/websocket/DPS007', "", this.wsMessage, this.wsError);
