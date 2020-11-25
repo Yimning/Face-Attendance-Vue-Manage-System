@@ -105,4 +105,4 @@ export function closeWebSocket() {
     websocket.close() // 关闭websocket
     websocket.onclose() // 关闭websocket
   }
-}
+}  
