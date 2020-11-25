@@ -79,7 +79,7 @@ function websocketClose(e) {
     Message.error('WebSocket连接异常，请稍候重试')
     errorCallback()
   }
-}
+} 
 
 
 /**
@@ -94,7 +94,7 @@ export function sendWebSocket(url, agentData, successCallback, errCallback) {
   initWebSocket()
   messageCallback = successCallback
   errorCallback = errCallback
-  websocketSend(agentData)
+  websocketSend(agentData)  
 }
 
 /**
