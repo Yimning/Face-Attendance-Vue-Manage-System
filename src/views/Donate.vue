@@ -52,8 +52,8 @@ require('tracking/examples/assets/stats.min.js');
 
 export default {     
     name: 'componentName',
-    data() {
-        return {
+    data() { 
+        return {  
             videoEle: null,
             trackerTask: null,
             first: null
