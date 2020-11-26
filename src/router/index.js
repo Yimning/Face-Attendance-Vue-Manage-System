@@ -228,7 +228,7 @@ export default new Router({
                         title: '出勤率'
                     }
                 },
-                {
+                { 
                     path: '/stuAttendenceRecords',
                     component: () => import( /* webpackChunkName: "stuAttendenceRecords" */ '../views/SignIn/StuAttendenceRecords.vue'),
                     meta: {
