@@ -50,7 +50,7 @@ require('tracking/build/data/face-min.js');
 require('tracking/build/data/mouth-min.js');
 require('tracking/examples/assets/stats.min.js');
 
-export default {  
+export default {     
     name: 'componentName',
     data() {
         return {
