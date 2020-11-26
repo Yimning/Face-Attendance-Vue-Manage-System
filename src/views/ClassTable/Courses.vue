@@ -174,7 +174,7 @@ export default {
             this.isTeacher = true;  //只有教师显示
             this.findUserUrl = '/api/scourse/findScourseByteacherNumber';
         } else {
-        }
+        } 
 
         this.$axios
             .get(this.findUserUrl, { params: { id: this.$store.getters.getUser.userID } })

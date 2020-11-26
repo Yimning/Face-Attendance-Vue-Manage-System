@@ -342,7 +342,7 @@ export default {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
-                })
+                }) 
                     .then(() => {
                         console.log(str);
                         this.$axios.post('/api/student/deleteFaceMore', { studentNumber: str }).then((res) => {

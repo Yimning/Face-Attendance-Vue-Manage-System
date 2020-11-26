@@ -334,7 +334,7 @@ export default {
                     //console.log("属性:"+key);
                     this.$set(this.list, key, form[i].student[key]); //对象新增属性(使用Vue.$set())
                     this.newArray[i] = this.list; //新建数组存放
-                }
+                } 
                 for (const key in form[i].teacher) {
                     //console.log("属性:"+key);
                     this.$set(this.list, key, form[i].teacher[key]); //对象新增属性(使用Vue.$set())

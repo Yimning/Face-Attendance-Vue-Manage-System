@@ -21,7 +21,7 @@ export default {
 			this.websock.onmessage = this.websocketonmessage;                
 			this.websock.onclose = this.websocketclose;              
 		},              
-		websocketonopen: function () {                
+		websocketonopen: function () {                   
 			console.log("WebSocket连接成功");              
 		},              
 		websocketonerror: function (e) {                

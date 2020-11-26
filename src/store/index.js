@@ -14,7 +14,7 @@ export default new Vuex.Store({
     SET_TOKEN: (state, token) => {
       state.token = token,
       localStorage.setItem("token", token)
-    },
+    }, 
     SET_USERINFO: (state, userInfo) => {
       state.userInfo = userInfo
       sessionStorage.setItem("userInfo", JSON.stringify(userInfo))  //对话储存

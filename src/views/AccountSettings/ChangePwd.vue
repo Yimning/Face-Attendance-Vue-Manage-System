@@ -32,7 +32,7 @@
                 <!-- :show-close= false //不要小叉叉关闭 
                 :close-on-click-modal= true //不要点击遮罩层关闭 
                 :close-on-press-escape= false
-                //不要esc关闭 width="30%" //宽度 -->
+                //不要esc关闭 width="30%" //宽度 --> 
                 <el-dialog
                     title="提示"
                     :visible.sync="Successdialog"

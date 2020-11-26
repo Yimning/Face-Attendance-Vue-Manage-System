@@ -40,7 +40,7 @@
                     <el-button type="primary" @click="showPracticeCourseDialog = true" class="btn_practice_course">实践课</el-button>
                 </div>
             </div>
-        </el-scrollbar>
+        </el-scrollbar> 
 
         <el-dialog title="我的实践课" :visible.sync="showPracticeCourseDialog" width="30%" center>
             <el-scrollbar style="height: 500px" wrap-style="overflow-x:hidden;">

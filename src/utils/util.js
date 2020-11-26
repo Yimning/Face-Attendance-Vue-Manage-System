@@ -18,7 +18,7 @@ export function triggerWindowResizeEvent () {
   event.initEvent('resize', true, true)
   event.eventType = 'message'
   window.dispatchEvent(event)
-}
+}  
 
 export function handleScrollHeader (callback) {
   let timer = 0

@@ -36,9 +36,7 @@ function initWebSocket() {
   }
 }
 
-
-
-
+  
 // 建立ws连接
 function websocketOpen(e) {
   console.log('WebSocket连接成功')
