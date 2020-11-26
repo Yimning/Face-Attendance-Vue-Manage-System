@@ -319,7 +319,7 @@ export default {
             this.ForgetPwd1Visible = true;
         },
         onSubmit() {
-            const that = this;
+            const that = this; 
             this.id = this.form.userID;
             if (this.id != '' || this.id != null) {
                 if (this.str === 'A') {
