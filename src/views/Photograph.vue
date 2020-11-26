@@ -98,7 +98,7 @@ export default {
             }
             ADOM.click();
         },  
-        // 关闭摄像头
+        // 关闭摄像头 
         closeCamera() {
             if (!this.$refs['video'].srcObject) return;
             let stream = this.$refs['video'].srcObject;
