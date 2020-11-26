@@ -242,7 +242,7 @@ export default {
     },
     activated() {
         this.handleListener();
-    },
+    },  
     deactivated() {
         window.removeEventListener('resize', this.renderChart);
         bus.$off('collapse', this.handleBus);
