@@ -121,7 +121,7 @@ export default {
                         },
                         {
                             index: 'webSocket',
-                            title: 'webSocket'
+                            title: 'webSocket' 
                         }
                     ]
                 },
