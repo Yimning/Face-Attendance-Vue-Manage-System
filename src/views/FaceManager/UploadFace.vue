@@ -124,7 +124,7 @@ export default {
                     if (err.response.status === 400) {
                         this.$message.error(`请求错误`);
                         that.cropImg = that.defaultSrc;
-                    }
+                    } 
                     if (err.response.status === 500) {
                         this.$message.error(`请求失败，请选择图片`);
                         that.cropImg = that.defaultSrc;
