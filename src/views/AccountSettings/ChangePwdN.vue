@@ -155,7 +155,7 @@ export default {
                     that.sendMsg(); //倒计时结束时运行的业务逻辑，这里的是关闭当前页面
                 }
             }, 1000);
-        },
+        }, 
         sendMsg() {
             this.reload(); //刷新 ----推荐
             //this.$router.go(0);//刷新

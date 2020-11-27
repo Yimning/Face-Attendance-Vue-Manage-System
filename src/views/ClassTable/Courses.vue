@@ -164,7 +164,7 @@ export default {
         selectedCourse() {
             return this.CourseInfo[this.selectedCourseIndex];
         }
-    },
+    }, 
     //数据渲染
     created() {
         //角色判断

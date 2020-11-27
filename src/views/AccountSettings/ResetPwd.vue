@@ -59,7 +59,7 @@
 export default {
     name: 'baseform',
     data() {
-        return {
+        return { 
             form: {
                 question: '',
                 pwdAnswer: '',
