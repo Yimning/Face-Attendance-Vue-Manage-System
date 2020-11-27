@@ -101,7 +101,7 @@ export default {
                     event.data.forEach(function (rect) {
                         context.strokeStyle = '#ff0000';
                         context.strokeRect(rect.x, rect.y, rect.width, rect.height);
-                    });
+                    }); 
                     if (event.data.length) {
                         // 会不停的去检测人脸，所以这里需要做个锁   
                         if (flag) {
