@@ -14,7 +14,7 @@
                 <!-- vue-cropperjs：一个封装了 cropperjs 的 Vue 组件。
                 访问地址：-->
                 <!-- <a href="https://github.com/Agontuk/vue-cropperjs" target="_blank">vue-cropperjs</a> -->
-            </div>
+            </div> 
             <div class="crop-demo">
                 <img :src="cropImg" class="pre-img" />
 
