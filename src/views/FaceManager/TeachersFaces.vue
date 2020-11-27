@@ -6,7 +6,7 @@
                     <i class="el-icon-lx-cascades"></i> 全部教师信息
                 </el-breadcrumb-item>
             </el-breadcrumb>
-        </div>
+        </div> 
         <div class="container">
             <div class="handle-box">
                 <el-button
