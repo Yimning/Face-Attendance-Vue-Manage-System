@@ -588,12 +588,12 @@ export default {
                 )
                 .catch((err) => {
                     console.log(err);
-                });
+                }); 
             // let oneArray = [];
             // let one = {}; //添加的对象
             // one['notFlag'] = this.count.notFlag;
             // one['isFlag'] = this.count.isFlag;
-            // one['flagPercent'] = this.count.flagPercent;
+            // one['flagPercent'] = this.count.flagPercent; 
             // oneArray.push(one);
 
             this.count = row;
