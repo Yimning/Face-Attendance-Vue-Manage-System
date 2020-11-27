@@ -109,7 +109,7 @@ td {
   height: 80px;
   border-right: 1px solid #fefefe;
   border-bottom: 1px solid #fefefe;
-}
+} 
 tr td div {
   background: #a5d16d;
   width: 100%;
