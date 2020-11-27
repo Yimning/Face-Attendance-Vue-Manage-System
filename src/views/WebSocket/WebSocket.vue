@@ -43,7 +43,7 @@ export default {
 			xhr.open('get',url,true);
 			xhr.send("fff");        
 	  
-	},  
+	},   
 	closeWebSocket(){
 		closeWebSocket();
 	}
