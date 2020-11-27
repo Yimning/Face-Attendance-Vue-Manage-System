@@ -6,7 +6,7 @@
                 <el-breadcrumb-item>账户冻结状态</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
-        <div class="container">
+        <div class="container"> 
             <div class="form-box">
                 <el-form ref="form" :model="form"  label-width="280px" class="box-content">
                     <!-- <span class="span-text">账号冻结状态:</span> -->
