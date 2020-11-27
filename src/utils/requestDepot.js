@@ -38,7 +38,7 @@ export default () => {
 // depot();
 
 
-//使用  注意解决跨域问题 
+//使用  注意解决跨域问题  
 
 // depot.get({
 //     url: 'demo/demo',
