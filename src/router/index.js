@@ -233,7 +233,7 @@ export default new Router({
                     component: () => import( /* webpackChunkName: "stuAttendenceRecords" */ '../views/SignIn/StuAttendenceRecords.vue'),
                     meta: {
                         title: '考勤记录'
-                    }
+                    } 
                 },
                 {
                     path: '/webSocket',
