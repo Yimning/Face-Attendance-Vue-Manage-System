@@ -23,7 +23,7 @@ export default {
 		},              
 		websocketonopen: function () {                    
 			console.log("WebSocket连接成功");              
-		},               
+		},                
 		websocketonerror: function (e) {                
 			console.log("WebSocket连接发生错误" + e);              
 		},              
