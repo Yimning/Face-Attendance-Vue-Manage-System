@@ -85,7 +85,7 @@
                     <el-button class="" type="primary" icon="el-icon-search" @click="handleSearchByInfo">搜索</el-button>
                 </div>
                 <el-button class="handle-line" type="primary" plain icon="el-icon-refresh" @click="handleFresh">条件重置</el-button>
-                <el-button class="handle-line" type="success" icon="el-icon-circle-check" @click="handleFlag">已签</el-button>
+                <el-button  type="success" icon="el-icon-circle-check" @click="handleFlag">已签</el-button>
                 <el-button type="warning" icon="el-icon-circle-close" @click="handleNotFlag">未签</el-button>
                 <el-button type="success" plain icon="el-icon-s-flag" @click="handleCheck">出勤率查询</el-button>
                 <div>
@@ -730,7 +730,7 @@ export default {
         handleAllUpload() {},
         handleDetails() {},
         handleCheck() {
-            // this.$router.push('/addCourse');
+             this.$router.push('/attendenceQuery');
         },
         handleFresh() {
             return this.reload(); //刷新 ----推荐
@@ -788,9 +788,8 @@ export default {
     display: block;
 }
 .handle-line {
-    position: relative;
     margin-top: 8px;
-}
+} 
 .handle-weekday {
     position: relative;
     margin-left: 570px;
