@@ -165,7 +165,7 @@ export default {
             return this.CourseInfo[this.selectedCourseIndex];
         }
     }, 
-    //数据渲染
+    //数据渲染   
     created() {
         //角色判断
         if (this.$store.getters.getUser.roseID == '0') {
