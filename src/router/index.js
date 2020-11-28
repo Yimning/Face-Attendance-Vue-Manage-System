@@ -235,6 +235,20 @@ export default new Router({
                         title: '考勤记录'
                     } 
                 },
+                { 
+                    path: '/roseJude',
+                    component: () => import( /* webpackChunkName: "roseJude" */ '../views/SignIn/RoseJude.vue'),
+                    meta: {
+                        title: '角色判断'
+                    } 
+                },
+                { 
+                    path: '/teachAttendenceRecords',
+                    component: () => import( /* webpackChunkName: "teachAttendenceRecords" */ '../views/SignIn/TeachAttendenceRecords.vue'),
+                    meta: {
+                        title: '考勤记录'
+                    } 
+                },
                 {
                     path: '/webSocket',
                     component: () => import( /* webpackChunkName: "webSocket" */ '../views/WebSocket/WebSocket.vue'),
