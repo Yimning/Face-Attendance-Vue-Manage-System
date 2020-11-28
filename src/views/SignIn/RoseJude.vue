@@ -6,7 +6,7 @@
  
 <script>
 export default {
-    name: 'App',
+    name: 'App',    
     created() {
         if (this.$store.getters.getUser.roseID == '1') {
             if (this.$store.getters.getUser.roseName == '教师管理员') {
