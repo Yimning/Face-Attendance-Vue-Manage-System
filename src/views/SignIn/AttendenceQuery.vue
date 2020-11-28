@@ -402,7 +402,7 @@ export default {
         courseFunc(e) {
             const url = '/api/attendance/findAttendanceBycourseID';
             this.getAttendanceBycourseID(url, e);
-        },
+        },  
         // 获取课程BycourseID
         getAttendanceBycourseID(url, id) {
             const that = this;
