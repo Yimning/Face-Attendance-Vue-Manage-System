@@ -268,7 +268,7 @@ export default {
             form: {},
             formAdd: {},
             defaultAvatar: {},
-            idx: -1,
+            idx: -1,  
             row:'',
             id: -1
         };
