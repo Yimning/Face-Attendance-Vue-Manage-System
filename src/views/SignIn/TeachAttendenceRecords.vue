@@ -26,7 +26,7 @@
                     <el-option key="查学生姓名" label="学生姓名" value="3"></el-option>
                 </el-select>
 
-                <el-input
+                <el-input  
                     v-model="query.request"
                     v-if="selected === '0'"
                     placeholder="教师号"
