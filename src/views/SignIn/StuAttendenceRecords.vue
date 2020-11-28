@@ -17,7 +17,7 @@
                         :label="item.courseID + item.courseName"
                         :value="item.courseID"
                     ></el-option>
-                </el-select>
+                </el-select>  
 
                 <el-select v-model="selected" v-on:input="selectedFunc" class="handle-select mr10">
                     <el-option key="查查学生学号" label="查学生学号" value="2"></el-option>
