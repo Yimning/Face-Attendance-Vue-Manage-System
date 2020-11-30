@@ -19,10 +19,9 @@
                 </el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
-                        <el-button type="text" icon="el-icon-more" class="blue" @click="handleMore(scope.$index, scope.row)"
-                            >统计</el-button
+                        <el-button type="text" icon="el-icon-mouse" class="blue" @click="handleMore(scope.$index, scope.row)"
+                            >考勤</el-button
                         >
-                        <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">出勤率</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -59,6 +58,7 @@ export default {
             form: {
                 options: []
             },
+            dataParams:[],
             tableData: [],
             list: [{}],
             weeks: {
@@ -85,7 +85,7 @@ export default {
             this.dataDateNumber(aData);
             //console.log(this.dataDateNumber(aData));
             if (this.$store.getters.getUser.roseID == '1') {
-                const params = { params: { tID: this.$store.getters.getUser.userID, cID: null, cD: 1 } };
+                const params = { params: { tID: this.$store.getters.getUser.userID, cID: null, cD: this.dataDateNumber(aData) } };
                 const that = this;
                 //axios的get请求
                 this.$axios
@@ -93,7 +93,6 @@ export default {
                     .then((res) => {
                         //console.log(res);
                         this.form = res.data[0];
-                        console.log(this.form);
                         //console.log('请求后台数据结果', this.form);
                         this.dataTraversal(this.form);
                     })
@@ -145,7 +144,12 @@ export default {
                 let weekIndex = date.getDay();
                 return weekIndex;
             } else return null;
-        }
+        },
+        handleMore(index, row) {
+            this.idx = index;
+            this.dataParams=row;
+            console.log(this.dataParams);
+        },
     }
 };
 </script>
