@@ -85,7 +85,7 @@
                     <el-button class="" type="primary" icon="el-icon-search" @click="handleSearchByInfo">搜索</el-button>
                 </div>
                 <el-button class="handle-line" type="primary" plain icon="el-icon-refresh" @click="handleFresh">条件重置</el-button>
-                <el-button  type="success" icon="el-icon-circle-check" @click="handleFlag">已签</el-button>
+                <el-button type="success" icon="el-icon-circle-check" @click="handleFlag">已签</el-button>
                 <el-button type="warning" icon="el-icon-circle-close" @click="handleNotFlag">未签</el-button>
                 <el-button type="success" plain icon="el-icon-s-flag" @click="handleCheck">出勤率查询</el-button>
                 <div>
@@ -268,8 +268,8 @@ export default {
             form: {},
             formAdd: {},
             defaultAvatar: {},
-            idx: -1,  
-            row:'',
+            idx: -1,
+            row: '',
             id: -1
         };
     },
@@ -334,7 +334,7 @@ export default {
                     //console.log("属性:"+key);
                     this.$set(this.list, key, form[i].student[key]); //对象新增属性(使用Vue.$set())
                     this.newArray[i] = this.list; //新建数组存放
-                } 
+                }
                 for (const key in form[i].teacher) {
                     //console.log("属性:"+key);
                     this.$set(this.list, key, form[i].teacher[key]); //对象新增属性(使用Vue.$set())
@@ -549,7 +549,7 @@ export default {
         //详情信息
         handleMore(index, row) {
             this.idx = index;
-                        this.row=row;
+            this.row = row;
             const that = this;
             const url = '/api/attendance/countAttendanceNotflag';
             const params = { params: { flag: 0, cID: row.courseID, sID: row.studentNumber } };
@@ -605,7 +605,7 @@ export default {
         handleEdit1(index, row) {
             this.idx = index;
             const that = this;
-           // console.log(row);
+            // console.log(row);
             const url = '/api/attendance/updateAttendanceInfo1';
             var obj = {};
             for (var i in row) {
@@ -730,7 +730,7 @@ export default {
         handleAllUpload() {},
         handleDetails() {},
         handleCheck() {
-             this.$router.push('/attendenceQuery');
+            this.$router.push('/attendenceQuery');
         },
         handleFresh() {
             return this.reload(); //刷新 ----推荐
@@ -742,7 +742,7 @@ export default {
                 return this.$message.error(`请选择课程号-课程名`);
             } else {
                 this.requestHandle(url, params);
-            }   
+            }
         },
 
         handleNotFlag() {
@@ -789,7 +789,7 @@ export default {
 }
 .handle-line {
     margin-top: 8px;
-} 
+}
 .handle-weekday {
     position: relative;
     margin-left: 570px;
