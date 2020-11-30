@@ -250,6 +250,7 @@ export default {
                 recordTime: [{ required: true, message: '请输入密保答案', trigger: 'blur' }]
             },
             requestAddr: '',
+            url: '',
             selected: '0', //注意数据格式的转换，否则会导致不正常
             tableData: [],
             paramsData: [],
@@ -289,19 +290,23 @@ export default {
         // 获取后台数据
         getData() {
             const that = this;
-            const url = '';
             if (this.$store.getters.getUser.roseID == '1') {
                 if (this.$store.getters.getUser.roseName == '教师管理员') {
-                    url = '/api/course/findAllCourse';
+                    this.url = '/api/attendance/findAllAttendance';
                 } else {
-                    url = '/api/course/findAttendanceByteacherID';
+                    this.url = '/api/attendance/findAttendanceByteacherID';
                 }
             }
             //axios的get请求
+            this.getAllattendance(url,params)
+        },
+        getAllattendance(url,params) {
+            const that = this;
+            //axios的get请求
             this.$axios
-                .get(url,)
+                .get(url,params)
                 .then((res) => {
-                    //console.log(res);
+                    console.log(res);
                     this.form = res.data;
                     //console.log('请求后台数据结果', this.form);
                     this.dataTraversal(this.form);
@@ -310,6 +315,7 @@ export default {
                     console.log(err);
                 });
         },
+
         // 获取全部课程数据
         getAllCourse() {
             const that = this;
