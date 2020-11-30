@@ -221,7 +221,7 @@ export default {
                     title: '考勤管理',
                     subs: [
                         {
-                            index: 'signin',
+                            index: 'attendenceCourse',
                             title: '考勤'
                         },
                         {
