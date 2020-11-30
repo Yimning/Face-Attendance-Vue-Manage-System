@@ -289,9 +289,17 @@ export default {
         // 获取后台数据
         getData() {
             const that = this;
+            const url = '';
+            if (this.$store.getters.getUser.roseID == '1') {
+                if (this.$store.getters.getUser.roseName == '教师管理员') {
+                    url = '/api/course/findAllCourse';
+                } else {
+                    url = '/api/course/findAttendanceByteacherID';
+                }
+            }
             //axios的get请求
             this.$axios
-                .get('/api/attendance/findAllAttendance')
+                .get(url,)
                 .then((res) => {
                     //console.log(res);
                     this.form = res.data;
