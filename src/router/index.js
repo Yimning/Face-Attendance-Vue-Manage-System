@@ -222,6 +222,13 @@ export default new Router({
                     }
                 },
                 {
+                    path: '/attendenceCourse',
+                    component: () => import( /* webpackChunkName: "attendenceCourse" */ '../views/SignIn/AttendenceCourse.vue'),
+                    meta: {
+                        title: '考勤课程'
+                    }
+                },
+                {
                     path: '/attendenceQuery',
                     component: () => import( /* webpackChunkName: "attendenceQuery" */ '../views/SignIn/AttendenceQuery.vue'),
                     meta: {
