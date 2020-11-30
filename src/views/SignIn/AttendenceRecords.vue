@@ -292,28 +292,35 @@ export default {
             const that = this;
             if (this.$store.getters.getUser.roseID == '1') {
                 if (this.$store.getters.getUser.roseName == '教师管理员') {
-                    this.url = '/api/attendance/findAllAttendance';
+                    const url = '/api/attendance/findAllAttendance';
+                    this.$axios
+                        .get(url)
+                        .then((res) => {
+                            //console.log(res);
+                            this.form = res.data;
+                            //console.log('请求后台数据结果', this.form);
+                            this.dataTraversal(this.form);
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
                 } else {
-                    this.url = '/api/attendance/findAttendanceByteacherID';
+                    const params = { params: { id: this.$store.getters.getUser.userID } };
+                    const that = this;
+                    //axios的get请求
+                    this.$axios
+                        .get('/api/attendance/findAttendanceByteacherID', params)
+                        .then((res) => {
+                            //console.log(res);
+                            this.form = res.data;
+                            //console.log('请求后台数据结果', this.form);
+                            this.dataTraversal(this.form);
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
                 }
             }
-            //axios的get请求
-            this.getAllattendance(url,params)
-        },
-        getAllattendance(url,params) {
-            const that = this;
-            //axios的get请求
-            this.$axios
-                .get(url,params)
-                .then((res) => {
-                    console.log(res);
-                    this.form = res.data;
-                    //console.log('请求后台数据结果', this.form);
-                    this.dataTraversal(this.form);
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
         },
 
         // 获取全部课程数据
