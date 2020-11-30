@@ -13,8 +13,10 @@
                 <el-table-column prop="teacherName" label="授课教师" align="center"></el-table-column>
                 <el-table-column prop="courseDay" label="星期" align="center"></el-table-column>
                 <el-table-column prop="courseTime" label="上课时间" align="center"></el-table-column>
-                <el-table-column prop="weekDay" label="上课地点" align="center"></el-table-column>
-                <el-table-column prop="coursePeriodF" label="起始节" align="center"></el-table-column>
+                <el-table-column prop="classRoomID" label="上课地点" align="center"></el-table-column>
+                <el-table-column prop="" label="起始节" align="center">
+                    <template slot-scope="scope">{{ scope.row.coursePeriodF }}-{{ scope.row.coursePeriodB }}节</template>
+                </el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
                         <el-button type="text" icon="el-icon-more" class="blue" @click="handleMore(scope.$index, scope.row)"
@@ -24,6 +26,15 @@
                     </template>
                 </el-table-column>
             </el-table>
+            <div class="pagination">
+                <el-pagination
+                    background
+                    layout="total, prev, pager, next"
+                    :current-page="query.currentPage"
+                    :page-size="query.pageSize"
+                    :total="query.pageTotal"
+                ></el-pagination>
+            </div>
         </div>
     </div>
 </template>
@@ -70,14 +81,17 @@ export default {
         // 获取后台数据
         getData() {
             const that = this;
+            var aData = new Date();
+            this.dataDateNumber(aData);
+            //console.log(this.dataDateNumber(aData));
             if (this.$store.getters.getUser.roseID == '1') {
-                const params = { params: { tID: this.$store.getters.getUser.userID, cID: 1, cD: 1 } };
+                const params = { params: { tID: this.$store.getters.getUser.userID, cID: null, cD: 1 } };
                 const that = this;
                 //axios的get请求
                 this.$axios
                     .get('/api/scourse/findScourseBytIDcID', params)
                     .then((res) => {
-                        console.log(res);
+                        //console.log(res);
                         this.form = res.data[0];
                         console.log(this.form);
                         //console.log('请求后台数据结果', this.form);
@@ -91,15 +105,12 @@ export default {
         dataTraversal(form) {
             this.list = [];
             this.newArray = [];
-            //console.log('属性:' + i);
-            this.$set(this.list, 'recordID', form.recordID);
-            this.$set(this.list, 'recordTime', form.recordTime);
-            this.$set(this.list, 'flag', form.flag);
-            this.$set(this.list, 'weekDay', this.dataDateChange(form.recordTime));
 
             for (const key in form.course) {
-                this.$set(this.list, key, form.course[key]); //对象新增属性(使用Vue.$set())
-                this.newArray[0]= this.list; //新建数组存放
+                if (key == 'courseDay') {
+                    this.$set(this.list, key, weekArr[form.course[key]]);
+                } else this.$set(this.list, key, form.course[key]); //对象新增属性(使用Vue.$set())
+                this.newArray[0] = this.list; //新建数组存放
             }
             for (const key in form.student) {
                 //console.log("属性:"+key);
@@ -125,6 +136,14 @@ export default {
                 let weekIndex = date.getDay();
                 //this.week = this.weeks[weekIndex];
                 return this.weeks[weekIndex];
+            } else return null;
+        },
+        //根据当前的日期显示当前是星期几的索引
+        dataDateNumber(dateStr) {
+            if (dateStr != null || dateStr == '') {
+                let date = new Date(dateStr);
+                let weekIndex = date.getDay();
+                return weekIndex;
             } else return null;
         }
     }
