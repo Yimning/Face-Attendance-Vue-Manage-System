@@ -37,6 +37,17 @@ export default {
     inject: ['reload'],
     data() {
         return {
+            query: {
+                address: '',
+                name: '',
+                currentPage: 1,
+                pageSize: 5,
+                pageTotal: 0,
+                request: ''
+            },
+            form: {
+                options: []
+            },
             tableData: [],
             list: [{}],
             weeks: {
@@ -52,45 +63,70 @@ export default {
     },
     components: {},
     created() {
-                this.getData(); //渲染
+        this.getData(); //渲染
     },
 
     methods: {
-         // 获取后台数据
+        // 获取后台数据
         getData() {
             const that = this;
             if (this.$store.getters.getUser.roseID == '1') {
-                if (this.$store.getters.getUser.roseName == '教师管理员') {
-                    const url = '/api/attendance/findAllAttendance';
-                    this.$axios
-                        .get(url)
-                        .then((res) => {
-                            //console.log(res);
-                            this.form = res.data;
-                            //console.log('请求后台数据结果', this.form);
-                            this.dataTraversal(this.form);
-                        })
-                        .catch((err) => {
-                            console.log(err);
-                        });
-                } else {
-                    const params = { params: { id: this.$store.getters.getUser.userID } };
-                    const that = this;
-                    //axios的get请求
-                    this.$axios
-                        .get('/api/attendance/findAttendanceByteacherID', params)
-                        .then((res) => {
-                            //console.log(res);
-                            this.form = res.data;
-                            //console.log('请求后台数据结果', this.form);
-                            this.dataTraversal(this.form);
-                        })
-                        .catch((err) => {
-                            console.log(err);
-                        });
-                }
+                const params = { params: { tID: this.$store.getters.getUser.userID, cID: 1, cD: 1 } };
+                const that = this;
+                //axios的get请求
+                this.$axios
+                    .get('/api/scourse/findScourseBytIDcID', params)
+                    .then((res) => {
+                        console.log(res);
+                        this.form = res.data[0];
+                        console.log(this.form);
+                        //console.log('请求后台数据结果', this.form);
+                        this.dataTraversal(this.form);
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
             }
         },
+        dataTraversal(form) {
+            this.list = [];
+            this.newArray = [];
+            //console.log('属性:' + i);
+            this.$set(this.list, 'recordID', form.recordID);
+            this.$set(this.list, 'recordTime', form.recordTime);
+            this.$set(this.list, 'flag', form.flag);
+            this.$set(this.list, 'weekDay', this.dataDateChange(form.recordTime));
+
+            for (const key in form.course) {
+                this.$set(this.list, key, form.course[key]); //对象新增属性(使用Vue.$set())
+                this.newArray[0]= this.list; //新建数组存放
+            }
+            for (const key in form.student) {
+                //console.log("属性:"+key);
+                this.$set(this.list, key, form.student[key]); //对象新增属性(使用Vue.$set())
+                this.newArray[0] = this.list; //新建数组存放
+            }
+            for (const key in form.teacher) {
+                //console.log("属性:"+key);
+                this.$set(this.list, key, form.teacher[key]); //对象新增属性(使用Vue.$set())
+                this.newArray[0] = this.list; //新建数组存放
+            }
+            // this.list = []; //循环完必须清空,否则可能会覆盖
+            //console.log(this.newArray);
+            this.tableData = this.newArray;
+            this.query.currentPage = 1;
+            this.query.pageTotal = form.length;
+            this.query.pageSize = form.length;
+        },
+        //根据当前的日期显示当前是星期几
+        dataDateChange(dateStr) {
+            if (dateStr != null || dateStr == '') {
+                let date = new Date(dateStr);
+                let weekIndex = date.getDay();
+                //this.week = this.weeks[weekIndex];
+                return this.weeks[weekIndex];
+            } else return null;
+        }
     }
 };
 </script>
