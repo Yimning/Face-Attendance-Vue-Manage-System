@@ -15,14 +15,6 @@ export default {
                 this.$router.push('/teachAttendenceRecords');
             }
         }
-                    const url='';
-            if (this.$store.getters.getUser.roseID == '1') {
-                if (this.$store.getters.getUser.roseName == '教师管理员') {
-                   url='/api/course/findAllCourse';
-                } else {
-                     url='/api/course/findAllCourse';
-                }
-            }
     },
     methods: {
     }
