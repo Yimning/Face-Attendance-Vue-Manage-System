@@ -225,7 +225,7 @@ export default {
                             title: '考勤'
                         },
                         {
-                            index: 'roseJude',
+                            index: 'attendenceRecords',
                             title: '考勤记录'
                         }
                     ]
