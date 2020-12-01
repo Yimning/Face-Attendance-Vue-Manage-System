@@ -41,15 +41,18 @@ export default {
             videoEle: null,
             trackerTask: null,
             first: null,
-            face: {
-                imgpath: ''
+            faceInfo: {
+                imgpath: '',
+                courseID:'',
+                UserID:'',
             },
             dataParams: {},
         };
     },
     created() {
         this.dataParams=this.$route.query.data; 
-        console.log( this.dataParams);
+        this.faceInfo.courseID=this.dataParams.courseID;
+        console.log( this.faceInfo);
     },
     methods: {
         created() {
@@ -111,12 +114,12 @@ export default {
                             contextUpload.drawImage(video, 0, 0, 480, 400);
                             flag = false;
                             // 人脸的basa64
-                            that.face.imgpath = canvasUpload.toDataURL('image/jpeg');
+                            that.faceInfo.imgpath = canvasUpload.toDataURL('image/jpeg');
                             // console.log(that.face);
 
                             // ajax请求
                             that.$axios
-                                .post('/api/attendance/faceAttendance', JSON.stringify(that.face), {
+                                .post('/api/attendance/faceAttendance', JSON.stringify(that.faceInfo), {
                                     headers: {
                                         'Content-Type': 'application/json; charset=UTF-8'
                                     }
