@@ -218,7 +218,7 @@ export default new Router({
                     path: '/attendenceRecords',
                     component: () => import( /* webpackChunkName: "attendenceRecords" */ '../views/SignIn/AttendenceRecords.vue'),
                     meta: {
-                        title: '考勤'
+                        title: '考勤记录'
                     }
                 },
                 {
