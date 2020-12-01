@@ -636,6 +636,7 @@ export default {
             const that = this;
             // console.log(row);
             const url = '/api/attendance/updateAttendanceInfo1';
+            //将数组转成对象
             var obj = {};
             for (var i in row) {
                 obj[i] = row[i];
