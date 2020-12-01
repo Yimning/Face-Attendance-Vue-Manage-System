@@ -43,11 +43,13 @@ export default {
             first: null,
             face: {
                 imgpath: ''
-            }
+            },
+            dataParams: {},
         };
     },
     created() {
-        console.log(this.$route.query.data);
+        this.dataParams=this.$route.query.data; 
+        console.log( this.dataParams);
     },
     methods: {
         created() {
@@ -114,24 +116,24 @@ export default {
 
                             // ajax请求
                             that.$axios
-                                .post('/api/faceLogin', JSON.stringify(that.face), {
+                                .post('/api/attendance/faceAttendance', JSON.stringify(that.face), {
                                     headers: {
                                         'Content-Type': 'application/json; charset=UTF-8'
                                     }
                                 })
                                 .then((res) => {
-                                    //console.log(res);
-                                    const jwt = res.headers['authorization'];
-                                    const userInfo = res.data;
+                                    console.log(res);
+                                    // const jwt = res.headers['authorization'];
+                                    // const userInfo = res.data;
 
-                                    // 把数据共享出去，存于this.store下
-                                    that.$store.commit('SET_TOKEN', jwt);
-                                    that.$store.commit('SET_USERINFO', userInfo);
+                                    // // 把数据共享出去，存于this.store下
+                                    // that.$store.commit('SET_TOKEN', jwt);
+                                    // that.$store.commit('SET_USERINFO', userInfo);
                                     //console.log(userInfo)
                                     if (res.data.error_code === 0 && res.data.face_liveness > 0.8) {
                                         that.closeCamera();
                                         // 登录成功跳转到首页
-                                        that.$router.push('/dashboard');
+                                       // that.$router.push('/dashboard');
                                         that.$message.success('登录成功');
                                         that.FaceLoginVisible = false;
                                     } else {
