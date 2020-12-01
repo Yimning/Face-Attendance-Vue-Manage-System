@@ -58,7 +58,8 @@ export default {
             form: {
                 options: []
             },
-            dataParams:[],
+            //给子组件的值
+            dataParams: {},
             tableData: [],
             list: [{}],
             weeks: {
@@ -91,8 +92,8 @@ export default {
                 this.$axios
                     .get('/api/scourse/findScourseBytIDcID', params)
                     .then((res) => {
-                        //console.log(res);
-                        this.form = res.data[0];
+                        console.log(res);
+                        this.form = res.data;
                         //console.log('请求后台数据结果', this.form);
                         this.dataTraversal(this.form);
                     })
@@ -105,23 +106,29 @@ export default {
             this.list = [];
             this.newArray = [];
 
-            for (const key in form.course) {
-                if (key == 'courseDay') {
-                    this.$set(this.list, key, weekArr[form.course[key]]);
-                } else this.$set(this.list, key, form.course[key]); //对象新增属性(使用Vue.$set())
-                this.newArray[0] = this.list; //新建数组存放
+            for (const i in form) {
+                //console.log('属性:' + i);
+                this.$set(this.list, 'recordID', form[i].recordID);
+                this.$set(this.list, 'recordTime', form[i].recordTime);
+                this.$set(this.list, 'flag', form[i].flag);
+                this.$set(this.list, 'weekDay', this.dataDateChange(form[i].recordTime));
+
+                for (const key in form[i].course) {
+                    this.$set(this.list, key, form[i].course[key]); //对象新增属性(使用Vue.$set())
+                    this.newArray[i] = this.list; //新建数组存放
+                }
+                for (const key in form[i].student) {
+                    //console.log("属性:"+key);
+                    this.$set(this.list, key, form[i].student[key]); //对象新增属性(使用Vue.$set())
+                    this.newArray[i] = this.list; //新建数组存放
+                }
+                for (const key in form[i].teacher) {
+                    //console.log("属性:"+key);
+                    this.$set(this.list, key, form[i].teacher[key]); //对象新增属性(使用Vue.$set())
+                    this.newArray[i] = this.list; //新建数组存放
+                }
+                this.list = []; //循环完必须清空,否则可能会覆盖
             }
-            for (const key in form.student) {
-                //console.log("属性:"+key);
-                this.$set(this.list, key, form.student[key]); //对象新增属性(使用Vue.$set())
-                this.newArray[0] = this.list; //新建数组存放
-            }
-            for (const key in form.teacher) {
-                //console.log("属性:"+key);
-                this.$set(this.list, key, form.teacher[key]); //对象新增属性(使用Vue.$set())
-                this.newArray[0] = this.list; //新建数组存放
-            }
-            // this.list = []; //循环完必须清空,否则可能会覆盖
             //console.log(this.newArray);
             this.tableData = this.newArray;
             this.query.currentPage = 1;
@@ -147,9 +154,15 @@ export default {
         },
         handleMore(index, row) {
             this.idx = index;
-            this.dataParams=row;
-            console.log(this.dataParams);
-        },
+            this.dataParams = row;
+            //将数组转成对象
+            var obj = {};
+            for (var i in row) {
+                obj[i] = row[i];
+            }
+            this.dataParams = obj;
+            this.$router.push({ path: '/SignIn', query: { data: this.dataParams } }); //路由跳转传参
+        }
     }
 };
 </script>
