@@ -92,7 +92,7 @@ export default {
                 this.$axios
                     .get('/api/scourse/findScourseBytIDcID', params)
                     .then((res) => {
-                        console.log(res);
+                        //console.log(res);
                         this.form = res.data;
                         //console.log('请求后台数据结果', this.form);
                         this.dataTraversal(this.form);
@@ -125,7 +125,7 @@ export default {
 
                 this.list = []; //循环完必须清空,否则可能会覆盖
             }
-            console.log(this.newArray);
+            //console.log(this.newArray);
             this.tableData = this.newArray;
             this.query.currentPage = 1;
             this.query.pageTotal = form.length;
