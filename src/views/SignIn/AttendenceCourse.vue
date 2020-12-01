@@ -105,14 +105,9 @@ export default {
         dataTraversal(form) {
             this.list = [];
             this.newArray = [];
-
+            let id = 0;
             for (const i in form) {
                 //console.log('属性:' + i);
-                this.$set(this.list, 'recordID', form[i].recordID);
-                this.$set(this.list, 'recordTime', form[i].recordTime);
-                this.$set(this.list, 'flag', form[i].flag);
-                this.$set(this.list, 'weekDay', this.dataDateChange(form[i].recordTime));
-
                 for (const key in form[i].course) {
                     this.$set(this.list, key, form[i].course[key]); //对象新增属性(使用Vue.$set())
                     this.newArray[i] = this.list; //新建数组存放
@@ -127,9 +122,10 @@ export default {
                     this.$set(this.list, key, form[i].teacher[key]); //对象新增属性(使用Vue.$set())
                     this.newArray[i] = this.list; //新建数组存放
                 }
+
                 this.list = []; //循环完必须清空,否则可能会覆盖
             }
-            //console.log(this.newArray);
+            console.log(this.newArray);
             this.tableData = this.newArray;
             this.query.currentPage = 1;
             this.query.pageTotal = form.length;
