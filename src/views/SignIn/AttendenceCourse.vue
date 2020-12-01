@@ -52,7 +52,7 @@ export default {
                 name: '',
                 currentPage: 1,
                 pageSize: 5,
-                pageTotal: 0,
+                pageTotal: 0, 
                 request: ''
             },
             form: {
