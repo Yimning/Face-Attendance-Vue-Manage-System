@@ -48,7 +48,7 @@ export default {
             },
             dataParams: {},
         };
-    },
+    },  
     created() {
         this.dataParams=this.$route.query.data; 
         this.faceInfo.courseID=this.dataParams.courseID;
