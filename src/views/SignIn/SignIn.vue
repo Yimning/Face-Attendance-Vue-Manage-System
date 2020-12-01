@@ -2,9 +2,7 @@
     <div>
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item>
-                    <i class="el-icon-lx-redpacket_fill"></i> 课程考勤
-                </el-breadcrumb-item>
+                <el-breadcrumb-item> <i class="el-icon-lx-redpacket_fill"></i> 课程考勤 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="container">
@@ -13,10 +11,10 @@
             </div>-->
             <el-button type="primary" icon="el-icon-camera-solid" @click="openCamera">打开摄像头</el-button>
             <el-button type="primary" icon="el-icon-camera-solid" @click="closeCamera">关闭摄像头</el-button>
-          
+
             <!--提示-->
             <div align="center">
-                <p id="flag" class="tishi"> </p>
+                <p id="flag" class="tishi"></p>
             </div>
 
             <div align="center">
@@ -24,13 +22,7 @@
                 <video id="video" ref="video" width="480px" height="400px" autoplay="autoplay"></video>
                 <!-- <video id="video" preload autoplay loop muted></video> -->
                 <!--canvas截取流-->
-                <canvas
-                    ref="canvas"
-                    id="canvas"
-                    width="480px"
-                    height="400px"
-                    style="display: none;"
-                ></canvas>
+                <canvas ref="canvas" id="canvas" width="480px" height="400px" style="display: none"></canvas>
             </div>
         </div>
     </div>
@@ -51,7 +43,10 @@ export default {
             first: null
         };
     },
-
+    created() {
+        
+        console.log(this.$route.query.data);
+    },
     methods: {
         created() {
             setTimeout(() => {
@@ -101,9 +96,9 @@ export default {
                     event.data.forEach(function (rect) {
                         context.strokeStyle = '#ff0000';
                         context.strokeRect(rect.x, rect.y, rect.width, rect.height);
-                    }); 
+                    });
                     if (event.data.length) {
-                        // 会不停的去检测人脸，所以这里需要做个锁   
+                        // 会不停的去检测人脸，所以这里需要做个锁
                         if (flag) {
                             // 裁剪出人脸并绘制下来
                             const canvasUpload = document.getElementById('canvas');
