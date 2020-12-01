@@ -40,11 +40,13 @@ export default {
         return {
             videoEle: null,
             trackerTask: null,
-            first: null
+            first: null,
+            face: {
+                imgpath: ''
+            }
         };
     },
     created() {
-        
         console.log(this.$route.query.data);
     },
     methods: {
@@ -91,6 +93,7 @@ export default {
             set_clear = setTimeout(function () {
                 // 每秒 检测人脸 结果
                 tracker.on('track', function (event) {
+                    that.tips = '正在刷脸中';
                     // 视频流
                     context.clearRect(0, 0, canvas.width, canvas.height);
                     event.data.forEach(function (rect) {
@@ -103,51 +106,57 @@ export default {
                             // 裁剪出人脸并绘制下来
                             const canvasUpload = document.getElementById('canvas');
                             const contextUpload = canvasUpload.getContext('2d');
-                            contextUpload.drawImage(video, 0, 0, 105, 105);
+                            contextUpload.drawImage(video, 0, 0, 480, 400);
                             flag = false;
                             // 人脸的basa64
-                            const dataURL = canvasUpload.toDataURL('image/jpeg');
-                            console.log(dataURL);
-                            // // ajax请求
-                            // _this.$store
-                            //     .dispatch('LoginByFaceID', {
-                            //         face_img: dataURL.slice(23) // 我们后台需要的basa64不要前缀
-                            //     })
-                            //     .then((res) => {
-                            //         let type = 'success';
-                            //         // 登录成功跳转到首页
-                            //         if (res.data.code === 200) {
-                            //             _this.$router.push({
-                            //                 path: '/'
-                            //             });
-                            //         }
-                            //         // 登录失败重新进行人脸检测
-                            //         else {
-                            //             type = 'error';
-                            //             setTimeout(() => {
-                            //                 flag = true;
-                            //             }, 1500);
-                            //         }
-                            //         _this.$message({
-                            //             message: res.data.message,
-                            //             type,
-                            //             center: true
-                            //         });
-                            //     })
-                            //     .catch((error) => {
-                            //         console.log(error);
-                            //     });
-                            video.load();
-                            that.first = null;
-                            that.tracker_fun(tracker, video, context, canvas);
+                            that.face.imgpath = canvasUpload.toDataURL('image/jpeg');
+                            // console.log(that.face);
+
+                            // ajax请求
+                            that.$axios
+                                .post('/api/faceLogin', JSON.stringify(that.face), {
+                                    headers: {
+                                        'Content-Type': 'application/json; charset=UTF-8'
+                                    }
+                                })
+                                .then((res) => {
+                                    //console.log(res);
+                                    const jwt = res.headers['authorization'];
+                                    const userInfo = res.data;
+
+                                    // 把数据共享出去，存于this.store下
+                                    that.$store.commit('SET_TOKEN', jwt);
+                                    that.$store.commit('SET_USERINFO', userInfo);
+                                    //console.log(userInfo)
+                                    if (res.data.error_code === 0 && res.data.face_liveness > 0.8) {
+                                        that.closeCamera();
+                                        // 登录成功跳转到首页
+                                        that.$router.push('/dashboard');
+                                        that.$message.success('登录成功');
+                                        that.FaceLoginVisible = false;
+                                    } else {
+                                        // 登录失败重新进行人脸检测
+                                        // continue;
+                                        //that.$message.fail('记录风险');
+                                    }
+                                })
+                                .catch((err) => {
+                                    console.log(err);
+                                });
+                            setTimeout(() => {
+                                //设置延迟执行
+                                video.load();
+                                that.first = null;
+                                that.tracker_fun(tracker, video, context, canvas);
+                            }, 2000);
                         }
                     } else {
-                        console.log('没有检测到人脸');
+                        that.tips = '没有检测到人脸';
                     }
                 });
                 clearTimeout(set_clear);
-                console.log('5秒重新加载摄像头');
-            }, 5000);
+                this.tips = '重新加载摄像头';
+            }, 3000);
         },
         // 关闭摄像头
         closeCamera() {
