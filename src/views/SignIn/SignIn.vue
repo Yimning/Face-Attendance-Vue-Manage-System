@@ -14,7 +14,7 @@
             <div class="time">
                 <p>00:{{ timerCount2 }}:{{ timerCount1 }}</p>
                 <!-- <button @click="reset">重新计时</button> -->
-                
+
             </div>
             <!--提示-->
             <div align="center">
@@ -90,6 +90,7 @@ export default {
         },
         mounted() {},
         openCamera() {
+             this.reset();
             var video = document.getElementById('video');
             var canvas = document.getElementById('canvas');
             var context = this.$refs['canvas'].getContext('2d');
@@ -207,7 +208,7 @@ export default {
         // 重新计时
         reset() {
             sessionStorage.removeItem('answered');
-            window.location.reload();
+           //window.location.reload();
             localStorage.removeItem('startTime1');
             localStorage.removeItem('startTime2');
             clearInterval(this.timer);
