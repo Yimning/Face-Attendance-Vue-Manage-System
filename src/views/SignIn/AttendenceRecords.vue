@@ -20,8 +20,8 @@
                 </el-select>
 
                 <el-select v-model="selected" placeholder="查询条件" v-on:input="selectedFunc" class="handle-select mr10">
-                    <el-option key="查教师号" label="教师号" value="0"></el-option>
-                    <el-option key="查教师姓名" label="教师姓名" value="1"></el-option>
+                    <el-option key="查教师号" label="教师号" v-if="teacherAdmin" value="0"></el-option>
+                    <el-option key="查教师姓名" label="教师姓名"  v-if="teacherAdmin" value="1"></el-option>
                     <el-option key="查查学生学号" label="查学生学号" value="2"></el-option>
                     <el-option key="查学生姓名" label="学生姓名" value="3"></el-option>
                 </el-select>
@@ -251,7 +251,7 @@ export default {
             },
             requestAddr: '',
             url: '',
-            selected: '0', //注意数据格式的转换，否则会导致不正常
+            selected: '', //注意数据格式的转换，否则会导致不正常
             tableData: [],
             paramsData: [],
             count: {
@@ -260,6 +260,7 @@ export default {
             },
             multipleSelection: [],
             delList: [],
+            teacherAdmin: false,
             editVisible: false,
             moreVisible: false,
             addVisible: false,
@@ -278,6 +279,9 @@ export default {
         'download-excel': JsonExcel
     },
     created() {
+        if(this.$store.getters.getUser.roseName == '教师管理员'){
+            this.teacherAdmin=true;
+        }
         this.getData(); //渲染
         this.getAllCourse();
         AvatarData(this.defaultAvatar).then((res) => {
@@ -311,7 +315,7 @@ export default {
                     this.$axios
                         .get('/api/attendance/findAttendanceByteacherID', params)
                         .then((res) => {
-                            //console.log(res);
+                            console.log(res);
                             this.form = res.data;
                             //console.log('请求后台数据结果', this.form);
                             this.dataTraversal(this.form);
