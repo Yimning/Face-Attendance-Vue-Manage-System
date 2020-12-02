@@ -13,7 +13,8 @@
             <el-button type="primary" icon="el-icon-camera-solid" @click="closeCamera">关闭摄像头</el-button>
             <div class="time">
                 <p>00:{{ timerCount2 }}:{{ timerCount1 }}</p>
-                <button @click="reset">重新计时</button>
+                <!-- <button @click="reset">重新计时</button> -->
+                
             </div>
             <!--提示-->
             <div align="center">
@@ -274,8 +275,11 @@ export default {
     font-size: 20px;
 }
 .time {
- color: #f72a3a;
- font-weight: bold;
- font-size: 26px;
+    position: absolute;
+    margin-left: 900px;
+    margin-top: -25px;
+    color: #f72a3a;
+    font-weight: bold;
+    font-size: 26px;
 }
 </style>
