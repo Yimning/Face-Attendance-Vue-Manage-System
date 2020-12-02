@@ -90,7 +90,6 @@ export default {
         },
         mounted() {},
         openCamera() {
-             this.reset();
             var video = document.getElementById('video');
             var canvas = document.getElementById('canvas');
             var context = this.$refs['canvas'].getContext('2d');
@@ -247,6 +246,7 @@ export default {
                 } else if (this.timeMinutes == 0 && this.timeSeconds == 0) {
                     this.timeSeconds = 0;
                     this.clear();
+                           this.closeCamera();
                     alert('考试时间到');
                 } else {
                     this.timeSeconds--;
