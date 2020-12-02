@@ -90,7 +90,7 @@ export default {
                 const that = this;
                 //axios的get请求
                 this.$axios
-                    .get('/api/scourse/findScourseBytIDcID', params)
+                    .get('/api/scourse/findScourseBytIDcIDcD', params)
                     .then((res) => {
                         //console.log(res);
                         this.form = res.data;
