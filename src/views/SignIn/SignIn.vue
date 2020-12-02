@@ -246,8 +246,8 @@ export default {
                 } else if (this.timeMinutes == 0 && this.timeSeconds == 0) {
                     this.timeSeconds = 0;
                     this.clear();
-                           this.closeCamera();
-                    alert('考试时间到');
+                    this.closeCamera();
+                    //alert('时间到');
                 } else {
                     this.timeSeconds--;
                 }
