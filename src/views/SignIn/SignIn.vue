@@ -11,7 +11,10 @@
             </div>-->
             <el-button type="primary" icon="el-icon-camera-solid" @click="openCamera">打开摄像头</el-button>
             <el-button type="primary" icon="el-icon-camera-solid" @click="closeCamera">关闭摄像头</el-button>
-
+            <div class="time">
+                <p>00:{{ timerCount2 }}:{{ timerCount1 }}</p>
+                <button @click="reset">重新计时</button>
+            </div>
             <!--提示-->
             <div align="center">
                 <p id="flag" class="tishi"></p>
@@ -23,10 +26,6 @@
                 <!-- <video id="video" preload autoplay loop muted></video> -->
                 <!--canvas截取流-->
                 <canvas ref="canvas" id="canvas" width="480px" height="400px" style="display: none"></canvas>
-            </div>
-            <div class="time">
-                <p>00:{{ timerCount2 }}:{{ timerCount1 }}</p>
-                <button @click="reset">重新计时</button>
             </div>
         </div>
     </div>
@@ -273,5 +272,10 @@ export default {
 }
 .tishi {
     font-size: 20px;
+}
+.time {
+ color: #f72a3a;
+ font-weight: bold;
+ font-size: 26px;
 }
 </style>
