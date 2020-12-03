@@ -309,9 +309,10 @@ export default {
         // 获取全部课程数据
         getAllCourse() {
             const that = this;
+             const params = { params: { id: this.$store.getters.getUser.userID } };
             //axios的get请求
             this.$axios
-                .get('/api/course/findAllCourse')
+                .get('/api/scourse/findScourseByteacherNumber',params)
                 .then((res) => {
                     // console.log(res);
                     that.QueryConditions = res.data;
