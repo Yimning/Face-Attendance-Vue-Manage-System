@@ -216,7 +216,9 @@ export default {
             QueryConditions: {
                 IsDay: '',
                 courseID: '',
-                courseName: ''
+                courseName: '',
+                course:{}
+
             },
             queryInfo: {
                 courseID: '',
@@ -330,12 +332,14 @@ export default {
         // 获取全部课程数据
         getAllCourse() {
             const that = this;
+            const params = { params: { id: this.$store.getters.getUser.userID } }; 
             //axios的get请求
             this.$axios
-                .get('/api/course/findAllCourse')
+                .get('/api/scourse/findScourseByteacherNumber',params)
                 .then((res) => {
-                    // console.log(res);
-                    that.QueryConditions = res.data;
+                     console.log(res);
+                    that.QueryConditions = res.data[0].course;
+                     console.log(res);
                 })
                 .catch((err) => {
                     console.log(err);
