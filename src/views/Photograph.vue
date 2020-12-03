@@ -2,7 +2,7 @@
     <div>
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item> <i class="el-icon-lx-redpacket_fill"></i> js调用摄像头拍照上传图片 </el-breadcrumb-item>
+                <el-breadcrumb-item> <i class="el-icon-lx-redpacket_fill"></i> js调用摄像头拍照保存图片 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="container">

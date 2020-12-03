@@ -947,6 +947,9 @@ export default {
 </script>
 
 <style scoped>
+.container{
+   position: relative; 
+}
 .handleUpload {
     position: relative;
     margin-left: 850px;

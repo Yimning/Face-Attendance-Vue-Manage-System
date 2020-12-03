@@ -568,7 +568,7 @@ export default {
                         time: this.QueryConditions.recordTime
                     }
                 };
-                this.getAttendanceByInfo(url,this.params);
+                this.getAttendanceByInfo(url, this.params);
             }
         },
         selectedFunc() {
@@ -968,6 +968,9 @@ export default {
 </script>
 
 <style scoped>
+.container{
+   position: relative; 
+}
 .handleUpload {
     position: relative;
     margin-left: 850px;
@@ -978,6 +981,7 @@ export default {
     display: block;
 }
 .handle-line {
+    position: relative;
     margin-top: 8px;
 }
 .handle-weekday {

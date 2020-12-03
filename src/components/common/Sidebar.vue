@@ -222,7 +222,7 @@ export default {
                     subs: [
                         {
                             index: 'attendenceCourse',
-                            title: '考勤'
+                            title: '考勤课程'
                         },
                         {
                             index: 'attendenceRecords',
