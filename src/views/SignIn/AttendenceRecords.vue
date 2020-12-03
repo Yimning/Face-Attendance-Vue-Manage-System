@@ -593,7 +593,7 @@ export default {
             //console.log(this.selected);
             if (this.query.request != '') {
                 //
-                if (this.selected == '' && this.QueryConditions.courseID=='') return this.$message.error(`选择课程号-课程名`);
+                if (this.selected == '' && this.QueryConditions.courseID == '') return this.$message.error(`选择课程号-课程名`);
                 if (this.selected == 0) {
                     this.requestAddr = findByteacherID;
                     this.params = {
@@ -800,7 +800,7 @@ export default {
                         })
                         .catch((err) => {
                             console.error();
-                            that.$message.success(`删除失败`);
+                            that.$message.error(`删除失败`);
                         });
                 })
                 .catch(() => {
@@ -876,22 +876,72 @@ export default {
             return this.reload(); //刷新 ----推荐
         },
         handleFlag() {
-            const url = '/api/attendance/findAllAttendanceIsflag';
-            const params = { params: { flag: 1, cID: this.QueryConditions.courseID } };
+            const url = '/api/attendance/findAttendanceInfo';
+            if (this.teacherAdmin) {
+                if (this.query.request != '' && this.selected == 0) return that.$message.error(`请输入教师号`);
+                this.params = {
+                    params: {
+                        courseID: this.QueryConditions.courseID,
+                        studentNumber: null,
+                        studentName: null,
+                        teacherNumber: this.query.request,
+                        teacherName: null,
+                        flag: 1,
+                        time: this.QueryConditions.recordTime
+                    }
+                };
+            } else {
+                this.params = {
+                    params: {
+                        courseID: this.QueryConditions.courseID,
+                        studentNumber: null,
+                        studentName: null,
+                        teacherNumber: this.$store.getters.getUser.userID,
+                        teacherName: null,
+                        flag: 1,
+                        time: this.QueryConditions.recordTime
+                    }
+                };
+            }
             if (!this.QueryConditions.courseID) {
                 return this.$message.error(`请选择课程号-课程名`);
             } else {
-                this.requestHandle(url, params);
+                this.requestHandle(url, this.params);
             }
         },
 
         handleNotFlag() {
-            const url = '/api/attendance/findAllAttendanceNotflag';
-            const params = { params: { flag: 0, cID: this.QueryConditions.courseID } };
+            const url = '/api/attendance/findAttendanceInfo';
+            if (this.teacherAdmin) {
+                if (this.query.request != '' && this.selected == 0) return that.$message.error(`请输入教师号`);
+                this.params = {
+                    params: {
+                        courseID: this.QueryConditions.courseID,
+                        studentNumber: null,
+                        studentName: null,
+                        teacherNumber: this.query.request,
+                        teacherName: null,
+                        flag: 0,
+                        time: this.QueryConditions.recordTime
+                    }
+                };
+            } else {
+                this.params = {
+                    params: {
+                        courseID: this.QueryConditions.courseID,
+                        studentNumber: null,
+                        studentName: null,
+                        teacherNumber: this.$store.getters.getUser.userID,
+                        teacherName: null,
+                        flag: 0,
+                        time: this.QueryConditions.recordTime
+                    }
+                };
+            }
             if (!this.QueryConditions.courseID) {
                 return this.$message.error(`请选择课程号-课程名`);
             } else {
-                this.requestHandle(url, params);
+                this.requestHandle(url, this.params);
             }
         },
         requestHandle(url, params) {
