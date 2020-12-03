@@ -87,6 +87,8 @@
                 <el-button class="handle-line" type="primary" plain icon="el-icon-refresh" @click="handleFresh">条件重置</el-button>
                 <el-button type="success" icon="el-icon-circle-check" @click="handleFlag">已签</el-button>
                 <el-button type="warning" icon="el-icon-circle-close" @click="handleNotFlag">未签</el-button>
+                <el-button type="primary" icon="el-icon-notebook-1" @click="handleNow">当天记录</el-button>
+               <el-button type="info" icon="el-icon-data-analysis" @click="handleHistory">历史记录</el-button>
                 <el-button type="success" plain icon="el-icon-s-flag" @click="handleCheck">出勤率查询</el-button>
                 <div>
                     <download-excel
@@ -443,7 +445,7 @@ export default {
         getAttendanceBycourseID(url, id) {
             const that = this;
             //axios的get请求
-            const params = {
+            this.params = {
                 params: {
                     courseID: id,
                     studentNumber: null,
@@ -455,7 +457,7 @@ export default {
                 }
             };
             this.$axios
-                .get(url, params)
+                .get(url, this.params)
                 .then((res) => {
                     this.form = res.data;
                     //console.log('请求后台数据结果', this.form);
@@ -467,7 +469,6 @@ export default {
                         type: 'info',
                         message: '请正确选择'
                     });
-                    this.handleFresh();
                 });
         },
         // 获取课程BystudentID
@@ -962,7 +963,9 @@ export default {
             //console.log(val);
             this.$set(this.query, 'currentPage', val);
             this.getData();
-        }
+        },
+        handleNow(){},
+        handleHistory(){}
     }
 };
 </script>
@@ -983,6 +986,8 @@ export default {
 .handle-line {
     position: relative;
     margin-left: 2px;
+    margin-bottom: 0px;
+    margin-right: 0px;
     margin-top: 8px;
 }
 .handle-weekday {
