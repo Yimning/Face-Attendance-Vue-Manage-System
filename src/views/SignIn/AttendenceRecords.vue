@@ -12,7 +12,7 @@
                 <el-select v-model="QueryConditions.courseID" placeholder="课程号-课程名" class="mr10" v-on:input="courseFunc">
                     <el-option
                         el-option
-                        v-for="item in QueryConditions"
+                        v-for="item in QueryConditions.course"
                         :key="item.courseID"
                         :label="item.courseID + item.courseName"
                         :value="item.courseID"
@@ -21,7 +21,7 @@
 
                 <el-select v-model="selected" placeholder="查询条件" v-on:input="selectedFunc" class="handle-select mr10">
                     <el-option key="查教师号" label="教师号" v-if="teacherAdmin" value="0"></el-option>
-                    <el-option key="查教师姓名" label="教师姓名"  v-if="teacherAdmin" value="1"></el-option>
+                    <el-option key="查教师姓名" label="教师姓名" v-if="teacherAdmin" value="1"></el-option>
                     <el-option key="查查学生学号" label="查学生学号" value="2"></el-option>
                     <el-option key="查学生姓名" label="学生姓名" value="3"></el-option>
                 </el-select>
@@ -217,8 +217,7 @@ export default {
                 IsDay: '',
                 courseID: '',
                 courseName: '',
-                course:{}
-
+                course: {}
             },
             queryInfo: {
                 courseID: '',
@@ -281,8 +280,8 @@ export default {
         'download-excel': JsonExcel
     },
     created() {
-        if(this.$store.getters.getUser.roseName == '教师管理员'){
-            this.teacherAdmin=true;
+        if (this.$store.getters.getUser.roseName == '教师管理员') {
+            this.teacherAdmin = true;
         }
         this.getData(); //渲染
         this.getAllCourse();
@@ -317,7 +316,7 @@ export default {
                     this.$axios
                         .get('/api/attendance/findAttendanceByteacherID', params)
                         .then((res) => {
-                            console.log(res);
+                            //console.log(res);
                             this.form = res.data;
                             //console.log('请求后台数据结果', this.form);
                             this.dataTraversal(this.form);
@@ -332,17 +331,27 @@ export default {
         // 获取全部课程数据
         getAllCourse() {
             const that = this;
-            const params = { params: { id: this.$store.getters.getUser.userID } }; 
+            const params = { params: { id: this.$store.getters.getUser.userID } };
             //axios的get请求
             this.$axios
-                .get('/api/scourse/findScourseByteacherNumber',params)
+                .get('/api/scourse/findScourseByteacherNumber', params)
                 .then((res) => {
-                     console.log(res);
-                    that.QueryConditions = res.data[0].course;
-                     console.log(res);
+                    this.list = [];
+                    this.newArray = [];
+                    for (const i in res.data) {
+                        for (const key in res.data[i].course) {
+                            this.$set(this.list, key, res.data[i].course[key]); //对象新增属性(使用Vue.$set())
+                            this.newArray[i] = this.list; //新建数组存放
+                        }
+                        this.list = []; //循环完必须清空,否则可能会覆盖
+                    }
+                    that.QueryConditions.course = this.newArray;
                 })
                 .catch((err) => {
-                    console.log(err);
+                    this.$message({
+                        type: 'info',
+                        message: '请正确选择'
+                    });
                 });
         },
         dataTraversal(form) {
@@ -426,6 +435,7 @@ export default {
         },
         courseFunc(e) {
             const url = '/api/attendance/findAttendanceBycourseID';
+            // console.log(e)
             this.getAttendanceBycourseID(url, e);
         },
         // 获取课程BycourseID
@@ -440,7 +450,12 @@ export default {
                     this.dataTraversal(this.form);
                 })
                 .catch((err) => {
-                    console.log(err);
+                    //console.log(err);
+                    this.$message({
+                        type: 'info',
+                        message: '请正确选择'
+                    });
+                    this.handleFresh();
                 });
         },
         // 获取课程BystudentID
