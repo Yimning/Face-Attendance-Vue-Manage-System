@@ -434,16 +434,17 @@ export default {
             this.getData();
         },
         courseFunc(e) {
-            const url = '/api/attendance/findAttendanceBycourseID';
-            // console.log(e)
+            const url = '/api/attendance/findAttendanceInfo';
+            //console.log(e)   //课程号
             this.getAttendanceBycourseID(url, e);
         },
         // 获取课程BycourseID
         getAttendanceBycourseID(url, id) {
             const that = this;
             //axios的get请求
+            const params = { params: { courseID: id,studentNumber:null, studentName:null,teacherNumber:this.$store.getters.getUser.userID , teacherName=null, flag=null, time=null} };
             this.$axios
-                .get(url, { params: { id: id } })
+                .get(url, params)
                 .then((res) => {
                     this.form = res.data;
                     //console.log('请求后台数据结果', this.form);
