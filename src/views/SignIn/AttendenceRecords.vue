@@ -442,7 +442,7 @@ export default {
         getAttendanceBycourseID(url, id) {
             const that = this;
             //axios的get请求
-            const params = { params: { courseID: id,studentNumber:null, studentName:null,teacherNumber:this.$store.getters.getUser.userID , teacherName=null, flag=null, time=null} };
+            const params = { params: { courseID: id,studentNumber:null, studentName:null,teacherNumber:this.$store.getters.getUser.userID , teacherName:null, flag:null, time:null} };
             this.$axios
                 .get(url, params)
                 .then((res) => {
