@@ -133,7 +133,7 @@
                         <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">出勤率</el-button>
                         <!-- <el-button type="text" icon="el-icon-delete" class="red" @click="handleEdit1(scope.$index, scope.row)"
                             >缺勤</el-button
-                        > -->  
+                        > -->
                     </template>
                 </el-table-column>
             </el-table>
@@ -692,7 +692,7 @@ export default {
         //详情信息
         handleMore(index, row) {
             this.idx = index;
-            this.row=row;
+            this.row = row;
             const that = this;
             const url = '/api/attendance/countAttendanceNotflag';
             const params = { params: { flag: 0, cID: row.courseID, sID: row.studentNumber } };
@@ -947,8 +947,8 @@ export default {
 </script>
 
 <style scoped>
-.container{
-   position: relative; 
+.container {
+    position: relative;
 }
 .handleUpload {
     position: relative;
@@ -961,6 +961,7 @@ export default {
 }
 .handle-line {
     position: relative;
+    margin-left: 2px;
     margin-top: 8px;
 }
 .handle-weekday {

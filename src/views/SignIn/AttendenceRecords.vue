@@ -982,6 +982,7 @@ export default {
 }
 .handle-line {
     position: relative;
+    margin-left: 2px;
     margin-top: 8px;
 }
 .handle-weekday {
