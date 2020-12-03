@@ -568,7 +568,7 @@ export default {
                         time: this.QueryConditions.recordTime
                     }
                 };
-                this.getAttendanceByInfo(url, params);
+                this.getAttendanceByInfo(url,this.params);
             }
         },
         selectedFunc() {
