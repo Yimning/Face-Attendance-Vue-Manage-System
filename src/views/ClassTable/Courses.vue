@@ -164,17 +164,17 @@ export default {
         selectedCourse() {
             return this.CourseInfo[this.selectedCourseIndex];
         }
-    }, 
-    //数据渲染   
+    },
+    //数据渲染
     created() {
         //角色判断
         if (this.$store.getters.getUser.roseID == '0') {
             this.findUserUrl = '/api/scourse/findScourseBystudentNumber';
         } else if (this.$store.getters.getUser.roseID == '1') {
-            this.isTeacher = true;  //只有教师显示
+            this.isTeacher = true; //只有教师显示
             this.findUserUrl = '/api/scourse/findScourseByteacherNumber';
         } else {
-        } 
+        }
 
         this.$axios
             .get(this.findUserUrl, { params: { id: this.$store.getters.getUser.userID } })
@@ -206,8 +206,6 @@ export default {
                     }
                     this.list = []; //循环完必须清空,否则可能会覆盖
                 }
-                // console.log('newArray');
-                // console.log(newArray);
                 this.CourseInfo = newArray;
             })
             .catch((err) => {
@@ -216,7 +214,10 @@ export default {
     },
     mounted() {},
     methods: {
-        signIn() {}
+        signIn() {
+            //获取当前的课程信息
+            console.log(this.selectedCourse);
+        }
     }
 };
 </script>
