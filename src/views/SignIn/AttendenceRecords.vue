@@ -259,6 +259,7 @@ export default {
                 isFlag: '',
                 notFlag: ''
             },
+            params: {},
             multipleSelection: [],
             delList: [],
             teacherAdmin: false,
@@ -442,7 +443,17 @@ export default {
         getAttendanceBycourseID(url, id) {
             const that = this;
             //axios的get请求
-            const params = { params: { courseID: id,studentNumber:null, studentName:null,teacherNumber:this.$store.getters.getUser.userID , teacherName:null, flag:null, time:null} };
+            const params = {
+                params: {
+                    courseID: id,
+                    studentNumber: null,
+                    studentName: null,
+                    teacherNumber: this.$store.getters.getUser.userID,
+                    teacherName: null,
+                    flag: null,
+                    time: null
+                }
+            };
             this.$axios
                 .get(url, params)
                 .then((res) => {
@@ -460,11 +471,11 @@ export default {
                 });
         },
         // 获取课程BystudentID
-        getAttendanceBystudentID(url, id) {
+        getAttendanceBystudentID(url, params) {
             const that = this;
             //axios的get请求
             this.$axios
-                .get(url, { params: { id: id } })
+                .get(url, params)
                 .then((res) => {
                     this.form = res.data;
                     //console.log('请求后台数据结果', this.form);
@@ -475,11 +486,11 @@ export default {
                 });
         },
         // 获取课程BystudentName
-        getAttendanceBystudentName(url, id) {
+        getAttendanceBystudentName(url, params) {
             const that = this;
             //axios的get请求
             this.$axios
-                .get(url, { params: { id: id } })
+                .get(url, params)
                 .then((res) => {
                     this.form = res.data;
                     //console.log('请求后台数据结果', this.form);
@@ -490,11 +501,11 @@ export default {
                 });
         },
         // 获取课程ByteacherID
-        getAttendanceByteacherID(url, id) {
+        getAttendanceByteacherID(url, params) {
             const that = this;
             //axios的get请求
             this.$axios
-                .get(url, { params: { id: id } })
+                .get(url, params)
                 .then((res) => {
                     this.form = res.data;
                     //console.log('请求后台数据结果', this.form);
@@ -505,11 +516,11 @@ export default {
                 });
         },
         // 获取课程ByteacherName
-        getAttendanceByteacherName(url, id) {
+        getAttendanceByteacherName(url, params) {
             const that = this;
             //axios的get请求
             this.$axios
-                .get(url, { params: { id: id } })
+                .get(url, params)
                 .then((res) => {
                     this.form = res.data;
                     //console.log('请求后台数据结果', this.form);
@@ -546,7 +557,17 @@ export default {
 
             if (this.QueryConditions.courseID && this.QueryConditions.recordTime) {
                 const url = '/api/attendance/findAttendanceInfo';
-                const params = { params: { id: this.QueryConditions.courseID, time: this.QueryConditions.recordTime } };
+                this.params = {
+                    params: {
+                        courseID: this.QueryConditions.courseID,
+                        studentNumber: null,
+                        studentName: null,
+                        teacherNumber: null,
+                        teacherName: null,
+                        flag: null,
+                        time: this.QueryConditions.recordTime
+                    }
+                };
                 this.getAttendanceByInfo(url, params);
             }
         },
@@ -565,28 +586,102 @@ export default {
             // console.log(this.query.request);//打印输入搜索的值
             this.tableData = [];
             const that = this;
-            const findBystudentID = '/api/attendance/findAttendanceBystudentID';
-            const findBystudnetName = '/api/attendance/findAttendanceByStudentName';
-            const findByteacherID = '/api/attendance/findAttendanceByteacherID';
-            const findByteacherName = '/api/attendance/findAttendanceByteacherName';
+            const findBystudentID = '/api/attendance/findAttendanceInfo';
+            const findBystudnetName = '/api/attendance/findAttendanceInfo';
+            const findByteacherID = '/api/attendance/findAttendanceInfo';
+            const findByteacherName = '/api/attendance/findAttendanceInfo';
             //console.log(this.selected);
             if (this.query.request != '') {
                 //
+                if (this.selected == '' && this.QueryConditions.courseID=='') return this.$message.error(`选择课程号-课程名`);
                 if (this.selected == 0) {
                     this.requestAddr = findByteacherID;
-                    this.getAttendanceByteacherID(this.requestAddr, value);
+                    this.params = {
+                        params: {
+                            courseID: this.QueryConditions.courseID,
+                            studentNumber: null,
+                            studentName: null,
+                            teacherNumber: value,
+                            teacherName: null,
+                            flag: null,
+                            time: null
+                        }
+                    };
+                    this.getAttendanceByteacherID(this.requestAddr, this.params);
                 } else if (this.selected == 1) {
                     this.requestAddr = findByteacherName;
-                    this.getAttendanceByteacherName(this.requestAddr, value);
+                    this.params = {
+                        params: {
+                            courseID: this.QueryConditions.courseID,
+                            studentNumber: null,
+                            studentName: null,
+                            teacherNumber: null,
+                            teacherName: value,
+                            flag: null,
+                            time: null
+                        }
+                    };
+                    this.getAttendanceByteacherName(this.requestAddr, this.params);
                 } else if (this.selected == 2) {
                     this.requestAddr = findBystudentID;
-                    this.getAttendanceBystudentID(this.requestAddr, value);
+                    if (this.teacherAdmin) {
+                        this.params = {
+                            params: {
+                                courseID: this.QueryConditions.courseID,
+                                studentNumber: value,
+                                studentName: null,
+                                teacherNumber: null,
+                                teacherName: null,
+                                flag: null,
+                                time: null
+                            }
+                        };
+                    } else {
+                        this.params = {
+                            params: {
+                                courseID: this.QueryConditions.courseID,
+                                studentNumber: null,
+                                studentName: null,
+                                teacherNumber: this.$store.getters.getUser.userID,
+                                teacherName: null,
+                                flag: null,
+                                time: null
+                            }
+                        };
+                    }
+
+                    this.getAttendanceBystudentID(this.requestAddr, this.params);
                 } else {
                     this.requestAddr = findBystudnetName;
-                    this.getAttendanceBystudentName(this.requestAddr, value);
+                    if (this.teacherAdmin) {
+                        this.params = {
+                            params: {
+                                courseID: this.QueryConditions.courseID,
+                                studentNumber: null,
+                                studentName: value,
+                                teacherNumber: null,
+                                teacherName: null,
+                                flag: null,
+                                time: null
+                            }
+                        };
+                    } else {
+                        this.params = {
+                            params: {
+                                courseID: this.QueryConditions.courseID,
+                                studentNumber: null,
+                                studentName: null,
+                                teacherNumber: this.$store.getters.getUser.userID,
+                                teacherName: null,
+                                flag: null,
+                                time: null
+                            }
+                        };
+                    }
+                    this.getAttendanceBystudentName(this.requestAddr, this.params);
                 }
             } else {
-                this.$message.error(`请正确输入查询内容`);
+                this.$message.error(`请正确选择或输入查询内容`);
                 this.getData();
             }
         },
