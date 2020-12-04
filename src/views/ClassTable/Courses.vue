@@ -247,7 +247,9 @@ export default {
                     type: 'warning'
                 })
                     .then(() => {
+                        sessionStorage.setItem('courseID', this.dataParams.courseID);
                         this.$router.push({ path: '/SignIn', query: { data: this.dataParams } }); //路由跳转传参
+                        
                     })
                     .catch(() => {
                         this.$message({
