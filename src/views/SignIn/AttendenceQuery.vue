@@ -597,7 +597,7 @@ export default {
             //console.log(this.selected);
             if (this.query.request != '') {
                 //
-                if (this.selected == '' && this.QueryConditions.courseID == '') return this.$message.error(`选择课程号-课程名`);
+                if (this.selected == '' || this.QueryConditions.courseID == '') return this.$message.error(`选择课程号-课程名`);
                 if (this.selected == 0) {
                     this.requestAddr = findByteacherID;
                     this.params = {
