@@ -133,7 +133,8 @@ export default {
                 4: '星期四',
                 5: '星期五',
                 6: '星期六'
-            }
+            },
+            dataParams: {}
         };
     },
 
@@ -226,7 +227,15 @@ export default {
     methods: {
         signIn() {
             //获取当前的课程信息
-            console.log(this.selectedCourse);
+            // console.log(this.selectedCourse);
+
+            //将数组转成对象
+            var obj = {};
+            for (var i in this.selectedCourse) {
+                obj[i] = this.selectedCourse[i];
+            }
+            this.dataParams = obj;
+            //console.log(this.dataParams);
             var aData = new Date();
             //console.log( this.dataDateNumber(aData));//显示当前星期几
             if (this.selectedCourse.courseID == this.dataDateNumber(aData)) {
