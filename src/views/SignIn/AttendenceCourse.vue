@@ -157,7 +157,9 @@ export default {
                 obj[i] = row[i];
             }
             this.dataParams = obj;
+            sessionStorage.setItem('courseID', this.dataParams.courseID);
             this.$router.push({ path: '/SignIn', query: { data: this.dataParams } }); //路由跳转传参
+            
         }
     }
 };
