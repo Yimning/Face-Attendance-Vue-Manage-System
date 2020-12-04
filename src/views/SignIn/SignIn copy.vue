@@ -11,7 +11,11 @@
             </div>-->
             <el-button type="primary" icon="el-icon-camera-solid" @click="openCamera">打开摄像头</el-button>
             <el-button type="primary" icon="el-icon-camera-solid" @click="closeCamera">关闭摄像头</el-button>
-
+             <el-button type="primary" icon="el-icon-camera-solid" @click="countDown">倒计时</el-button>
+            <div class="time">
+                <p>00:{{minute}}:{{second}}</p>
+                <!-- <button @click="reset">重新计时</button> -->
+            </div>
             <!--提示-->
             <div align="center">
                 <p id="flag" class="tishi"></p>
@@ -43,16 +47,41 @@ export default {
             first: null,
             faceInfo: {
                 imgpath: '',
-                courseID:'',
-                UserID:'',
+                courseID: '',
+                UserID: ''
             },
-            dataParams: {},   
+            dataParams: {},
+            params: {},
+            timeSeconds: 0,
+            timeMinutes: 0,
+            seconds: 59, // 秒
+            minutes: 1, // 分
+            timer: null
         };
-    },  
+    },
     created() {
-        this.dataParams=this.$route.query.data; 
-        this.faceInfo.courseID=this.dataParams.courseID;
-        console.log( this.faceInfo);
+        this.dataParams = this.$route.query.data;
+        this.faceInfo.courseID = this.dataParams.courseID;
+        console.log(this.faceInfo);
+    },
+    mounted() {
+        if (sessionStorage.getItem('answered') != 1) {
+            this.timing();
+        }
+    },
+    computed: {
+        timerCount1() {
+            return this.timeSeconds < 10 ? '0' + this.timeSeconds : '' + this.timeSeconds;
+        },
+        timerCount2() {
+            return this.timeMinutes < 10 ? '0' + this.timeMinutes : '' + this.timeMinutes;
+        }
+    },
+    destroyed() {
+        // 退出后清除计时器
+        if (this.timer) {
+            clearInterval(this.timer);
+        }
     },
     methods: {
         created() {
@@ -136,7 +165,7 @@ export default {
                                     if (res.data.error_code === 0 && res.data.face_liveness > 0.8) {
                                         that.closeCamera();
                                         // 登录成功跳转到首页
-                                       // that.$router.push('/dashboard');
+                                        // that.$router.push('/dashboard');
                                         that.$message.success('登录成功');
                                         that.FaceLoginVisible = false;
                                     } else {
@@ -172,16 +201,96 @@ export default {
                 track.stop();
             });
             this.$refs['video'].srcObject = null;
+            this.clear();
+        },
+        num(n) {
+            return n < 10 ? '0' + n : '' + n;
+        },
+        countDown(){
+            this.reset();
+        },
+        // 重新计时
+        reset() {
+            sessionStorage.removeItem('answered');
+            //window.location.reload();
+            localStorage.removeItem('startTime1');
+            localStorage.removeItem('startTime2');
+            clearInterval(this.timer);
+        },
+        // 清除
+        clear() {
+            localStorage.removeItem('startTime1');
+            localStorage.removeItem('startTime2');
+            sessionStorage.setItem('answered', 1);
+            clearInterval(this.timer);
+        },
+        // 倒计时
+        timing() {
+            let [startTime1, startTime2] = [localStorage.getItem('startTime1'), localStorage.getItem('startTime2')];
+            let nowTime = new Date().getTime();
+            if (startTime1) {
+                let surplus = this.seconds - parseInt((nowTime - startTime1) / 1000);
+                this.timeSeconds = surplus <= 0 ? 0 : surplus;
+            } else {
+                this.timeSeconds = this.seconds;
+                localStorage.setItem('startTime1', nowTime); //存储秒
+            }
+            if (startTime2) {
+                this.timeMinutes = startTime2;
+            } else {
+                this.timeMinutes = this.minutes;
+                localStorage.setItem('startTime2', this.minutes); //存储分
+            }
+            this.timer = setInterval(() => {
+                if (this.timeSeconds == 0 && this.timeMinutes != 0 && this.timeMinutes > 0) {
+                    let nowTime = new Date().getTime();
+                    this.timeSeconds = this.seconds;
+                    localStorage.setItem('startTime1', nowTime);
+                    this.timeMinutes--;
+                    localStorage.setItem('startTime2', this.timeMinutes);
+                } else if (this.timeMinutes == 0 && this.timeSeconds == 0) {
+                    this.timeSeconds = 0;
+                    this.clear();
+                    this.closeCamera();
+                    //alert('时间到');
+                    this.checkNoFlag();
+                } else {
+                    this.timeSeconds--;
+                }
+            }, 1000);
+        },
+        //查询在考勤结束之后搜索未考勤的学生并把信息加入数据库
+        checkNoFlag() {
+            const url = '/api/scourse/findScourseByteacherNumbercIDcD';
+            this.params = {
+                params: {
+                    cID: this.faceInfo.courseID,
+                    studentNumber: null,
+                    studentName: null,
+                    tID: this.$store.getters.getUser.userID,
+                    teacherName: null,
+                    flag: null,
+                    time: null
+                }
+            };
+            this.requestHandle(url, this.params);
+        },
+        requestHandle(url, params) {
+            const that = this;
+            //axios的get请求
+            this.$axios
+                .get(url, params)
+                .then((res) => {
+                    console.log(res);
+                    // this.form = res.data;
+                    // this.dataTraversal(this.form);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
         }
     }
-    // mounted() {},
-    // destroyed() {
-    //     // 停止侦测
-    //     this.trackerTask.stop();
-    //     // 关闭摄像头
-    //     window.tracking.closeCamera();
 
-    // }
 };
 </script>
 
@@ -194,5 +303,13 @@ export default {
 }
 .tishi {
     font-size: 20px;
+}
+.time {
+    position: absolute;
+    margin-left: 900px;
+    margin-top: -25px;
+    color: #f72a3a;
+    font-weight: bold;
+    font-size: 26px;
 }
 </style>

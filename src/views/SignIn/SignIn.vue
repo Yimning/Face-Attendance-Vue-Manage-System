@@ -9,13 +9,24 @@
             <!-- <div class="getface">
                 <img id="imgTag" src alt="imgTag" style="display: none;" />
             </div>-->
-            <el-button type="primary" icon="el-icon-camera-solid" @click="openCamera">打开摄像头</el-button>
-            <el-button type="primary" icon="el-icon-camera-solid" @click="closeCamera">关闭摄像头</el-button>
+            <el-button type="primary" icon="el-icon-camera-solid" @click="openCamera" v-bind:disabled="openIsCheck">打开摄像头</el-button>
+            <el-button type="danger" icon="el-icon-camera-solid" @click="closeCamera" v-bind:disabled="!openIsCheck">关闭摄像头</el-button>
             <!-- <el-button type="primary" icon="el-icon-camera-solid" @click="countDown">倒计时</el-button> -->
-            <div class="time">
-                <p>00:{{ minute }}:{{ second }}</p>
-                <!-- <button @click="reset">重新计时</button> -->
-            </div>
+            <el-select
+                v-model="selected"
+                v-bind:disabled="openIsCheck"
+                placeholder="倒计时"
+                v-on:input="selectedFunc"
+                class="handle-select mr10"
+            >
+                <el-option key="20分钟" label="倒计时20分钟" value="20"></el-option>
+                <el-option key="15分钟" label="倒计时15分钟" value="15"></el-option>
+                <el-option key="12分钟" label="倒计时12分钟" value="12"></el-option>
+                <el-option key="1分钟" label="倒计时1分钟" value="1"></el-option>
+                <el-option key="10秒" label="倒计时10秒" value="10"></el-option>
+            </el-select>
+
+            <el-button class="time">00:{{ minute }}:{{ second }}</el-button>
             <!--提示-->
             <div align="center">
                 <p id="flag" class="tishi"></p>
@@ -51,12 +62,15 @@ export default {
                 courseID: '',
                 UserID: ''
             },
+            selected: '15',
+            openIsCheck: false,
             dataParams: {},
+            dataJson: {},
             params: {},
             timeSeconds: 0,
             timeMinutes: 0,
-            seconds: 59, // 秒
-            minutes: 0, // 分
+            seconds: 0, // 秒
+            minutes: 15, // 分
             timer: null
         };
     },
@@ -64,8 +78,8 @@ export default {
         this.dataParams = this.$route.query.data;
         // this.faceInfo.courseID = this.dataParams.courseID;
         // console.log(this.faceInfo);
-        localStorage.setItem('courseID', this.dataParams.courseID);
-        this.faceInfo.courseID = localStorage.getItem('courseID');
+        //sessionStorage.setItem('courseID', this.dataParams.courseID);
+        this.faceInfo.courseID = sessionStorage.getItem('courseID');
         console.log(this.faceInfo);
     },
     mounted() {
@@ -80,7 +94,14 @@ export default {
         },
         mounted() {},
         openCamera() {
-            this.countDown();
+            let that = this;
+            if (this.faceInfo.courseID == '' || this.faceInfo.courseID == 'undefined') {
+                this.$message.error('记录号失效,2秒后返回前一页');
+                return setTimeout(() => {
+                    //设置延迟执行
+                    that.$router.go(-1);
+                }, 2000);
+            }
             var video = document.getElementById('video');
             var canvas = document.getElementById('canvas');
             var context = this.$refs['canvas'].getContext('2d');
@@ -88,8 +109,10 @@ export default {
             tracker.setInitialScale(1);
             tracker.setStepSize(2);
             tracker.setEdgesDensity(0.1);
-
             this.trackerTask = tracking.track('#video', tracker, { camera: true });
+            this.countDown();
+            this.openIsCheck = true;
+
             //-------  指定 canvas 的宽高 ，auto 自动播放
             let constraints = {
                 video: { width: 500, height: 500 },
@@ -107,7 +130,6 @@ export default {
                     console.log(PermissionDeniedError);
                 });
             //--------------
-            let that = this;
             that.tracker_fun(tracker, video, context, canvas); //open 摄像头，执行tracker_fun( 传入参数 )
         },
         tracker_fun(tracker, video, context, canvas) {
@@ -145,19 +167,11 @@ export default {
                                 })
                                 .then((res) => {
                                     console.log(res);
-                                    // const jwt = res.headers['authorization'];
-                                    // const userInfo = res.data;
-
-                                    // // 把数据共享出去，存于this.store下
-                                    // that.$store.commit('SET_TOKEN', jwt);
-                                    // that.$store.commit('SET_USERINFO', userInfo);
-                                    //console.log(userInfo)
                                     if (res.data.error_code === 0 && res.data.face_liveness > 0.8) {
-                                        that.closeCamera();
-                                        // 登录成功跳转到首页
-                                        // that.$router.push('/dashboard');
-                                        that.$message.success('登录成功');
-                                        that.FaceLoginVisible = false;
+                                        if (res.data.result === 0) return that.$message.error('Fail');
+                                        if (res.data.result === 1) return that.$message.error('Success');
+                                        if (res.data.result === 2) return that.$message.error('Exist');
+                                        if (res.data.result === 3) return that.$message.error('NONE');
                                     } else {
                                         // 登录失败重新进行人脸检测
                                         // continue;
@@ -180,7 +194,7 @@ export default {
                 });
                 clearTimeout(set_clear);
                 this.tips = '重新加载摄像头';
-            }, 3000);
+            }, 2000);
         },
         // 关闭摄像头
         closeCamera() {
@@ -191,7 +205,19 @@ export default {
                 track.stop();
             });
             this.$refs['video'].srcObject = null;
-            this.reload(); //刷新 ----推荐
+            this.showOrNot = true;
+            // this.reload(); //刷新 ----推荐
+        },
+        selectedFunc(e) {
+            //console.log(e);
+            this.minutes = e;
+            if (e == '10') {
+                //console.log(e);  //测试用
+                this.minutes = 0;
+                this.seconds = e;
+            } else {
+                this.minutes = e;
+            }
         },
         num(n) {
             return n < 10 ? '0' + n : '' + n;
@@ -200,20 +226,64 @@ export default {
             this.add();
         },
         add() {
-            var _this = this;
+            var that = this;
             var time = window.setInterval(function () {
-                if (_this.seconds === 0 && _this.minutes !== 0) {
-                    _this.seconds = 59;
-                    _this.minutes -= 1;
-                } else if (_this.minutes === 0 && _this.seconds === 0) {
-                    _this.seconds = 0;
+                if (that.seconds === 0 && that.minutes !== 0) {
+                    that.seconds = 59;
+                    that.minutes -= 1;
+                } else if (that.minutes === 0 && that.seconds === 0) {
+                    that.seconds = 0;
                     window.clearInterval(time);
-                    _this.closeCamera();
                     console.log('时间到');
+                    that.checkNoFlag();
+                    that.closeCamera();
                 } else {
-                    _this.seconds -= 1;
+                    that.seconds -= 1;
                 }
             }, 1000);
+        },
+        //查询在考勤结束之后搜索改课程的选课学生,未考勤的学生并把信息加入数据库,若已考勤则原纪录信息不变
+        checkNoFlag() {
+            const url = '/api/scourse/findScourseByteacherNumbercIDcD';
+            this.params = {
+                params: {
+                    cID: this.faceInfo.courseID,
+                    studentNumber: null,
+                    studentName: null,
+                    tID: this.$store.getters.getUser.userID,
+                    teacherName: null,
+                    flag: null,
+                    time: null
+                }
+            };
+            this.requestHandle(url, this.params);
+        },
+        requestHandle(url, params) {
+            const that = this;
+            //axios的get请求
+            this.$axios
+                .get(url, params)
+                .then((res) => {
+                    console.log(res);
+                    that.dataJson = res.data;
+                    that.queryHandle(null, that.dataJson);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        },
+        //考勤结束之后，查询未签到的学生信息自动录入数据库
+        queryHandle(url, params) {
+            url = '/api/attendance/addNotAttendance';
+            //console.log(JSON.stringify(params));
+            this.$axios
+                .post(url, JSON.stringify(params))
+                .then((res) => {
+                    console.log(res);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
         }
     },
     watch: {
@@ -235,36 +305,6 @@ export default {
         minute: function () {
             return this.num(this.minutes);
         }
-    },
-    //查询在考勤结束之后搜索未考勤的学生并把信息加入数据库
-    checkNoFlag() {
-        const url = '/api/scourse/findScourseByteacherNumbercIDcD';
-        this.params = {
-            params: {
-                cID: this.faceInfo.courseID,
-                studentNumber: null,
-                studentName: null,
-                tID: this.$store.getters.getUser.userID,
-                teacherName: null,
-                flag: null,
-                time: null
-            }
-        };
-        this.requestHandle(url, this.params);
-    },
-    requestHandle(url, params) {
-        const that = this;
-        //axios的get请求
-        this.$axios
-            .get(url, params)
-            .then((res) => {
-                console.log(res);
-                // this.form = res.data;
-                // this.dataTraversal(this.form);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
     }
 };
 </script>
@@ -279,12 +319,20 @@ export default {
 .tishi {
     font-size: 20px;
 }
+.handle-select {
+    width: 130px;
+}
+.mr10 {
+    margin-left: 15px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    margin-right: 10px;
+}
 .time {
-    position: absolute;
-    margin-left: 900px;
-    margin-top: -25px;
+    margin-left: 500px;
+    margin-top: -10px;
     color: #f72a3a;
     font-weight: bold;
-    font-size: 26px;
+    font-size: 24px;
 }
 </style>
