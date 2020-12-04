@@ -109,6 +109,7 @@
 </template>
  
 <script>
+const weekArr = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
 export default {
     name: 'CourseTable',
     props: ['usualCourses'],
@@ -123,7 +124,16 @@ export default {
             list: [{}],
             catalogArr: [], //类目数组
             catalogObj: {}, //嵌套对象
-            isTeacher: false
+            isTeacher: false,
+            weeks: {
+                0: '星期日',
+                1: '星期一',
+                2: '星期二',
+                3: '星期三',
+                4: '星期四',
+                5: '星期五',
+                6: '星期六'
+            }
         };
     },
 
@@ -217,6 +227,58 @@ export default {
         signIn() {
             //获取当前的课程信息
             console.log(this.selectedCourse);
+            var aData = new Date();
+            //console.log( this.dataDateNumber(aData));//显示当前星期几
+            if(this.selectedCourse.courseID== this.dataDateNumber(aData))
+        },
+        // 时间格式化
+        dataFormat(value) {
+            if (value != null || value == '') {
+                var year = value.substr(0, 4);
+                var month = value.substr(5, 2);
+                var day = value.substr(8, 2);
+                var hour = value.substr(11, 2);
+                var min = value.substr(14, 2);
+                var second = value.substr(17, 2);
+                return year + '-' + month + '-' + day + ' ' + hour + ':' + min + ':' + second;
+            } else return null;
+        },
+        //根据当前的日期显示当前是星期几
+        dataDateChange(dateStr) {
+            if (dateStr != null || dateStr == '') {
+                let date = new Date(dateStr);
+                let weekIndex = date.getDay();
+                //this.week = this.weeks[weekIndex];
+                return this.weeks[weekIndex];
+            } else return null;
+        },
+        //根据当前的日期显示当前是星期几的索引
+        dataDateNumber(dateStr) {
+            if (dateStr != null || dateStr == '') {
+                let date = new Date(dateStr);
+                let weekIndex = date.getDay();
+                return weekIndex;
+            } else return null;
+        },
+        GMTToStr: function (time) {
+            let date = new Date(time);
+            let Str =
+                date.getFullYear() +
+                '-' +
+                (date.getMonth() + 1) +
+                '-' +
+                date.getDate() +
+                ' ' +
+                date.getHours() +
+                ':' +
+                date.getMinutes() +
+                ':' +
+                date.getSeconds();
+            return Str;
+        },
+        StrToGMT(time) {
+            let GMT = new Date(time);
+            return GMT;
         }
     }
 };

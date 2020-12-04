@@ -14,7 +14,6 @@
             <div class="time">
                 <p>00:{{ timerCount2 }}:{{ timerCount1 }}</p>
                 <!-- <button @click="reset">重新计时</button> -->
-
             </div>
             <!--提示-->
             <div align="center">
@@ -51,6 +50,7 @@ export default {
                 UserID: ''
             },
             dataParams: {},
+            params: {},
             timeSeconds: 0,
             timeMinutes: 0,
             seconds: 59, // 秒
@@ -207,7 +207,7 @@ export default {
         // 重新计时
         reset() {
             sessionStorage.removeItem('answered');
-           //window.location.reload();
+            //window.location.reload();
             localStorage.removeItem('startTime1');
             localStorage.removeItem('startTime2');
             clearInterval(this.timer);
@@ -253,12 +253,36 @@ export default {
                 }
             }, 1000);
         },
-        checkNoFlag(){
-        
-
+        //查询在考勤结束之后搜索未考勤的学生并把信息加入数据库
+        checkNoFlag() {
+            const url = '/api/scourse/findScourseByteacherNumbercIDcD';
+            this.params = {
+                params: {
+                    cID: this.faceInfo.courseID,
+                    studentNumber: null,
+                    studentName: null,
+                    tID: this.$store.getters.getUser.userID,
+                    teacherName: null,
+                    flag: null,
+                    time: null
+                }
+            };
+            this.requestHandle(url, params);
+        },
+        requestHandle(url, params) {
+            const that = this;
+            //axios的get请求
+            this.$axios
+                .get(url, params)
+                .then((res) => {
+                    console.log(res);
+                    this.form = res.data;
+                    this.dataTraversal(this.form);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
         }
-    
-    
     }
     // mounted() {},
     // destroyed() {
