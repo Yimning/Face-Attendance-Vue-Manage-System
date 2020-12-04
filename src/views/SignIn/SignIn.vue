@@ -252,7 +252,13 @@ export default {
                     this.timeSeconds--;
                 }
             }, 1000);
+        },
+        checkNoFlag(){
+        
+
         }
+    
+    
     }
     // mounted() {},
     // destroyed() {
