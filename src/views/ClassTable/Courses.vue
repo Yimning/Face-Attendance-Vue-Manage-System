@@ -119,6 +119,7 @@ export default {
             showPracticeCourseDialog: false,
             selectedCourseIndex: 0,
             findUserUrl: '',
+            params: {},
             usualCourses: [{}],
             CourseInfo: [{}],
             list: [{}],
@@ -180,15 +181,17 @@ export default {
     created() {
         //角色判断
         if (this.$store.getters.getUser.roseID == '0') {
-            this.findUserUrl = '/api/scourse/findScourseBystudentNumber';
+            this.findUserUrl = '/api/scourse/findScourseBysIDcIDcD';
+            this.params = { params: { cID: this.$store.getters.getUser.userID } };
         } else if (this.$store.getters.getUser.roseID == '1') {
             this.isTeacher = true; //只有教师显示
-            this.findUserUrl = '/api/scourse/findScourseByteacherNumber';
+            this.findUserUrl = '/api/scourse/findScourseBytIDcIDcD';
+            this.params = { params: { tID: this.$store.getters.getUser.userID } };
         } else {
         }
 
         this.$axios
-            .get(this.findUserUrl, { params: { id: this.$store.getters.getUser.userID } })
+            .get(this.findUserUrl, params)
             .then((res) => {
                 //console.log(res);
                 //this.form = res.data[res.data.length - 1];
@@ -249,7 +252,6 @@ export default {
                     .then(() => {
                         sessionStorage.setItem('courseID', this.dataParams.courseID);
                         this.$router.push({ path: '/SignIn', query: { data: this.dataParams } }); //路由跳转传参
-                        
                     })
                     .catch(() => {
                         this.$message({
