@@ -337,10 +337,10 @@ export default {
         // 获取全部课程数据
         getAllCourse() {
             const that = this;
-            const params = { params: { id: this.$store.getters.getUser.userID } };
+            const params = { params: { tID: this.$store.getters.getUser.userID } };
             //axios的get请求
             this.$axios
-                .get('/api/scourse/findScourseByteacherNumber', params)
+                .get('/api/scourse/findScourseBytIDcIDcD', params)
                 .then((res) => {
                     this.list = [];
                     this.newArray = [];
