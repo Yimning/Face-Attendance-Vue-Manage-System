@@ -182,7 +182,7 @@ export default {
         //角色判断
         if (this.$store.getters.getUser.roseID == '0') {
             this.findUserUrl = '/api/scourse/findScourseBysIDcIDcD';
-            this.params = { params: { cID: this.$store.getters.getUser.userID } };
+            this.params = { params: { sID: this.$store.getters.getUser.userID } };
         } else if (this.$store.getters.getUser.roseID == '1') {
             this.isTeacher = true; //只有教师显示
             this.findUserUrl = '/api/scourse/findScourseBytIDcIDcD';
@@ -191,7 +191,7 @@ export default {
         }
 
         this.$axios
-            .get(this.findUserUrl, params)
+            .get(this.findUserUrl, this.params)
             .then((res) => {
                 //console.log(res);
                 //this.form = res.data[res.data.length - 1];
