@@ -29,7 +29,7 @@
                 </el-card>
             </el-col>
             <el-col :span="16">
-                <el-row :gutter="20" class="mgb20">
+                <el-row :gutter="20" class="mgb20" ref="form" :model="form">
                     <el-col :span="8">
                         <el-card shadow="hover" :body-style="{ padding: '0px' }">
                             <div class="grid-content grid-con-1">
@@ -117,6 +117,7 @@ export default {
             userAvatar: this.$store.getters.getUser.avatar,
             roseID: this.$store.getters.getUser.roseID,
             roseName: this.$store.getters.getUser.roseName,
+            form:{},
             todoList: [
                 {
                     title: '今天要修复100个bug',
@@ -230,6 +231,7 @@ export default {
         this.handleListener();
         this.changeDate();
         // console.log(this.userInfo);
+        this.recentAttendanceInfo();
     },
     mounted() {
         // 延迟 1 秒显示欢迎信息
@@ -268,7 +270,10 @@ export default {
         renderChart() {
             this.$refs.bar.renderChart();
             this.$refs.line.renderChart();
-        }
+        },
+        recentAttendanceInfo(){
+
+        },
     }
 };
 </script>
