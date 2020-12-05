@@ -41,7 +41,6 @@
                             </div>
                         </el-card>
                     </el-col>
-
                     <el-col :span="8">
                         <el-card shadow="hover" :body-style="{ padding: '0px' }">
                             <div class="grid-content grid-con-2">
