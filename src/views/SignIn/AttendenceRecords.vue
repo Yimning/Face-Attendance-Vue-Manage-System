@@ -891,7 +891,7 @@ export default {
                         time: this.QueryConditions.recordTime
                     }
                 };
-            } else {
+            } else {   
                 this.params = {
                     params: {
                         courseID: this.QueryConditions.courseID,
