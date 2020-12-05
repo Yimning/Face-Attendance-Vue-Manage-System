@@ -33,21 +33,22 @@
                     <el-col :span="8">
                         <el-card shadow="hover" :body-style="{ padding: '0px' }">
                             <div class="grid-content grid-con-1">
-                                <i class="el-icon-lx-people grid-con-icon"></i>
+                                <i class="el-icon-lx-notice grid-con-icon"></i>
                                 <div class="grid-cont-right">
-                                    <div class="grid-num">1234</div>
-                                    <div>用户访问量</div>
+                                    <div class="grid-num">3111</div>
+                                    <div>最近签到课程:广覆盖大风刮过</div>
                                 </div>
                             </div>
                         </el-card>
                     </el-col>
+
                     <el-col :span="8">
                         <el-card shadow="hover" :body-style="{ padding: '0px' }">
                             <div class="grid-content grid-con-2">
-                                <i class="el-icon-lx-notice grid-con-icon"></i>
+                                <i class="el-icon-lx-people grid-con-icon"></i>
                                 <div class="grid-cont-right">
-                                    <div class="grid-num">321</div>
-                                    <div>系统消息</div>
+                                    <div class="grid-num">1234</div>
+                                    <div>出勤人数</div>
                                 </div>
                             </div>
                         </el-card>
@@ -55,10 +56,10 @@
                     <el-col :span="8">
                         <el-card shadow="hover" :body-style="{ padding: '0px' }">
                             <div class="grid-content grid-con-3">
-                                <i class="el-icon-lx-goods grid-con-icon"></i>
+                                <i class="el-icon-s-custom grid-con-icon"></i>
                                 <div class="grid-cont-right">
                                     <div class="grid-num">5000</div>
-                                    <div>数量</div>
+                                    <div>缺勤人数</div>
                                 </div>
                             </div>
                         </el-card>
@@ -66,7 +67,7 @@
                 </el-row>
                 <el-card shadow="hover" style="height: 403px">
                     <div slot="header" class="clearfix">
-                        <span>待办事项</span>
+                        <span>待上课课程</span>
                         <el-button style="float: right; padding: 3px 0" type="text">添加</el-button>
                     </div>
                     <el-table :show-header="false" :data="todoList" style="width: 100%">
@@ -158,7 +159,7 @@ export default {
                 },
                 {
                     name: '2018/09/07',
-                    value: 816  
+                    value: 816
                 },
                 {
                     name: '2018/09/08',
@@ -211,7 +212,7 @@ export default {
                         data: [164, 178, 150, 135, 160]
                     },
                     {
-                        label: '食品',  
+                        label: '食品',
                         data: [74, 118, 200, 235, 90]
                     }
                 ]
@@ -242,7 +243,7 @@ export default {
     },
     activated() {
         this.handleListener();
-    },  
+    },
     deactivated() {
         window.removeEventListener('resize', this.renderChart);
         bus.$off('collapse', this.handleBus);
