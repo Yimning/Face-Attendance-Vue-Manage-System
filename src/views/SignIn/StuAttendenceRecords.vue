@@ -254,7 +254,7 @@ export default {
             const that = this;
             //axios的get请求
             this.$axios
-                .get('/api/attendance/findAttendanceBystudentID', { params: { id: this.query.request } })
+                .get('/api/attendance/findAttendanceInfo', { params: { studentNumber: this.query.request } })
                 .then((res) => {
                     //console.log(res);
                     this.form = res.data;
