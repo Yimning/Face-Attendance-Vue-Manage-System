@@ -270,7 +270,7 @@ export default {
             const that = this;
             //axios的get请求
             this.$axios
-                .get('/api/scourse/findScourseBystudentNumber', { params: { id: this.query.request } })
+                .get('/api/scourse/findScourseBysIDcIDcD', { params: { sID: this.query.request } })
                 .then((res) => {
                     for (const i in res.data) {
                         for (const key in res.data[i].course) {
