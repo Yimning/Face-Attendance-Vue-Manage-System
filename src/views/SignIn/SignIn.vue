@@ -71,7 +71,8 @@ export default {
             timeMinutes: 0,
             seconds: 0, // 秒
             minutes: 15, // 分
-            timer: null
+            timer: null,
+            tempTime: ''
         };
     },
     created() {
@@ -81,6 +82,7 @@ export default {
         //sessionStorage.setItem('courseID', this.dataParams.courseID);
         this.faceInfo.courseID = sessionStorage.getItem('courseID');
         console.log(this.faceInfo);
+        this.tempTime=15;
     },
     mounted() {
         // this.add();
@@ -205,8 +207,15 @@ export default {
                 track.stop();
             });
             this.$refs['video'].srcObject = null;
-            this.showOrNot = true;
+            this.openIsCheck = false;
             // this.reload(); //刷新 ----推荐
+            var that = this;
+            //倒计时复位
+
+            that.seconds = 0;
+            that.minutes = 0;
+            clearInterval(that.timer);
+            this.selectedFunc(this.tempTime);
         },
         selectedFunc(e) {
             //console.log(e);
@@ -218,6 +227,8 @@ export default {
             } else {
                 this.minutes = e;
             }
+            //记录当前的值
+            this.tempTime = e;
         },
         num(n) {
             return n < 10 ? '0' + n : '' + n;
@@ -227,15 +238,15 @@ export default {
         },
         add() {
             var that = this;
-            var time = window.setInterval(function () {
+            this.timer = window.setInterval(function () {
                 if (that.seconds === 0 && that.minutes !== 0) {
                     that.seconds = 59;
                     that.minutes -= 1;
                 } else if (that.minutes === 0 && that.seconds === 0) {
                     that.seconds = 0;
-                    window.clearInterval(time);
+                    window.clearInterval(that.timer);
                     console.log('时间到');
-                    that.checkNoFlag();
+                    // that.checkNoFlag();
                     that.closeCamera();
                 } else {
                     that.seconds -= 1;
@@ -304,6 +315,12 @@ export default {
         },
         minute: function () {
             return this.num(this.minutes);
+        }
+    },
+    destroyed() {
+        // 退出后清除计时器
+        if (this.timer) {
+            clearInterval(this.timer);
         }
     }
 };
