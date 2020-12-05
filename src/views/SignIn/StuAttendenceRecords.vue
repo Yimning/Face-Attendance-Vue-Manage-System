@@ -17,7 +17,7 @@
                         :label="item.courseID + item.courseName"
                         :value="item.courseID"
                     ></el-option>
-                </el-select>  
+                </el-select>
 
                 <el-select v-model="selected" v-on:input="selectedFunc" class="handle-select mr10">
                     <el-option key="查查学生学号" label="查学生学号" value="2"></el-option>
@@ -214,6 +214,7 @@ export default {
             selected: '2', //注意数据格式的转换，否则会导致不正常
             tableData: [],
             paramsData: [],
+            params: {},
             count: {
                 isFlag: '',
                 notFlag: '',
@@ -365,15 +366,27 @@ export default {
             this.getData();
         },
         courseFunc(e) {
-            const url = '/api/attendance/findAttendanceBycourseID';
+            const url = '/api/attendance/findAttendanceInfo';
+            // console.log('请求后台数据结果',e);
             this.getAttendanceBycourseID(url, e);
         },
         // 获取课程BycourseID
         getAttendanceBycourseID(url, id) {
             const that = this;
+            this.params = {
+                params: {
+                    courseID: id,
+                    studentNumber: this.$store.getters.getUser.userID,
+                    studentName: null,
+                    teacherNumber: null,
+                    teacherName: null,
+                    flag: null,
+                    time: null
+                }
+            };
             //axios的get请求
             this.$axios
-                .get(url, { params: { id: id } })
+                .get(url, this.params)
                 .then((res) => {
                     this.form = res.data;
                     //console.log('请求后台数据结果', this.form);
@@ -469,9 +482,19 @@ export default {
             if (!this.QueryConditions.recordTime) return this.$message.error(`选择时间查询`);
 
             if (this.QueryConditions.courseID && this.QueryConditions.recordTime) {
-                const url = '/api/attendance/findAttendanceBystudentID';
-                const params = { params: { id: this.QueryConditions.courseID, time: this.QueryConditions.recordTime } };
-                this.getAttendanceByInfo(url, params);
+                const url = '/api/attendance/findAttendanceInfo';
+                this.params = {
+                    params: {
+                        courseID: this.QueryConditions.courseID,
+                        studentNumber: this.$store.getters.getUser.userID,
+                        studentName: null,
+                        teacherNumber: null,
+                        teacherName: null,
+                        flag: null,
+                        time: this.QueryConditions.recordTime
+                    }
+                };
+                this.getAttendanceByInfo(url, this.params);
             }
         },
         selectedFunc() {
@@ -588,12 +611,12 @@ export default {
                 )
                 .catch((err) => {
                     console.log(err);
-                }); 
+                });
             // let oneArray = [];
             // let one = {}; //添加的对象
             // one['notFlag'] = this.count.notFlag;
             // one['isFlag'] = this.count.isFlag;
-            // one['flagPercent'] = this.count.flagPercent; 
+            // one['flagPercent'] = this.count.flagPercent;
             // oneArray.push(one);
 
             this.count = row;
@@ -740,22 +763,42 @@ export default {
             return this.reload(); //刷新 ----推荐
         },
         handleFlag() {
-            const url = '/api/attendance/findAllAttendanceIsflag';
-            const params = { params: { flag: 1, cID: this.QueryConditions.courseID } };
+            const url = '/api/attendance/findAttendanceInfo';
+            this.params = {
+                params: {
+                    courseID: this.QueryConditions.courseID,
+                    studentNumber: this.$store.getters.getUser.userID,
+                    studentName: null,
+                    teacherNumber: null,
+                    teacherName: null,
+                    flag: 1,
+                    time: null
+                }
+            };
             if (!this.QueryConditions.courseID) {
                 return this.$message.error(`请选择课程号-课程名`);
             } else {
-                this.requestHandle(url, params);
+                this.requestHandle(url, this.params);
             }
         },
 
         handleNotFlag() {
-            const url = '/api/attendance/findAllAttendanceNotflag';
-            const params = { params: { flag: 0, cID: this.QueryConditions.courseID } };
+            const url = '/api/attendance/findAttendanceInfo';
+            this.params = {
+                params: {
+                    courseID: this.QueryConditions.courseID,
+                    studentNumber: this.$store.getters.getUser.userID,
+                    studentName: null,
+                    teacherNumber: null,
+                    teacherName: null,
+                    flag: 0,
+                    time: null
+                }
+            };
             if (!this.QueryConditions.courseID) {
                 return this.$message.error(`请选择课程号-课程名`);
             } else {
-                this.requestHandle(url, params);
+                this.requestHandle(url, this.params);
             }
         },
         requestHandle(url, params) {
