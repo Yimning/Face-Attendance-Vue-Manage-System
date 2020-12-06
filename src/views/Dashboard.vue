@@ -35,13 +35,13 @@
                             <div class="grid-content grid-con-1">
                                 <i class="el-icon-lx-notice grid-con-icon"></i>
                                 <div class="grid-cont-right">
-                                    <div class="grid-num">{{recentAttendanceList.courseID}}</div>
-                                    <div>最近签到课程:{{recentAttendanceList.courseName}}</div>
+                                    <div class="grid-num">{{ recentAttendanceList.courseID }}</div>
+                                    <div>最近签到课程:{{ recentAttendanceList.courseName }}</div>
                                 </div>
                             </div>
                         </el-card>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="8" :model="recentAttendanceInfo">
                         <el-card shadow="hover" :body-style="{ padding: '0px' }">
                             <div class="grid-content grid-con-2">
                                 <i class="el-icon-lx-people grid-con-icon"></i>
@@ -125,12 +125,16 @@ export default {
             requestUrl: '',
             list: [],
             newArray: [],
-            recentAttendanceList:[],
-            recentCourseList:[],
-            json:{
-             course:{},
-             student:{},
-             teacher:{},
+            recentAttendanceList: [],
+            recentCourseList: [],
+            recentAttendanceInfo:{
+                 allFlag:'',
+                 notFlag:''
+            },
+            json: {
+                course: {},
+                student: {},
+                teacher: {}
             },
             weeks: {
                 0: '星期日',
@@ -253,7 +257,6 @@ export default {
     created() {
         this.handleListener();
         this.changeDate();
-        this.recentAttendanceInfo();
         if (this.$store.getters.getUser.roseID != '2') {
             this.tsRose = true;
         }
@@ -325,18 +328,39 @@ export default {
             this.$refs.bar.renderChart();
             this.$refs.line.renderChart();
         },
-        recentAttendanceInfo() {},
         StuAttendenceRecords(url, params) {
             const that = this;
+            const url1 = '/api/attendance/countAttendanceNotflag';
+           
+            const url2 = '/api/attendance/countAttendanceIsflag';
+         
             //axios的get请求
             this.$axios
                 .get(url, params)
                 .then((res) => {
                     this.form = res.data;
-                   console.log('请求后台数据结果', res.data[0]);
-                    console.log('请求后台数据', this.dataTraversal(this.form));
-                    this.newArray=this.dataTraversal(this.form);
-                   this.recentAttendanceList = this.newArray[0];
+                    //console.log('请求后台数据结果', res.data[0]);
+                    this.json = res.data[0];
+                    console.log('this.json.course数据结果', this.json.course);
+                    this.newArray = this.dataTraversal(this.form);
+                    this.recentAttendanceList = this.newArray[0];
+                   const params1 = {
+                        params: {
+                            cID: this.json.courseID,
+                            sID: this.$store.getters.getUser.userID,
+                            tID: this.json.teacher.teacherNumber,
+                            flag: 0
+                        }
+                    };
+                    const params2 = {
+                        params: {
+                            cID: this.json.courseID,
+                            sID: this.$store.getters.getUser.userID,
+                            tID: this.json.teacher.teacherNumber,
+                            flag: 1
+                        }
+                    };
+                    this.recentAttendanceFlag(url1, params1, url2, params2);
                 })
                 .catch((err) => {
                     console.log(err);
@@ -348,12 +372,28 @@ export default {
             this.$axios
                 .get(url, params)
                 .then((res) => {
-                     this.form = res.data;
-                   // console.log('请求后台数据结果', res);
+                    this.form = res.data;
+                    // console.log('请求后台数据结果', res);
                     console.log('请求后台数据', this.dataTraversal(this.form));
-                    this.newArray=this.dataTraversal(this.form);
-                   this.recentAttendanceList = this.newArray[0];
+                    this.newArray = this.dataTraversal(this.form);
+                    this.recentAttendanceList = this.newArray[0];
                 })
+                .catch((err) => {
+                    console.log(err);
+                });
+        },
+        recentAttendanceFlag(url1, params1, url2, params2) {
+            const that = this;
+            var r0 = this.$axios.get(url1, params1);
+            var r1 = this.$axios.get(url2, params2);
+            //并发请求
+            this.$axios
+                .all([r0, r1])
+                .then(
+                    that.$axios.spread((res1, res2) => {
+                        console.log(res1,res2)
+                    })
+                )
                 .catch((err) => {
                     console.log(err);
                 });
