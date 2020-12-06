@@ -252,8 +252,10 @@ export default {
                     .then(() => {
                         sessionStorage.setItem('courseID', this.dataParams.courseID);
                         this.$router.push({ path: '/SignIn', query: { data: this.dataParams } }); //路由跳转传参
+                        this.showUsualCourseDialog = false;
                     })
                     .catch(() => {
+                        this.showUsualCourseDialog = false;
                         this.$message({
                             type: 'info',
                             message: '已取消'
