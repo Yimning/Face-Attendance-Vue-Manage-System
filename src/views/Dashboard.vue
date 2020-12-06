@@ -86,9 +86,10 @@
                             </template>
                         </el-table-column>
                         <el-table-column width="60">
-                            <template>
-                                <i class="el-icon-edit"></i>
-                                <i class="el-icon-delete"></i>
+                            <template slot-scope="scope">
+                                <el-button class="el-icon-edit" style="float: right; padding: 3px 0" type="text" @click="signIn(scope.$index, scope.row)">详情</el-button>
+                                <!-- <i class="el-icon-edit"></i>
+                                <i class="el-icon-delete"></i> -->
                             </template>
                         </el-table-column>
                     </el-table>
@@ -426,6 +427,9 @@ export default {
         },
         courseTable(){
              this.$router.push({ path: '/Courses' }); 
+        },
+        signIn(e,date){
+            console.log(e,date)
         },
         recentCourse() {
             const that = this;
