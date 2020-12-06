@@ -46,7 +46,7 @@
                             <div class="grid-content grid-con-2">
                                 <i class="el-icon-lx-people grid-con-icon"></i>
                                 <div class="grid-cont-right">
-                                    <div class="grid-num">{{recentAttendanceInfo.allFlag}}</div>
+                                    <div class="grid-num">{{ recentAttendanceInfo.allFlag }}</div>
                                     <div>出勤人数</div>
                                 </div>
                             </div>
@@ -57,7 +57,7 @@
                             <div class="grid-content grid-con-3">
                                 <i class="el-icon-s-custom grid-con-icon"></i>
                                 <div class="grid-cont-right">
-                                    <div class="grid-num">{{recentAttendanceInfo.notFlag}}</div>
+                                    <div class="grid-num">{{ recentAttendanceInfo.notFlag }}</div>
                                     <div>缺勤人数</div>
                                 </div>
                             </div>
@@ -67,9 +67,9 @@
                 <el-card shadow="hover" style="height: 403px" :model="recentCourseList" v-if="tsRose">
                     <div slot="header" class="clearfix">
                         <span>待上课课程</span>
-                        <el-button style="float: right; padding: 3px 0" type="text">添加</el-button>
+                        <el-button style="float: right; padding: 3px 0" type="text" @click="courseTable">课程表</el-button>
                     </div>
-                    <el-table :show-header="false" :data="todoList" style="width: 100%">
+                    <el-table :show-header="false" :data="recentCourseList" style="width: 100%">
                         <el-table-column width="40">
                             <template slot-scope="scope">
                                 <el-checkbox v-model="scope.row.status"></el-checkbox>
@@ -77,7 +77,12 @@
                         </el-table-column>
                         <el-table-column>
                             <template slot-scope="scope">
-                                <div class="todo-item" :class="{ 'todo-item-del': scope.row.status }">{{ scope.row.title }}</div>
+                                <div class="todo-item" :class="{ 'todo-item-del': scope.row.status }">
+                                    课程:{{ scope.row.courseName }}——
+                                    地点:{{ scope.row.classRoomID }}——
+                                    时间:{{ scope.row.weekDay+''+ scope.row.courseTime}}——
+                                    节数:{{scope.row.coursePeriodF+'-'+ scope.row.coursePeriodB}}节
+                                </div>
                             </template>
                         </el-table-column>
                         <el-table-column width="60">
@@ -127,9 +132,9 @@ export default {
             newArray: [],
             recentAttendanceList: [],
             recentCourseList: [],
-            recentAttendanceInfo:{
-                 allFlag:'',
-                 notFlag:''
+            recentAttendanceInfo: {
+                allFlag: '',
+                notFlag: ''
             },
             json: {
                 course: {},
@@ -257,6 +262,7 @@ export default {
     created() {
         this.handleListener();
         this.changeDate();
+        this.recentCourse();
         if (this.$store.getters.getUser.roseID != '2') {
             this.tsRose = true;
         }
@@ -339,10 +345,10 @@ export default {
                     this.form = res.data;
                     //console.log('请求后台数据结果', res.data[0]);
                     this.json = res.data[0];
-                   // console.log('this.json.course数据结果', this.json.course);
+                    // console.log('this.json.course数据结果', this.json.course);
                     this.newArray = this.dataTraversal(this.form);
                     this.recentAttendanceList = this.newArray[0];
-                   const params1 = {
+                    const params1 = {
                         params: {
                             cID: this.json.courseID,
                             sID: this.$store.getters.getUser.userID,
@@ -366,7 +372,7 @@ export default {
         },
         TeachAttendenceRecords(url, params) {
             const that = this;
-                        const url1 = '/api/attendance/countAttendanceNotflag';
+            const url1 = '/api/attendance/countAttendanceNotflag';
             const url2 = '/api/attendance/countAttendanceIsflag';
             //axios的get请求
             this.$axios
@@ -375,22 +381,22 @@ export default {
                     this.form = res.data;
                     //console.log('请求后台数据结果', res.data[0]);
                     this.json = res.data[0];
-                   // console.log('this.json.course数据结果', this.json.course);
+                    // console.log('this.json.course数据结果', this.json.course);
                     this.newArray = this.dataTraversal(this.form);
                     this.recentAttendanceList = this.newArray[0];
-                   const params1 = {
+                    const params1 = {
                         params: {
                             cID: this.json.courseID,
-                            sID: this.$store.getters.getUser.userID,
-                            tID: this.json.teacher.teacherNumber,
+                            sID: this.json.student.studentNumber,
+                            tID: this.$store.getters.getUser.userID,
                             flag: 0
                         }
                     };
                     const params2 = {
                         params: {
                             cID: this.json.courseID,
-                            sID: this.$store.getters.getUser.userID,
-                            tID: this.json.teacher.teacherNumber,
+                            sID: this.json.student.studentNumber,
+                            tID: this.$store.getters.getUser.userID,
                             flag: 1
                         }
                     };
@@ -410,13 +416,54 @@ export default {
                 .then(
                     that.$axios.spread((res1, res2) => {
                         //console.log(res1,res2)
-                       this.recentAttendanceInfo.allFlag = res1.data.length;
+                        this.recentAttendanceInfo.allFlag = res1.data.length;
                         this.recentAttendanceInfo.notFlag = res2.data.length;
                     })
                 )
                 .catch((err) => {
                     console.log(err);
                 });
+        },
+        courseTable(){
+             this.$router.push({ path: '/Courses' }); 
+        },
+        recentCourse() {
+            const that = this;
+            var aData = new Date();
+            // this.dataDateNumber(aData);//星期几的索引
+            if (this.$store.getters.getUser.roseID == '1') {
+                const params = { params: { tID: this.$store.getters.getUser.userID, cID: null, cD: 2 } };
+                const that = this;
+                //axios的get请求
+                this.$axios
+                    .get('/api/scourse/findScourseBytIDcIDcD', params)
+                    .then((res) => {
+                        //console.log('请求后台数据结果', res);
+                        this.form = res.data;
+                        this.newArray = this.dataTraversal(this.form);
+                        this.recentCourseList = this.newArray;
+                        console.log(this.recentCourseList);
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            }
+            if (this.$store.getters.getUser.roseID == '0') {
+                const params = { params: { sID: this.$store.getters.getUser.userID, cID: null, cD: this.dataDateNumber(aData) } };
+                const that = this;
+                //axios的get请求
+                this.$axios
+                    .get('/api/scourse/findScourseBysIDcIDcD', params)
+                    .then((res) => {
+                        console.log(res);
+                        this.form = res.data;
+                        //console.log('请求后台数据结果', this.form);
+                        this.dataTraversal(this.form);
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            }
         },
         dataTraversal(form) {
             this.list = [];
@@ -430,6 +477,9 @@ export default {
 
                 for (const key in form[i].course) {
                     this.$set(this.list, key, form[i].course[key]); //对象新增属性(使用Vue.$set())
+                    if (key == 'courseDay') {
+                        this.$set(this.list, 'weekDay', this.weeks[form[i].course[key]]);
+                    }
                     this.newArray[i] = this.list; //新建数组存放
                 }
                 for (const key in form[i].student) {
@@ -465,6 +515,14 @@ export default {
                 let weekIndex = date.getDay();
                 //this.week = this.weeks[weekIndex];
                 return this.weeks[weekIndex];
+            } else return null;
+        },
+        //根据当前的日期显示当前是星期几的索引
+        dataDateNumber(dateStr) {
+            if (dateStr != null || dateStr == '') {
+                let date = new Date(dateStr);
+                let weekIndex = date.getDay();
+                return weekIndex;
             } else return null;
         },
         GMTToStr: function (time) {
