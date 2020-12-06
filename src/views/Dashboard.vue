@@ -29,14 +29,14 @@
                 </el-card>
             </el-col>
             <el-col :span="16">
-                <el-row :gutter="20" class="mgb20" ref="form" :model="form" v-if="tsRose">
+                <el-row :gutter="20" class="mgb20" ref="dateList" :model="recentAttendanceList" v-if="tsRose">
                     <el-col :span="8">
                         <el-card shadow="hover" :body-style="{ padding: '0px' }">
                             <div class="grid-content grid-con-1">
                                 <i class="el-icon-lx-notice grid-con-icon"></i>
                                 <div class="grid-cont-right">
-                                    <div class="grid-num">3111</div>
-                                    <div>最近签到课程:广覆盖大风刮过</div>
+                                    <div class="grid-num">{{recentAttendanceList.courseID}}</div>
+                                    <div>最近签到课程:{{recentAttendanceList.courseName}}</div>
                                 </div>
                             </div>
                         </el-card>
@@ -64,7 +64,7 @@
                         </el-card>
                     </el-col>
                 </el-row>
-                <el-card shadow="hover" style="height: 403px" :model="form" v-if="tsRose">
+                <el-card shadow="hover" style="height: 403px" :model="recentCourseList" v-if="tsRose">
                     <div slot="header" class="clearfix">
                         <span>待上课课程</span>
                         <el-button style="float: right; padding: 3px 0" type="text">添加</el-button>
@@ -110,6 +110,7 @@ import Schart from 'vue-schart';
 import bus from '../components/common/bus';
 import { timeFix } from '../utils/util';
 import StuAttendenceRecordsVue from './SignIn/StuAttendenceRecords.vue';
+const weekArr = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
 export default {
     name: 'dashboard',
     data() {
@@ -121,7 +122,20 @@ export default {
             form: {},
             tsRose: false,
             params: {},
-            requestUrl:'',
+            requestUrl: '',
+            list: [],
+            newArray: [],
+            recentAttendanceList:[],
+            recentCourseList:[],
+            weeks: {
+                0: '星期日',
+                1: '星期一',
+                2: '星期二',
+                3: '星期三',
+                4: '星期四',
+                5: '星期五',
+                6: '星期六'
+            },
             todoList: [
                 {
                     title: '今天要修复100个bug',
@@ -243,7 +257,7 @@ export default {
             this.params = {
                 params: {
                     courseID: null,
-                    studentNumber: this.$store.getters.getUser.roseID,
+                    studentNumber: this.$store.getters.getUser.userID,
                     studentName: null,
                     teacherNumber: null,
                     teacherName: null,
@@ -259,7 +273,7 @@ export default {
                     courseID: null,
                     studentNumber: null,
                     studentName: null,
-                    teacherNumber: this.$store.getters.getUser.roseID,
+                    teacherNumber: this.$store.getters.getUser.userID,
                     teacherName: null,
                     flag: null,
                     time: null
@@ -313,9 +327,11 @@ export default {
             this.$axios
                 .get(url, params)
                 .then((res) => {
-                    // this.form = res.data;
-                    console.log('请求后台数据结果', res);
-                    //this.dataTraversal(this.form);
+                    this.form = res.data;
+                   // console.log('请求后台数据结果', res);
+                    console.log('请求后台数据', this.dataTraversal(this.form));
+                    this.newArray=this.dataTraversal(this.form);
+                   this.recentAttendanceList = this.newArray[0];
                 })
                 .catch((err) => {
                     console.log(err);
@@ -327,13 +343,84 @@ export default {
             this.$axios
                 .get(url, params)
                 .then((res) => {
-                    // this.form = res.data;
-                    console.log('请求后台数据结果', res);
-                    //this.dataTraversal(this.form);
+                     this.form = res.data;
+                   // console.log('请求后台数据结果', res);
+                    console.log('请求后台数据', this.dataTraversal(this.form));
+                    this.newArray=this.dataTraversal(this.form);
+                   this.recentAttendanceList = this.newArray[0];
                 })
                 .catch((err) => {
                     console.log(err);
                 });
+        },
+        dataTraversal(form) {
+            this.list = [];
+            this.newArray = [];
+            for (const i in form) {
+                //console.log('属性:' + i);
+                this.$set(this.list, 'recordID', form[i].recordID);
+                this.$set(this.list, 'recordTime', form[i].recordTime);
+                this.$set(this.list, 'flag', form[i].flag);
+                this.$set(this.list, 'weekDay', this.dataDateChange(form[i].recordTime));
+
+                for (const key in form[i].course) {
+                    this.$set(this.list, key, form[i].course[key]); //对象新增属性(使用Vue.$set())
+                    this.newArray[i] = this.list; //新建数组存放
+                }
+                for (const key in form[i].student) {
+                    //console.log("属性:"+key);
+                    this.$set(this.list, key, form[i].student[key]); //对象新增属性(使用Vue.$set())
+                    this.newArray[i] = this.list; //新建数组存放
+                }
+                for (const key in form[i].teacher) {
+                    //console.log("属性:"+key);
+                    this.$set(this.list, key, form[i].teacher[key]); //对象新增属性(使用Vue.$set())
+                    this.newArray[i] = this.list; //新建数组存放
+                }
+                this.list = []; //循环完必须清空,否则可能会覆盖
+            }
+            return this.newArray;
+        },
+        // 时间格式化
+        dataFormat(value) {
+            if (value != null || value == '') {
+                var year = value.substr(0, 4);
+                var month = value.substr(5, 2);
+                var day = value.substr(8, 2);
+                var hour = value.substr(11, 2);
+                var min = value.substr(14, 2);
+                var second = value.substr(17, 2);
+                return year + '-' + month + '-' + day + ' ' + hour + ':' + min + ':' + second;
+            } else return null;
+        },
+        //根据当前的日期显示当前是星期几
+        dataDateChange(dateStr) {
+            if (dateStr != null || dateStr == '') {
+                let date = new Date(dateStr);
+                let weekIndex = date.getDay();
+                //this.week = this.weeks[weekIndex];
+                return this.weeks[weekIndex];
+            } else return null;
+        },
+        GMTToStr: function (time) {
+            let date = new Date(time);
+            let Str =
+                date.getFullYear() +
+                '-' +
+                (date.getMonth() + 1) +
+                '-' +
+                date.getDate() +
+                ' ' +
+                date.getHours() +
+                ':' +
+                date.getMinutes() +
+                ':' +
+                date.getSeconds();
+            return Str;
+        },
+        StrToGMT(time) {
+            let GMT = new Date(time);
+            return GMT;
         }
     }
 };
