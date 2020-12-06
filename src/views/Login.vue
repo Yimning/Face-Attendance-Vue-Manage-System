@@ -611,6 +611,7 @@ export default {
         },
         TimeAndPlace() {
             const that = this;
+            this.$store.getters.getUser.loginTime=''; 
             this.$axios.post('/api/accountrecords/timeAndPlace', this.$store.getters.getUser).then((res) => {});
         },
         getSencond() {
