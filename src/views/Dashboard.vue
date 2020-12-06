@@ -393,14 +393,14 @@ export default {
                     //console.log('请求后台数据结果', res);
                     if (res.data.length != 0) {
                         this.json = res.data[0];
-                        console.log('this.json.course数据结果', this.json);
+                        // console.log('this.json.course数据结果', this.json);
                         this.newArray = this.dataTraversal(this.form);
                         this.recentAttendanceList = this.newArray[0];
                         const params1 = {
                             params: {
-                                    tID: this.json.teacher.teacherNumber,
-                                    cID: this.json.courseID,
-                                    cD: null
+                                tID: this.json.teacher.teacherNumber,
+                                cID: this.json.courseID,
+                                cD: null
                             }
                         };
                         const params2 = {
@@ -433,7 +433,7 @@ export default {
                     //console.log('请求后台数据结果', res.data);
                     if (res.data.length != 0) {
                         this.json = res.data[0];
-                        console.log('this.json数据结果', this.json);
+                        //console.log('this.json数据结果', this.json);
                         this.newArray = this.dataTraversal(this.form);
                         this.recentAttendanceList = this.newArray[0];
                         const params1 = {
@@ -543,16 +543,15 @@ export default {
                     });
             }
             if (this.$store.getters.getUser.roseID == '0') {
-                const params = { params: { sID: this.$store.getters.getUser.userID, cID: null, cD: this.dataDateNumber(aData) } };
+                const params = { params: { sID: this.$store.getters.getUser.userID, cID: null, cD: 1 } };
                 const that = this;
                 //axios的get请求
                 this.$axios
                     .get('/api/scourse/findScourseBysIDcIDcD', params)
                     .then((res) => {
-                        // console.log(res);
                         this.form = res.data;
-                        //console.log('请求后台数据结果', this.form);
-                        this.dataTraversal(this.form);
+                        this.newArray = this.dataTraversal(this.form);
+                        this.recentCourseList = this.newArray;
                     })
                     .catch((err) => {
                         console.log(err);
