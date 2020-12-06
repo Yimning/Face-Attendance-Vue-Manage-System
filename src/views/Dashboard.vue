@@ -29,7 +29,7 @@
                 </el-card>
             </el-col>
             <el-col :span="16">
-                <el-row :gutter="20" class="mgb20" ref="form" :model="form">
+                <el-row :gutter="20" class="mgb20" ref="form" :model="form" v-if="tsRose">
                     <el-col :span="8">
                         <el-card shadow="hover" :body-style="{ padding: '0px' }">
                             <div class="grid-content grid-con-1">
@@ -64,7 +64,7 @@
                         </el-card>
                     </el-col>
                 </el-row>
-                <el-card shadow="hover" style="height: 403px">
+                <el-card shadow="hover" style="height: 403px" :model="form" v-if="tsRose">
                     <div slot="header" class="clearfix">
                         <span>待上课课程</span>
                         <el-button style="float: right; padding: 3px 0" type="text">添加</el-button>
@@ -109,6 +109,7 @@
 import Schart from 'vue-schart';
 import bus from '../components/common/bus';
 import { timeFix } from '../utils/util';
+import StuAttendenceRecordsVue from './SignIn/StuAttendenceRecords.vue';
 export default {
     name: 'dashboard',
     data() {
@@ -117,7 +118,9 @@ export default {
             userAvatar: this.$store.getters.getUser.avatar,
             roseID: this.$store.getters.getUser.roseID,
             roseName: this.$store.getters.getUser.roseName,
-            form:{},
+            form: {},
+            tsRose: false,
+            params: {},
             todoList: [
                 {
                     title: '今天要修复100个bug',
@@ -230,8 +233,39 @@ export default {
     created() {
         this.handleListener();
         this.changeDate();
-        // console.log(this.userInfo);
         this.recentAttendanceInfo();
+        if (this.$store.getters.getUser.roseID != '2') {
+            this.tsRose = true;
+        }
+        const url = '/api/attendance/findAttendanceInfo';
+        if (this.$store.getters.getUser.roseID == '0') {
+            this.params = {
+                params: {
+                    courseID: null,
+                    studentNumber: this.$store.getters.getUser.roseID,
+                    studentName: null,
+                    teacherNumber: null,
+                    teacherName: null,
+                    flag: null,
+                    time: null
+                }
+            };
+            this.StuAttendenceRecords(url, this.params);
+        }
+        if (this.$store.getters.getUser.roseID == '1') {
+            this.params = {
+                params: {
+                    courseID: null,
+                    studentNumber: null,
+                    studentName: null,
+                    teacherNumber: this.$store.getters.getUser.roseID,
+                    teacherName: null,
+                    flag: null,
+                    time: null
+                }
+            };
+            this.TeachAttendenceRecords(url, this.params);
+        }
     },
     mounted() {
         // 延迟 1 秒显示欢迎信息
@@ -271,9 +305,22 @@ export default {
             this.$refs.bar.renderChart();
             this.$refs.line.renderChart();
         },
-        recentAttendanceInfo(){
-
+        recentAttendanceInfo() {},
+        StuAttendenceRecords(url, params) {
+            const that = this;
+            //axios的get请求
+            this.$axios
+                .get(url, params)
+                .then((res) => {
+                   // this.form = res.data;
+                    console.log('请求后台数据结果', res);
+                    //this.dataTraversal(this.form);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
         },
+        TeachAttendenceRecords(url, params) {}
     }
 };
 </script>
