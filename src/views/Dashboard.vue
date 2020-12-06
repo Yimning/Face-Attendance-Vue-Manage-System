@@ -121,6 +121,7 @@ export default {
             form: {},
             tsRose: false,
             params: {},
+            requestUrl:'',
             todoList: [
                 {
                     title: '今天要修复100个bug',
@@ -312,7 +313,7 @@ export default {
             this.$axios
                 .get(url, params)
                 .then((res) => {
-                   // this.form = res.data;
+                    // this.form = res.data;
                     console.log('请求后台数据结果', res);
                     //this.dataTraversal(this.form);
                 })
@@ -320,7 +321,20 @@ export default {
                     console.log(err);
                 });
         },
-        TeachAttendenceRecords(url, params) {}
+        TeachAttendenceRecords(url, params) {
+            const that = this;
+            //axios的get请求
+            this.$axios
+                .get(url, params)
+                .then((res) => {
+                    // this.form = res.data;
+                    console.log('请求后台数据结果', res);
+                    //this.dataTraversal(this.form);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
     }
 };
 </script>
