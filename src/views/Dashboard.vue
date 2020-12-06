@@ -36,7 +36,9 @@
                                 <i class="el-icon-lx-notice grid-con-icon"></i>
                                 <div class="grid-cont-right">
                                     <div class="grid-num">{{ recentAttendanceList.courseID }}</div>
-                                    <div>最近签到课程:{{ recentAttendanceList.courseName }}</div>
+                                    <div>最近签到课程:</div>
+                                    <div>{{ recentAttendanceList.courseName }}</div>
+                                    <div>{{ recentAttendanceList.recordTime }}</div>
                                 </div>
                             </div>
                         </el-card>
@@ -47,7 +49,7 @@
                                 <i class="el-icon-lx-people grid-con-icon"></i>
                                 <div class="grid-cont-right">
                                     <div class="grid-num">{{ recentAttendanceInfo.allFlag }}</div>
-                                    <div>出勤人数</div>
+                                    <div>应出勤人数</div>
                                 </div>
                             </div>
                         </el-card>
@@ -189,9 +191,9 @@ export default {
                 5: '星期五',
                 6: '星期六'
             },
-             showUsualCourseDialog: false,
-             isTeacher:false,
-             selectedCourse:[],
+            showUsualCourseDialog: false,
+            isTeacher: false,
+            selectedCourse: [],
             todoList: [
                 {
                     title: '今天要修复100个bug',
@@ -309,6 +311,7 @@ export default {
             this.tsRose = true;
         }
         const url = '/api/attendance/findAttendanceInfo';
+        //学生
         if (this.$store.getters.getUser.roseID == '0') {
             this.params = {
                 params: {
@@ -323,7 +326,9 @@ export default {
             };
             this.StuAttendenceRecords(url, this.params);
         }
+        //教师
         if (this.$store.getters.getUser.roseID == '1') {
+            this.isTeacher = true; //只有教师显示
             this.params = {
                 params: {
                     courseID: null,
@@ -378,35 +383,41 @@ export default {
         },
         StuAttendenceRecords(url, params) {
             const that = this;
-            const url1 = '/api/attendance/countAttendanceNotflag';
-            const url2 = '/api/attendance/countAttendanceIsflag';
+            const url1 = '/api/scourse/findScourseByteacherNumbercIDcD';
+            const url2 = '/api/attendance/findAttendanceInfo';
             //axios的get请求
             this.$axios
                 .get(url, params)
                 .then((res) => {
                     this.form = res.data;
                     //console.log('请求后台数据结果', res.data[0]);
-                    this.json = res.data[0];
-                    // console.log('this.json.course数据结果', this.json.course);
-                    this.newArray = this.dataTraversal(this.form);
-                    this.recentAttendanceList = this.newArray[0];
-                    const params1 = {
-                        params: {
-                            cID: this.json.courseID,
-                            sID: this.$store.getters.getUser.userID,
-                            tID: this.json.teacher.teacherNumber,
-                            flag: 0
-                        }
-                    };
-                    const params2 = {
-                        params: {
-                            cID: this.json.courseID,
-                            sID: this.$store.getters.getUser.userID,
-                            tID: this.json.teacher.teacherNumber,
-                            flag: 1
-                        }
-                    };
-                    this.recentAttendanceFlag(url1, params1, url2, params2);
+                    if (res.data.length != 0) {
+                        this.json = res.data[0];
+                         console.log('this.json.course数据结果', this.json);
+                        this.newArray = this.dataTraversal(this.form);
+                        this.recentAttendanceList = this.newArray[0];
+                        const params1 = {
+                            params: {
+                                params: {
+                                    cID: this.json.courseID,
+                                    tID: this.json.teacher.teacherNumber,
+                                    cD: null
+                                }
+                            }
+                        };
+                        const params2 = {
+                            params: {
+                                courseID: this.json.courseID,
+                                studentNumber: this.$store.getters.getUser.userID,
+                                studentName: null,
+                                teacherNumber: this.json.teacher.teacherNumber,
+                                teacherName: null,
+                                flag: 0,
+                                time: this.json.recordTime
+                            }
+                        };
+                        this.recentAttendanceFlag(url1, params1, url2, params2);
+                    }
                 })
                 .catch((err) => {
                     console.log(err);
@@ -414,35 +425,39 @@ export default {
         },
         TeachAttendenceRecords(url, params) {
             const that = this;
-            const url1 = '/api/attendance/countAttendanceNotflag';
-            const url2 = '/api/attendance/countAttendanceIsflag';
+            const url1 = '/api/scourse/findScourseByteacherNumbercIDcD';
+            const url2 = '/api/attendance/findAttendanceInfo';
             //axios的get请求
             this.$axios
                 .get(url, params)
                 .then((res) => {
                     this.form = res.data;
-                    //console.log('请求后台数据结果', res.data[0]);
-                    this.json = res.data[0];
-                    // console.log('this.json.course数据结果', this.json.course);
-                    this.newArray = this.dataTraversal(this.form);
-                    this.recentAttendanceList = this.newArray[0];
-                    const params1 = {
-                        params: {
-                            cID: this.json.courseID,
-                            sID: this.json.student.studentNumber,
-                            tID: this.$store.getters.getUser.userID,
-                            flag: 0
-                        }
-                    };
-                    const params2 = {
-                        params: {
-                            cID: this.json.courseID,
-                            sID: this.json.student.studentNumber,
-                            tID: this.$store.getters.getUser.userID,
-                            flag: 1
-                        }
-                    };
-                    this.recentAttendanceFlag(url1, params1, url2, params2);
+                    //console.log('请求后台数据结果', res.data);
+                    if (res.data.length != 0) {
+                        this.json = res.data[0];
+                        console.log('this.json数据结果', this.json);
+                        this.newArray = this.dataTraversal(this.form);
+                        this.recentAttendanceList = this.newArray[0];
+                        const params1 = {
+                            params: {
+                                tID: this.json.teacher.teacherNumber,
+                                cID: this.json.courseID,
+                                cD: null
+                            }
+                        };
+                        const params2 = {
+                            params: {
+                                courseID: this.json.courseID,
+                                studentNumber: this.json.student.studentNumber,
+                                studentName: null,
+                                teacherNumber: this.$store.getters.getUser.userID,
+                                teacherName: null,
+                                flag: 0,
+                                time: this.json.recordTime
+                            }
+                        };
+                        this.recentAttendanceFlag(url1, params1, url2, params2);
+                    }
                 })
                 .catch((err) => {
                     console.log(err);
@@ -457,7 +472,7 @@ export default {
                 .all([r0, r1])
                 .then(
                     that.$axios.spread((res1, res2) => {
-                        //console.log(res1,res2)
+                        console.log(res1, res2);
                         this.recentAttendanceInfo.allFlag = res1.data.length;
                         this.recentAttendanceInfo.notFlag = res2.data.length;
                     })
@@ -470,11 +485,44 @@ export default {
             this.$router.push({ path: '/Courses' });
         },
         detail(e, data) {
-            console.log(e, data);
-            this.selectedCourse=data;
-            this.showUsualCourseDialog=true;
+            //console.log(e, data);
+            this.selectedCourse = data;
+            this.showUsualCourseDialog = true;
         },
-        signIn(){},
+        signIn() {
+            //获取当前的课程信息
+            // console.log(this.selectedCourse);
+
+            //将数组转成对象
+            var obj = {};
+            for (var i in this.selectedCourse) {
+                obj[i] = this.selectedCourse[i];
+            }
+            this.dataParams = obj;
+            var aData = new Date();
+            //console.log( this.dataDateNumber(aData));//显示当前星期几
+            if (this.selectedCourse.courseID == this.dataDateNumber(aData)) {
+                this.$router.push({ path: '/SignIn', query: { data: this.dataParams } }); //路由跳转传参
+            } else {
+                this.$confirm('当前课程时间不一致, 是否进行签到?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                })
+                    .then(() => {
+                        sessionStorage.setItem('courseID', this.dataParams.courseID);
+                        this.$router.push({ path: '/SignIn', query: { data: this.dataParams } }); //路由跳转传参
+                        this.showUsualCourseDialog = false;
+                    })
+                    .catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消'
+                        });
+                        this.showUsualCourseDialog = false;
+                    });
+            }
+        },
         recentCourse() {
             const that = this;
             var aData = new Date();
@@ -490,7 +538,7 @@ export default {
                         this.form = res.data;
                         this.newArray = this.dataTraversal(this.form);
                         this.recentCourseList = this.newArray;
-                        console.log(this.recentCourseList);
+                        //console.log(this.recentCourseList);
                     })
                     .catch((err) => {
                         console.log(err);
@@ -503,7 +551,7 @@ export default {
                 this.$axios
                     .get('/api/scourse/findScourseBysIDcIDcD', params)
                     .then((res) => {
-                        console.log(res);
+                        // console.log(res);
                         this.form = res.data;
                         //console.log('请求后台数据结果', this.form);
                         this.dataTraversal(this.form);
