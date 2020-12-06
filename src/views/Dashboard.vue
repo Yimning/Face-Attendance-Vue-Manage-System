@@ -390,19 +390,17 @@ export default {
                 .get(url, params)
                 .then((res) => {
                     this.form = res.data;
-                    //console.log('请求后台数据结果', res.data[0]);
+                    //console.log('请求后台数据结果', res);
                     if (res.data.length != 0) {
                         this.json = res.data[0];
-                         console.log('this.json.course数据结果', this.json);
+                        console.log('this.json.course数据结果', this.json);
                         this.newArray = this.dataTraversal(this.form);
                         this.recentAttendanceList = this.newArray[0];
                         const params1 = {
                             params: {
-                                params: {
-                                    cID: this.json.courseID,
                                     tID: this.json.teacher.teacherNumber,
+                                    cID: this.json.courseID,
                                     cD: null
-                                }
                             }
                         };
                         const params2 = {
