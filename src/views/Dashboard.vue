@@ -46,7 +46,7 @@
                             <div class="grid-content grid-con-2">
                                 <i class="el-icon-lx-people grid-con-icon"></i>
                                 <div class="grid-cont-right">
-                                    <div class="grid-num">1234</div>
+                                    <div class="grid-num">{{recentAttendanceInfo.allFlag}}</div>
                                     <div>出勤人数</div>
                                 </div>
                             </div>
@@ -57,7 +57,7 @@
                             <div class="grid-content grid-con-3">
                                 <i class="el-icon-s-custom grid-con-icon"></i>
                                 <div class="grid-cont-right">
-                                    <div class="grid-num">5000</div>
+                                    <div class="grid-num">{{recentAttendanceInfo.notFlag}}</div>
                                     <div>缺勤人数</div>
                                 </div>
                             </div>
@@ -331,9 +331,7 @@ export default {
         StuAttendenceRecords(url, params) {
             const that = this;
             const url1 = '/api/attendance/countAttendanceNotflag';
-           
             const url2 = '/api/attendance/countAttendanceIsflag';
-         
             //axios的get请求
             this.$axios
                 .get(url, params)
@@ -341,7 +339,7 @@ export default {
                     this.form = res.data;
                     //console.log('请求后台数据结果', res.data[0]);
                     this.json = res.data[0];
-                    console.log('this.json.course数据结果', this.json.course);
+                   // console.log('this.json.course数据结果', this.json.course);
                     this.newArray = this.dataTraversal(this.form);
                     this.recentAttendanceList = this.newArray[0];
                    const params1 = {
@@ -368,15 +366,35 @@ export default {
         },
         TeachAttendenceRecords(url, params) {
             const that = this;
+                        const url1 = '/api/attendance/countAttendanceNotflag';
+            const url2 = '/api/attendance/countAttendanceIsflag';
             //axios的get请求
             this.$axios
                 .get(url, params)
                 .then((res) => {
                     this.form = res.data;
-                    // console.log('请求后台数据结果', res);
-                    console.log('请求后台数据', this.dataTraversal(this.form));
+                    //console.log('请求后台数据结果', res.data[0]);
+                    this.json = res.data[0];
+                   // console.log('this.json.course数据结果', this.json.course);
                     this.newArray = this.dataTraversal(this.form);
                     this.recentAttendanceList = this.newArray[0];
+                   const params1 = {
+                        params: {
+                            cID: this.json.courseID,
+                            sID: this.$store.getters.getUser.userID,
+                            tID: this.json.teacher.teacherNumber,
+                            flag: 0
+                        }
+                    };
+                    const params2 = {
+                        params: {
+                            cID: this.json.courseID,
+                            sID: this.$store.getters.getUser.userID,
+                            tID: this.json.teacher.teacherNumber,
+                            flag: 1
+                        }
+                    };
+                    this.recentAttendanceFlag(url1, params1, url2, params2);
                 })
                 .catch((err) => {
                     console.log(err);
@@ -391,7 +409,9 @@ export default {
                 .all([r0, r1])
                 .then(
                     that.$axios.spread((res1, res2) => {
-                        console.log(res1,res2)
+                        //console.log(res1,res2)
+                       this.recentAttendanceInfo.allFlag = res1.data.length;
+                        this.recentAttendanceInfo.notFlag = res2.data.length;
                     })
                 )
                 .catch((err) => {
