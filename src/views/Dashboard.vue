@@ -78,21 +78,59 @@
                         <el-table-column>
                             <template slot-scope="scope">
                                 <div class="todo-item" :class="{ 'todo-item-del': scope.row.status }">
-                                    课程:{{ scope.row.courseName }}——
-                                    地点:{{ scope.row.classRoomID }}——
-                                    时间:{{ scope.row.weekDay+''+ scope.row.courseTime}}——
-                                    节数:{{scope.row.coursePeriodF+'-'+ scope.row.coursePeriodB}}节
+                                    课程:{{ scope.row.courseName }}—— 地点:{{ scope.row.classRoomID }}—— 时间:{{
+                                        scope.row.weekDay + '' + scope.row.courseTime
+                                    }}—— 节数:{{ scope.row.coursePeriodF + '-' + scope.row.coursePeriodB }}节
                                 </div>
                             </template>
                         </el-table-column>
                         <el-table-column width="60">
                             <template slot-scope="scope">
-                                <el-button class="el-icon-edit" style="float: right; padding: 3px 0" type="text" @click="signIn(scope.$index, scope.row)">详情</el-button>
+                                <el-button
+                                    class="el-icon-edit"
+                                    style="float: right; padding: 3px 0"
+                                    type="text"
+                                    @click="detail(scope.$index, scope.row)"
+                                    >详情</el-button
+                                >
                                 <!-- <i class="el-icon-edit"></i>
                                 <i class="el-icon-delete"></i> -->
                             </template>
                         </el-table-column>
                     </el-table>
+                    <el-dialog title="课程信息" :visible.sync="showUsualCourseDialog" width="30%" center>
+                        <div class="dialog-content">
+                            <div v-if="typeof selectedCourse != 'undefined'">
+                                <div>课程名称： {{ selectedCourse.courseName }}</div>
+                                <div>
+                                    上课时间：
+                                    {{ selectedCourse.courseTime }}
+                                </div>
+                                <div>
+                                    课程信息：
+                                    {{
+                                        '每周' +
+                                        selectedCourse.courseDay +
+                                        ' ' +
+                                        '第' +
+                                        selectedCourse.coursePeriodF +
+                                        '-' +
+                                        selectedCourse.coursePeriodB +
+                                        '节'
+                                    }}
+                                </div>
+
+                                <div>上课地点： {{ selectedCourse.classRoomID }}</div>
+                                <div>上课教师： {{ selectedCourse.teacherName }}</div>
+                                <div>上课周期： {{ selectedCourse.courseWeekF + '-' + selectedCourse.courseWeekB + '周' }}</div>
+                            </div>
+                            <div v-else class="tip">本学期没有课哦！</div>
+                        </div>
+                        <span slot="footer" class="dialog-footer">
+                            <el-button type="primary" @click="showUsualCourseDialog = false">确 定</el-button>
+                            <el-button v-if="isTeacher" type="primary" @click="signIn">进行签到</el-button>
+                        </span>
+                    </el-dialog>
                 </el-card>
             </el-col>
         </el-row>
@@ -151,6 +189,9 @@ export default {
                 5: '星期五',
                 6: '星期六'
             },
+             showUsualCourseDialog: false,
+             isTeacher:false,
+             selectedCourse:[],
             todoList: [
                 {
                     title: '今天要修复100个bug',
@@ -425,12 +466,15 @@ export default {
                     console.log(err);
                 });
         },
-        courseTable(){
-             this.$router.push({ path: '/Courses' }); 
+        courseTable() {
+            this.$router.push({ path: '/Courses' });
         },
-        signIn(e,date){
-            console.log(e,date)
+        detail(e, data) {
+            console.log(e, data);
+            this.selectedCourse=data;
+            this.showUsualCourseDialog=true;
         },
+        signIn(){},
         recentCourse() {
             const that = this;
             var aData = new Date();
