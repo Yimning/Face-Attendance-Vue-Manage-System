@@ -127,6 +127,11 @@ export default {
             newArray: [],
             recentAttendanceList:[],
             recentCourseList:[],
+            json:{
+             course:{},
+             student:{},
+             teacher:{},
+            },
             weeks: {
                 0: '星期日',
                 1: '星期一',
@@ -328,7 +333,7 @@ export default {
                 .get(url, params)
                 .then((res) => {
                     this.form = res.data;
-                   // console.log('请求后台数据结果', res);
+                   console.log('请求后台数据结果', res.data[0]);
                     console.log('请求后台数据', this.dataTraversal(this.form));
                     this.newArray=this.dataTraversal(this.form);
                    this.recentAttendanceList = this.newArray[0];
