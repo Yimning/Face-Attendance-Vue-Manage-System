@@ -650,7 +650,7 @@ export default {
 
         // ws连接成功，后台返回的ws数据，组件要拿数据渲染页面等操作
         wsMessage(data) {
-            const dataJson = data;
+            const dataJson = JSON.stringify({data});
             console.log("dataJson:"+dataJson);
             // 这里写拿到数据后的业务代码
         },
