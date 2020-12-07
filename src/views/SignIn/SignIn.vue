@@ -72,7 +72,8 @@ export default {
             seconds: 0, // 秒
             minutes: 15, // 分
             timer: null,
-            tempTime: ''
+            tempTime: '',
+            wsUrl: '/api/webSocket/serialPorts'
         };
     },
     created() {
@@ -114,7 +115,7 @@ export default {
             this.trackerTask = tracking.track('#video', tracker, { camera: true });
             this.countDown();
             this.openIsCheck = true;
-            this.requstWs();
+            this.requestWs(this.wsUrl, 'allTeacher', this.$store.getters.getUser.userID);
             //-------  指定 canvas 的宽高 ，auto 自动播放
             let constraints = {
                 video: { width: 500, height: 500 },
@@ -160,6 +161,8 @@ export default {
                             that.faceInfo.imgpath = canvasUpload.toDataURL('image/jpeg');
                             // console.log(that.face);
 
+                            const requestUrl = this.wsUrl + '?shipId=';
+
                             // ajax请求
                             that.$axios
                                 .post('/api/attendance/faceAttendance', JSON.stringify(that.faceInfo), {
@@ -170,10 +173,23 @@ export default {
                                 .then((res) => {
                                     console.log(res);
                                     if (res.data.error_code === 0 && res.data.face_liveness > 0.8) {
-                                        if (res.data.result === 0) return that.$message.error('Fail');
-                                        if (res.data.result === 1) return that.$message.error('Success');
-                                        if (res.data.result === 2) return that.$message.error('Exist');
-                                        if (res.data.result === 3) return that.$message.error('NONE');
+                                        if (res.data.result === 0) {
+                                            this.requestWs(this.wsUrl,this.$store.getters.getUser.userID,'0');
+
+                                            // return that.$message.error('Fail');
+                                        }
+                                        if (res.data.result === 1) {
+                                             this.requestWs(this.wsUrl,this.$store.getters.getUser.userID,'1');
+                                            // return that.$message.error('Success');
+                                        }
+                                        if (res.data.result === 2) {
+                                             this.requestWs(this.wsUrl,this.$store.getters.getUser.userID,'2');
+                                            // return that.$message.error('Exist');
+                                        }
+                                        if (res.data.result === 3) {
+                                            this.requestWs(this.wsUrl,this.$store.getters.getUser.userID,'3');
+                                            // return that.$message.error('NONE');
+                                        }
                                     } else {
                                         // 登录失败重新进行人脸检测
                                         // continue;
@@ -307,18 +323,17 @@ export default {
         wsError() {
             // 比如取消页面的loading
         },
-        requstWs() {
-            const url = '/api//webSocket/serialPorts';
+        requestWs(url, shopId, message) {
             const params = {
                 params: {
-                    shipId: "allTeacher",
-                    message: this.$store.getters.getUser.userID
+                    shopId: shopId,
+                    message: message
                 }
             };
             this.$axios
-                .get(url,params)
+                .get(url, params)
                 .then((res) => {
-                    console.log("web"+res);
+                    console.log('web' + res);
                 })
                 .catch((err) => {
                     console.log(err);
