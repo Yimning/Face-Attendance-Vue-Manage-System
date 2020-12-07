@@ -1,3 +1,11 @@
+<!--
+ * @Author: your name
+ * @Date: 2020-11-24 16:41:48
+ * @LastEditTime: 2020-12-07 15:18:36
+ * @LastEditors: your name
+ * @Description: In User Settings Edit
+ * @FilePath: \vue-manage-system\src\views\WebSocket\HelloWorld.vue
+-->
 <template>    
 	<div>       
 		<h1>测试webSocket</h1>      
@@ -34,7 +42,7 @@ export default {
 			console.log("connection closed ");              
 		},              
 		getWebsocket:function() {                
-			let url = "http://localhost:8082/xdx/text?shipId=DPS007"                
+			let url = "http://localhost:8082/webSocket/serialPorts?shipId=DPS007"                
 			// 这里只是一个基于axios的ajax请求，你可以换成你的请求格式                
 			// this.$ajax.get(url)        
 
