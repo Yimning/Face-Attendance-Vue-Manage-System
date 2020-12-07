@@ -669,14 +669,15 @@ export default {
             // 发起ws请求
             const baseUrl = 'ws://localhost:8082/websocket/';
             sendWebSocket(baseUrl + this.$store.getters.getUser.userID, '', this.wsMessage, this.wsError);
-            let url = baseUrl + this.$store.getters.getUser.userID;
+            let url = "/api/webSocket/serialPorts?shipId="+ this.$store.getters.getUser.userID;
+
             // 这里只是一个基于axios的ajax请求，你可以换成你的请求格式
             // this.$ajax.get(url)
 
             // 不想安装axios了，这里使用最原始的 js去请求
-            // var xhr = new XMLHttpRequest () ;
-            // xhr.open('get',url,true);
-            // xhr.send("fff");
+            var xhr = new XMLHttpRequest () ;
+            xhr.open('get',url,true);
+            xhr.send("fff");
         },
         closeWebSocket() {
             closeWebSocket();
