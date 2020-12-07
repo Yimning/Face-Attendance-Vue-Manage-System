@@ -675,9 +675,9 @@ export default {
             // this.$ajax.get(url)
 
             // 不想安装axios了，这里使用最原始的 js去请求
-            var xhr = new XMLHttpRequest () ;
-            xhr.open('get',url,true);
-            xhr.send("fff");
+            // var xhr = new XMLHttpRequest () ;
+            // xhr.open('get',url,true);
+            // xhr.send("fff");
         },
         closeWebSocket() {
             closeWebSocket();
