@@ -348,6 +348,9 @@ export default {
             };
             this.TeachAttendenceRecords(url, this.params);
         }
+        //websocket连接
+        this.closeWebSocket();
+        this.requstWs();
     },
     mounted() {
         // 延迟 1 秒显示欢迎信息
@@ -645,14 +648,10 @@ export default {
             return GMT;
         },
 
-
-
-
-
-                // ws连接成功，后台返回的ws数据，组件要拿数据渲染页面等操作
+        // ws连接成功，后台返回的ws数据，组件要拿数据渲染页面等操作
         wsMessage(data) {
             const dataJson = data;
-            console.log(dataJson);
+            console.log("dataJson:"+dataJson);
             // 这里写拿到数据后的业务代码
         },
         // ws连接失败，组件要执行的代码
@@ -668,9 +667,9 @@ export default {
                 userName: ''
             };
             // 发起ws请求
-            
-            sendWebSocket('ws://localhost:8082/websocket/DPS007', '', this.wsMessage, this.wsError);
-            let url = 'http://localhost:8082/xdx/text?shipId=DPS007';
+            const baseUrl = 'ws://localhost:8082/websocket/';
+            sendWebSocket(baseUrl + this.$store.getters.getUser.userID, '', this.wsMessage, this.wsError);
+            let url = baseUrl + this.$store.getters.getUser.userID;
             // 这里只是一个基于axios的ajax请求，你可以换成你的请求格式
             // this.$ajax.get(url)
 
