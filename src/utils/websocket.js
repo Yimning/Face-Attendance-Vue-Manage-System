@@ -45,8 +45,8 @@ function websocketOpen(e) {
 
 // 接收ws后端返回的数据
 function websocketOnmessage(e) {
-  messageCallback(JSON.parse(e.data))
- // messageCallback(e.data)
+ // messageCallback(JSON.parse(e.data))
+  messageCallback(e.data)
 
 }
 
