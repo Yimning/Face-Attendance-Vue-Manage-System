@@ -48,7 +48,7 @@ require('tracking/build/tracking-min.js');
 require('tracking/build/data/face-min.js');
 require('tracking/build/data/mouth-min.js');
 require('tracking/examples/assets/stats.min.js');
-
+import { sendWebSocket, closeWebSocket } from '@/utils/websocket.js';
 export default {
     name: 'componentName',
     inject: ['reload'],
@@ -82,7 +82,7 @@ export default {
         //sessionStorage.setItem('courseID', this.dataParams.courseID);
         this.faceInfo.courseID = sessionStorage.getItem('courseID');
         console.log(this.faceInfo);
-        this.tempTime=15;
+        this.tempTime = 15;
     },
     mounted() {
         // this.add();
@@ -114,7 +114,7 @@ export default {
             this.trackerTask = tracking.track('#video', tracker, { camera: true });
             this.countDown();
             this.openIsCheck = true;
-
+            this.requstWs();
             //-------  指定 canvas 的宽高 ，auto 自动播放
             let constraints = {
                 video: { width: 500, height: 500 },
@@ -215,6 +215,7 @@ export default {
             that.seconds = 0;
             that.minutes = 0;
             clearInterval(that.timer);
+            this.closeWebSocket();
             this.selectedFunc(this.tempTime);
         },
         selectedFunc(e) {
@@ -295,6 +296,36 @@ export default {
                 .catch((err) => {
                     console.log(err);
                 });
+        },
+        // ws连接成功，后台返回的ws数据，组件要拿数据渲染页面等操作
+        wsMessage(data) {
+            const dataJson = data;
+            console.log(dataJson);
+            // 这里写拿到数据后的业务代码
+        },
+        // ws连接失败，组件要执行的代码
+        wsError() {
+            // 比如取消页面的loading
+        },
+        requstWs() {
+            const url = '/api//webSocket/serialPorts';
+            const params = {
+                params: {
+                    shipId: "allTeacher",
+                    message: this.$store.getters.getUser.userID
+                }
+            };
+            this.$axios
+                .get(url,params)
+                .then((res) => {
+                    console.log("web"+res);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        },
+        closeWebSocket() {
+            closeWebSocket();
         }
     },
     watch: {
@@ -322,6 +353,7 @@ export default {
         if (this.timer) {
             clearInterval(this.timer);
         }
+        closeWebSocket();
     }
 };
 </script>
