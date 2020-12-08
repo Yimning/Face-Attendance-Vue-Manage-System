@@ -27,29 +27,29 @@
             </el-select>
             <el-button class="time">00:{{ minute }}:{{ second }}</el-button>
             <el-form ref="form" :model="form" label-width="80px">
-                <el-card class="box-card" v-if="roseID == '0'">
+                <el-card class="box-card">
                     <div slot="header" class="clearfix">
-                        <span>{{ form.studentName }}</span>
+                        <span>{{ form }}</span>
                         <el-button style="float: right; padding: 3px 0" type="text" @click="refresh">刷新</el-button>
                     </div>
                     <div class="items">
                         <div class="item text">
-                            {{ '性别: ' + form.studentSex }}
+                            {{ '性别: ' + form }}
                         </div>
                         <div class="item text">
-                            {{ '出生年月:' + form.studentBirth }}
+                            {{ '出生年月:' + form }}
                         </div>
                         <div class="item text">
-                            {{ '班级: ' + form.studentClass }}
+                            {{ '班级: ' + form }}
                         </div>
                         <div class="item text">
-                            {{ '专业: ' + form.profession }}
+                            {{ '专业: ' + form }}
                         </div>
                         <div class="item text">
-                            {{ '身份号码:' + form.cardNo }}
+                            {{ '身份号码:' + form }}
                         </div>
                         <div class="item text">
-                            {{ '角色:' + form.roseName }}
+                            {{ '角色:' + form}}
                         </div>
                     </div>
                 </el-card>
@@ -110,8 +110,9 @@ export default {
         // this.faceInfo.courseID = this.dataParams.courseID;
         // console.log(this.faceInfo);
         //sessionStorage.setItem('courseID', this.dataParams.courseID);
-        this.faceInfo.courseID = sessionStorage.getItem('courseID');
-        console.log(this.faceInfo);
+        this.faceInfo = sessionStorage.getItem('dataParams');
+        this.form=this.faceInfo;
+        console.log(sessionStorage.getItem('dataParams'));
         this.tempTime = 15;
     },
     mounted() {
@@ -428,5 +429,28 @@ export default {
     color: #f72a3a;
     font-weight: bold;
     font-size: 24px;
+}
+
+
+.clearfix:before,
+.clearfix:after {
+    display: table;
+    content: '';
+}
+.clearfix:after {
+    clear: both;
+}
+
+.card-content {
+    padding: 0 100px 0 0 ;
+    position: relative;
+    margin-top: -248px;
+    margin-left: 700px;
+    margin-bottom: 100px;
+}
+
+.box-card {
+    width: 480px;
+    margin-left: 200px;
 }
 </style>
