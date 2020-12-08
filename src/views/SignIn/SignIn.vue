@@ -161,8 +161,6 @@ export default {
                             that.faceInfo.imgpath = canvasUpload.toDataURL('image/jpeg');
                             // console.log(that.face);
 
-                            const requestUrl = this.wsUrl + '?shipId=';
-
                             // ajax请求
                             that.$axios
                                 .post('/api/attendance/faceAttendance', JSON.stringify(that.faceInfo), {
@@ -172,19 +170,18 @@ export default {
                                 })
                                 .then((res) => {
                                     console.log(res);
-                                    if (res.data.error_code === 0 && res.data.face_liveness > 0.8) {
+                                    if (res.data.error_code === 0) {
                                         if (res.data.result === 0) {
                                             that.requestWs(that.wsUrl,that.$store.getters.getUser.userID,'0');
-
                                             // return that.$message.error('Fail');
                                         }
                                         if (res.data.result === 1) {
-                                             tthathis.requestWs(that.wsUrl,that.$store.getters.getUser.userID,'1');
+                                             that.requestWs(that.wsUrl,that.$store.getters.getUser.userID,'1');
                                             // return that.$message.error('Success');
                                         }
                                         if (res.data.result === 2) {
                                              that.requestWs(that.wsUrl,that.$store.getters.getUser.userID,'2');
-                                            // return that.$message.error('Exist');
+                                             return that.$message.error('Exist');
                                         }
                                         if (res.data.result === 3) {
                                             that.requestWs(that.wsUrl,that.$store.getters.getUser.userID,'3');
@@ -231,7 +228,7 @@ export default {
             that.seconds = 0;
             that.minutes = 0;
             clearInterval(that.timer);
-            this.closeWebSocket();
+            closeWebSocket();
             this.selectedFunc(this.tempTime);
         },
         selectedFunc(e) {
@@ -324,6 +321,8 @@ export default {
             // 比如取消页面的loading
         },
         requestWs(url, shopId, message) {
+            // 防止用户多次连续点击发起请求，所以要先关闭上次的ws请求。
+            //closeWebSocket();
             const params = {
                 params: {
                     shopId: shopId,
