@@ -52,13 +52,13 @@ export default {
                 name: '',
                 currentPage: 1,
                 pageSize: 5,
-                pageTotal: 0, 
+                pageTotal: 0,
                 request: ''
             },
             form: {
                 options: []
             },
-            //给子组件的值   
+            //给子组件的值
             dataParams: {},
             tableData: [],
             list: [{}],
@@ -157,9 +157,9 @@ export default {
                 obj[i] = row[i];
             }
             this.dataParams = obj;
-            sessionStorage.setItem('courseID', this.dataParams.courseID);
+            sessionStorage.setItem('dataParams', JSON.stringify(this.dataParams));
+            this.showUsualCourseDialog = false;
             this.$router.push({ path: '/SignIn', query: { data: this.dataParams } }); //路由跳转传参
-            
         }
     }
 };
