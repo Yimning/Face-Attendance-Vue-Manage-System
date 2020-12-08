@@ -29,9 +29,8 @@
             <el-button class="time">00:{{ minute }}:{{ second }}</el-button>
             <!--提示-->
             <div align="center">
-                <p id="flag" class="tishi"></p>
+                <p id="flag" ref="flag" class="tishi">{{ this.tips }}</p>
             </div>
-
             <div align="center">
                 <!--开启摄像头-->
                 <video id="video" ref="video" width="480px" height="400px" autoplay="autoplay"></video>
@@ -56,6 +55,7 @@ export default {
         return {
             videoEle: null,
             trackerTask: null,
+            tips: '',
             first: null,
             faceInfo: {
                 imgpath: '',
@@ -93,6 +93,7 @@ export default {
         created() {
             setTimeout(() => {
                 this.openCamera(); // 此为绘画canvas的方法调用
+                 this.tips = '初始化摄像头';
             }, 2);
         },
         mounted() {},
@@ -230,6 +231,7 @@ export default {
             clearInterval(that.timer);
             closeWebSocket();
             this.selectedFunc(this.tempTime);
+            this.tips = '';
         },
         selectedFunc(e) {
             //console.log(e);
