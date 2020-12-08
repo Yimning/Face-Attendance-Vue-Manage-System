@@ -509,6 +509,8 @@ export default {
             var aData = new Date();
             //console.log( this.dataDateNumber(aData));//显示当前星期几
             if (this.selectedCourse.courseID == this.dataDateNumber(aData)) {
+                sessionStorage.setItem('courseID', this.dataParams.courseID);
+                this.showUsualCourseDialog = false;
                 this.$router.push({ path: '/SignIn', query: { data: this.dataParams } }); //路由跳转传参
             } else {
                 this.$confirm('当前课程时间不一致, 是否进行签到?', '提示', {
@@ -518,8 +520,8 @@ export default {
                 })
                     .then(() => {
                         sessionStorage.setItem('courseID', this.dataParams.courseID);
-                        this.$router.push({ path: '/SignIn', query: { data: this.dataParams } }); //路由跳转传参
                         this.showUsualCourseDialog = false;
+                        this.$router.push({ path: '/SignIn', query: { data: this.dataParams } }); //路由跳转传参
                     })
                     .catch(() => {
                         this.$message({
@@ -650,8 +652,8 @@ export default {
 
         // ws连接成功，后台返回的ws数据，组件要拿数据渲染页面等操作
         wsMessage(data) {
-            const dataJson = JSON.stringify({data});
-            console.log("dataJson:"+dataJson);
+            const dataJson = JSON.stringify({ data });
+            console.log('dataJson:' + dataJson);
             // 这里写拿到数据后的业务代码
         },
         // ws连接失败，组件要执行的代码
@@ -660,7 +662,7 @@ export default {
         },
         requstWs() {
             // 防止用户多次连续点击发起请求，所以要先关闭上次的ws请求。
-            //closeWebSocket();
+            closeWebSocket();
             // 跟后端协商，需要什么参数数据给后台
             const obj = {
                 monitorUrl: '',
@@ -669,7 +671,7 @@ export default {
             // 发起ws请求
             const baseUrl = 'ws://localhost:8082/websocket/';
             sendWebSocket(baseUrl + this.$store.getters.getUser.userID, '', this.wsMessage, this.wsError);
-            let url = "/api/webSocket/serialPorts?shopId="+ this.$store.getters.getUser.userID;
+            let url = '/api/webSocket/serialPorts?shopId=' + this.$store.getters.getUser.userID;
 
             // 这里只是一个基于axios的ajax请求，你可以换成你的请求格式
             // this.$ajax.get(url)
