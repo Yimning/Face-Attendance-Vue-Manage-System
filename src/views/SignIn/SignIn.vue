@@ -181,7 +181,7 @@ export default {
                                         }
                                         if (res.data.result === 2) {
                                              that.requestWs(that.wsUrl,that.$store.getters.getUser.userID,'2');
-                                             return that.$message.error('Exist');
+                                            // return that.$message.error('Exist');
                                         }
                                         if (res.data.result === 3) {
                                             that.requestWs(that.wsUrl,that.$store.getters.getUser.userID,'3');
