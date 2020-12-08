@@ -25,8 +25,36 @@
                 <el-option key="1分钟" label="倒计时1分钟" value="1"></el-option>
                 <el-option key="10秒" label="倒计时10秒" value="10"></el-option>
             </el-select>
-
             <el-button class="time">00:{{ minute }}:{{ second }}</el-button>
+            <el-form ref="form" :model="form" label-width="80px">
+                <el-card class="box-card" v-if="roseID == '0'">
+                    <div slot="header" class="clearfix">
+                        <span>{{ form.studentName }}</span>
+                        <el-button style="float: right; padding: 3px 0" type="text" @click="refresh">刷新</el-button>
+                    </div>
+                    <div class="items">
+                        <div class="item text">
+                            {{ '性别: ' + form.studentSex }}
+                        </div>
+                        <div class="item text">
+                            {{ '出生年月:' + form.studentBirth }}
+                        </div>
+                        <div class="item text">
+                            {{ '班级: ' + form.studentClass }}
+                        </div>
+                        <div class="item text">
+                            {{ '专业: ' + form.profession }}
+                        </div>
+                        <div class="item text">
+                            {{ '身份号码:' + form.cardNo }}
+                        </div>
+                        <div class="item text">
+                            {{ '角色:' + form.roseName }}
+                        </div>
+                    </div>
+                </el-card>
+            </el-form>
+
             <!--提示-->
             <div align="center">
                 <p id="flag" ref="flag" class="tishi">{{ this.tips }}</p>
@@ -62,6 +90,7 @@ export default {
                 courseID: '',
                 UserID: ''
             },
+            form:'',
             selected: '15',
             openIsCheck: false,
             dataParams: {},
@@ -93,7 +122,7 @@ export default {
         created() {
             setTimeout(() => {
                 this.openCamera(); // 此为绘画canvas的方法调用
-                 this.tips = '初始化摄像头';
+                this.tips = '初始化摄像头';
             }, 2);
         },
         mounted() {},
@@ -173,19 +202,19 @@ export default {
                                     console.log(res);
                                     if (res.data.error_code === 0) {
                                         if (res.data.result === 0) {
-                                            that.requestWs(that.wsUrl,that.$store.getters.getUser.userID,'0');
+                                            that.requestWs(that.wsUrl, that.$store.getters.getUser.userID, '0');
                                             // return that.$message.error('Fail');
                                         }
                                         if (res.data.result === 1) {
-                                             that.requestWs(that.wsUrl,that.$store.getters.getUser.userID,'1');
+                                            that.requestWs(that.wsUrl, that.$store.getters.getUser.userID, '1');
                                             // return that.$message.error('Success');
                                         }
                                         if (res.data.result === 2) {
-                                             that.requestWs(that.wsUrl,that.$store.getters.getUser.userID,'2');
+                                            that.requestWs(that.wsUrl, that.$store.getters.getUser.userID, '2');
                                             // return that.$message.error('Exist');
                                         }
                                         if (res.data.result === 3) {
-                                            that.requestWs(that.wsUrl,that.$store.getters.getUser.userID,'3');
+                                            that.requestWs(that.wsUrl, that.$store.getters.getUser.userID, '3');
                                             // return that.$message.error('NONE');
                                         }
                                     } else {
