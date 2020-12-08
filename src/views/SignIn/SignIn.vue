@@ -26,30 +26,30 @@
                 <el-option key="10秒" label="倒计时10秒" value="10"></el-option>
             </el-select>
             <el-button class="time">00:{{ minute }}:{{ second }}</el-button>
-            <el-form ref="form" :model="form" label-width="80px">
+            <el-form ref="dataParams" :model="dataParams" label-width="80px">
                 <el-card class="box-card">
                     <div slot="header" class="clearfix">
-                        <span>{{ form }}</span>
+                        <span>{{ dataParams.courseName }}</span>
                         <el-button style="float: right; padding: 3px 0" type="text" @click="refresh">刷新</el-button>
                     </div>
                     <div class="items">
                         <div class="item text">
-                            {{ '性别: ' + form }}
+                            {{ '课程号: ' + dataParams.courseID }}
                         </div>
                         <div class="item text">
-                            {{ '出生年月:' + form }}
+                            {{ '时间: 每周'+ dataParams.weekDay+' ' + dataParams.courseTime }}
                         </div>
                         <div class="item text">
-                            {{ '班级: ' + form }}
+                            {{ '地点:' + dataParams.classRoomID }}
                         </div>
                         <div class="item text">
-                            {{ '专业: ' + form }}
+                            {{ '节数: ' + dataParams.coursePeriodF + '-' + dataParams.coursePeriodB+'节'}}
                         </div>
                         <div class="item text">
-                            {{ '身份号码:' + form }}
+                            {{ '授课教师:' + dataParams.teacherName }}
                         </div>
                         <div class="item text">
-                            {{ '角色:' + form}}
+                            {{ '授课教师号:' + dataParams.teacherNumber}}
                         </div>
                     </div>
                 </el-card>
@@ -90,7 +90,7 @@ export default {
                 courseID: '',
                 UserID: ''
             },
-            form:'',
+            form: '',
             selected: '15',
             openIsCheck: false,
             dataParams: {},
@@ -107,12 +107,11 @@ export default {
     },
     created() {
         this.dataParams = this.$route.query.data;
-        // this.faceInfo.courseID = this.dataParams.courseID;
-        // console.log(this.faceInfo);
         //sessionStorage.setItem('courseID', this.dataParams.courseID);
-        this.faceInfo = sessionStorage.getItem('dataParams');
-        this.form=this.faceInfo;
-        console.log(sessionStorage.getItem('dataParams'));
+        this.dataParams = JSON.parse(sessionStorage.getItem('dataParams'));
+        console.log(this.dataParams);
+        this.faceInfo = this.dataParams;
+
         this.tempTime = 15;
     },
     mounted() {
@@ -431,7 +430,6 @@ export default {
     font-size: 24px;
 }
 
-
 .clearfix:before,
 .clearfix:after {
     display: table;
@@ -442,7 +440,7 @@ export default {
 }
 
 .card-content {
-    padding: 0 100px 0 0 ;
+    padding: 0 100px 0 0;
     position: relative;
     margin-top: -248px;
     margin-left: 700px;
