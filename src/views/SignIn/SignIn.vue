@@ -30,33 +30,33 @@
                 <el-card class="box-card">
                     <div slot="header" class="clearfix">
                         <span>{{ dataParams.courseName }}</span>
-                        <el-button style="float: right; padding: 3px 0" type="text" @click="refresh">刷新</el-button>
+                        <el-button style="float: right; padding: 3px 0" type="text" @click="refresh" v-bind:disabled="openIsCheck">刷新</el-button>
                     </div>
                     <div class="items">
                         <div class="item text">
                             {{ '课程号: ' + dataParams.courseID }}
                         </div>
                         <div class="item text">
-                            {{ '时间: 每周'+ dataParams.weekDay+' ' + dataParams.courseTime }}
+                            {{ '时间: 每周' + dataParams.weekDay + ' ' + dataParams.courseTime }}
                         </div>
                         <div class="item text">
                             {{ '地点:' + dataParams.classRoomID }}
                         </div>
                         <div class="item text">
-                            {{ '节数: ' + dataParams.coursePeriodF + '-' + dataParams.coursePeriodB+'节'}}
+                            {{ '节数: ' + dataParams.coursePeriodF + '-' + dataParams.coursePeriodB + '节' }}
                         </div>
                         <div class="item text">
                             {{ '授课教师:' + dataParams.teacherName }}
                         </div>
                         <div class="item text">
-                            {{ '授课教师号:' + dataParams.teacherNumber}}
+                            {{ '授课教师号:' + dataParams.teacherNumber }}
                         </div>
                     </div>
                 </el-card>
             </el-form>
 
             <!--提示-->
-            <div align="center">
+            <div align="center" class="center">
                 <p id="flag" ref="flag" class="tishi">{{ this.tips }}</p>
             </div>
             <div align="center">
@@ -262,6 +262,9 @@ export default {
             this.selectedFunc(this.tempTime);
             this.tips = '';
         },
+        refresh() {
+            this.reload(); //刷新 ----推荐
+        },
         selectedFunc(e) {
             //console.log(e);
             this.minutes = e;
@@ -448,7 +451,12 @@ export default {
 }
 
 .box-card {
-    width: 480px;
-    margin-left: 200px;
+    width: 300px;
+    margin-top: 5px;
+    margin-left: 0px;
+}
+.center {
+    margin-top: -248px;
+    margin-left: 0px;
 }
 </style>
