@@ -242,6 +242,8 @@ export default {
             var aData = new Date();
             //console.log( this.dataDateNumber(aData));//显示当前星期几
             if (this.selectedCourse.courseID == this.dataDateNumber(aData)) {
+                sessionStorage.setItem('dataParams', JSON.stringify(this.dataParams));
+                this.showUsualCourseDialog = false;
                 this.$router.push({ path: '/SignIn', query: { data: this.dataParams } }); //路由跳转传参
             } else {
                 this.$confirm('当前课程时间不一致, 是否进行签到?', '提示', {
@@ -250,9 +252,9 @@ export default {
                     type: 'warning'
                 })
                     .then(() => {
-                        sessionStorage.setItem('courseID', this.dataParams.courseID);
-                        this.$router.push({ path: '/SignIn', query: { data: this.dataParams } }); //路由跳转传参
+                        sessionStorage.setItem('dataParams', JSON.stringify(this.dataParams));
                         this.showUsualCourseDialog = false;
+                        this.$router.push({ path: '/SignIn', query: { data: this.dataParams } }); //路由跳转传参
                     })
                     .catch(() => {
                         this.showUsualCourseDialog = false;
