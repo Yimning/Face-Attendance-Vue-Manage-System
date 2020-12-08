@@ -42,7 +42,7 @@ export default {
             };
             // 发起ws请求
             sendWebSocket('ws://localhost:8082/websocket/DPS007', '', this.wsMessage, this.wsError);
-            let url = 'http://localhost:8082/xdx/text?shipId=DPS007';
+            let url = 'http://localhost:8082/xdx/text?shopId=DPS007';
             // 这里只是一个基于axios的ajax请求，你可以换成你的请求格式
             // this.$ajax.get(url)
 
