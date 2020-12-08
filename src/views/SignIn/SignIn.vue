@@ -174,20 +174,20 @@ export default {
                                     console.log(res);
                                     if (res.data.error_code === 0 && res.data.face_liveness > 0.8) {
                                         if (res.data.result === 0) {
-                                            this.requestWs(this.wsUrl,this.$store.getters.getUser.userID,'0');
+                                            that.requestWs(that.wsUrl,that.$store.getters.getUser.userID,'0');
 
                                             // return that.$message.error('Fail');
                                         }
                                         if (res.data.result === 1) {
-                                             this.requestWs(this.wsUrl,this.$store.getters.getUser.userID,'1');
+                                             tthathis.requestWs(that.wsUrl,that.$store.getters.getUser.userID,'1');
                                             // return that.$message.error('Success');
                                         }
                                         if (res.data.result === 2) {
-                                             this.requestWs(this.wsUrl,this.$store.getters.getUser.userID,'2');
+                                             that.requestWs(that.wsUrl,that.$store.getters.getUser.userID,'2');
                                             // return that.$message.error('Exist');
                                         }
                                         if (res.data.result === 3) {
-                                            this.requestWs(this.wsUrl,this.$store.getters.getUser.userID,'3');
+                                            that.requestWs(that.wsUrl,that.$store.getters.getUser.userID,'3');
                                             // return that.$message.error('NONE');
                                         }
                                     } else {
