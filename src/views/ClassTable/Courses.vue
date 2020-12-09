@@ -168,7 +168,7 @@ export default {
     },
     computed: {
         courseWidth() {
-            return Math.max((this.width - 35) / this.weekTable.length, 150);
+            return Math.max((this.width - 35) / this.weekTable.length, 130);
         },
         courseHeight() {
             return Math.max((this.height - 35) / this.timeTable.length, 35);
@@ -320,12 +320,12 @@ export default {
  
 <style scoped>
 .content-title {
-    font-size: 30px;
+    font-size: 20px;
     /* justify-content: center; */
     display: flex;
     align-items: center;
     text-align: center;
-    padding: 0px 0px 20px 40px;
+    padding: 0px 0px 0px 40px;
 }
 .course-table-content {
     padding: 0px 0px 0px 40px;

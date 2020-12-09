@@ -267,7 +267,7 @@ export default {
         const url = '/api/attendance/findAttendanceInfo';
         //学生
         if (this.$store.getters.getUser.roseID == '0') {
-            this.selected='1';
+            this.selected = '1';
             this.params = {
                 params: {
                     courseID: null,
@@ -794,9 +794,6 @@ export default {
 
         handleAllUpload() {},
         handleDetails() {},
-        handleCheck() {
-            this.$router.push('/attendenceQuery');
-        },
         handleFresh() {
             return this.reload(); //刷新 ----推荐
         },
@@ -828,8 +825,19 @@ export default {
                 type: 'success'
             });
         },
+        handleCheck() {
+            if (this.$store.getters.getUser.roseID == '0') {
+                this.$router.push('/stuAttendenceRecords');
+            } else {
+                this.$router.push('/attendenceQuery');
+            }
+        },
         handleHistory() {
-            this.$router.push('/attendenceRecords');
+            if (this.$store.getters.getUser.roseID == '0') {
+                this.$router.push('/stuAttendenceRecords');
+            } else {
+                this.$router.push('/attendenceRecords');
+            }
         }
     }
 };
