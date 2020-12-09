@@ -96,10 +96,6 @@ export default {
                     title: '课程表',
                     title: '课程管理',
                     subs: [
-                        // {
-                        //     index: 'addcourse',
-                        //     title: '添加课程'
-                        // },
                         {
                             index: 'courses',
                             title: '课程表'
@@ -120,9 +116,13 @@ export default {
                             title: '考勤记录'
                         },
                         {
-                            index: 'webSocket',
-                            title: 'webSocket'
-                        }
+                            index: 'recentAttendence',
+                            title: '课程签到情况'
+                        },
+                        // {
+                        //     index: 'webSocket',
+                        //     title: 'webSocket'
+                        // }
                     ]
                 },
 
@@ -227,10 +227,6 @@ export default {
                         {
                             index: 'recentAttendence',
                             title: '课程签到情况'
-                        },
-                        {
-                            index: 'attendenceInfo',
-                            title: '课程出勤率'
                         },
                         {
                             index: 'attendenceRecords',
