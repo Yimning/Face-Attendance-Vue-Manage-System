@@ -229,6 +229,10 @@ export default {
                             title: '课程签到情况'
                         },
                         {
+                            index: 'attendenceInfo',
+                            title: '课程出勤率'
+                        },
+                        {
                             index: 'attendenceRecords',
                             title: '考勤记录'
                         }

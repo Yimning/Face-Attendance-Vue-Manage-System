@@ -9,17 +9,21 @@
             <div class="handle-box" ref="QueryConditions" :rules="rules">
                 <el-button type="danger" icon="el-icon-delete" class="handle-del mr10" @click="delAllSelection">批量删除</el-button>
 
-                <el-select v-model="QueryConditions" placeholder="课程号-课程名" class="mr10" v-on:input="courseFunc">
+                <el-select v-model="QueryConditions.courseID" placeholder="课程号-课程名" class="mr10" v-on:input="courseFunc">
                     <el-option
                         el-option
-                        :key="QueryConditions.courseID"
-                        :label="QueryConditions.courseID + QueryConditions.courseName"
-                        :value="QueryConditions.courseID"
+                        v-for="item in QueryConditions.course"
+                        :key="item.courseID"
+                        :label="item.courseID + item.courseName"
+                        :value="item.courseID"
                     ></el-option>
                 </el-select>
 
                 <el-select v-model="selected" placeholder="查询条件" v-on:input="selectedFunc" class="handle-select mr10">
-                    <el-option key="查教师号" label="教师号" value="0"></el-option>
+                    <el-option key="查教师号" label="教师号" v-if="teacherAdmin" value="0"></el-option>
+                    <el-option key="查教师姓名" label="教师姓名" v-if="teacherAdmin" value="1"></el-option>
+                    <el-option key="查查学生学号" label="查学生学号" value="2"></el-option>
+                    <el-option key="查学生姓名" label="学生姓名" value="3"></el-option>
                 </el-select>
 
                 <el-input
@@ -31,17 +35,61 @@
                     id="messageInput"
                     v-on:input="inputFunc"
                     clearable
-                    disabled
                 ></el-input>
-                <div>
-                    <el-button class="handle-line" type="primary" plain icon="el-icon-refresh" @click="handleFresh">条件重置</el-button>
-                    <el-button type="success" icon="el-icon-circle-check" @click="handleFlag">已签</el-button>
-                    <el-button type="warning" icon="el-icon-circle-close" @click="handleNotFlag">未签</el-button>
-                    <el-button type="primary" icon="el-icon-notebook-1" @click="handleNow">当天记录</el-button>
-                    <el-button type="info" icon="el-icon-data-analysis" @click="handleHistory">历史记录</el-button>
-                    <el-button type="success" plain icon="el-icon-s-flag" @click="handleCheck">出勤率查询</el-button>
+                <!-- @keyup.enter 但是若在组件框架中写需要加.native -->
+                <el-input
+                    v-model="query.request"
+                    v-else-if="selected === '1'"
+                    placeholder="输入教师姓名"
+                    class="handle-input mr10"
+                    @keyup.enter.native="handleSearch"
+                    id="messageInput"
+                    v-on:input="inputFunc"
+                    clearable
+                ></el-input>
+                <el-input
+                    v-model="query.request"
+                    v-else-if="selected === '2'"
+                    placeholder="学生学号"
+                    class="handle-input mr10"
+                    @keyup.enter.native="handleSearch"
+                    id="messageInput"
+                    v-on:input="inputFunc"
+                    clearable
+                ></el-input>
+                <!-- @keyup.enter 但是若在组件框架中写需要加.native -->
+                <el-input
+                    v-model="query.request"
+                    v-else
+                    placeholder="输入学生姓名"
+                    class="handle-input mr10"
+                    @keyup.enter.native="handleSearch"
+                    id="messageInput"
+                    v-on:input="inputFunc"
+                    clearable
+                ></el-input>
+                <div class="handle-weekday">
+                    <el-tooltip class="item" effect="dark" content="系统会以课程时间的前后十五分钟来查询，请注意选择" placement="top">
+                        <el-col :span="8">
+                            <el-date-picker
+                                type="datetime"
+                                placeholder="选择日期时间"
+                                v-model="QueryConditions.recordTime"
+                                value-format="yyyy-MM-dd HH:mm:ss"
+                                v-on:input="inputFuncDay"
+                                clearable
+                            ></el-date-picker>
+                        </el-col>
+                    </el-tooltip>
+                    <el-input v-model="QueryConditions.IsDay" placeholder="" class="handle-input mr10" disabled></el-input>
+                    <el-button class="" type="primary" icon="el-icon-search" @click="handleSearchByInfo">搜索</el-button>
                 </div>
-
+                <el-button class="handle-line" type="primary" plain icon="el-icon-refresh" @click="handleFresh">条件重置</el-button>
+                <el-button type="success" icon="el-icon-circle-check" @click="handleFlag">已签</el-button>
+                <el-button type="warning" icon="el-icon-circle-close" @click="handleNotFlag">未签</el-button>
+                <el-button type="primary" icon="el-icon-notebook-1" @click="handleNow">当天记录</el-button>
+                <el-button type="info" icon="el-icon-data-analysis" @click="handleHistory">历史记录</el-button>
+                <el-button type="success" plain icon="el-icon-s-flag" @click="handleCheck">出勤率查询</el-button>
                 <div>
                     <download-excel
                         class="handleUpload"
@@ -67,12 +115,18 @@
             >
                 <el-table-column type="selection" width="40" align="center"></el-table-column>
                 <el-table-column prop="recordID" label="记录号" width="55" align="center"></el-table-column>
+                <el-table-column prop="studentNumber" label="学号" align="center"></el-table-column>
+                <el-table-column prop="studentName" label="姓名" align="center"></el-table-column>
+                <el-table-column prop="studentSex" label="性别" width="55" align="center"> </el-table-column>
+                <el-table-column prop="studentClass" label="班号" width="55" align="center"></el-table-column>
+                <el-table-column prop="profession" label="专业" align="center"></el-table-column>
                 <el-table-column prop="courseID" label="课程号" width="55" align="center"></el-table-column>
                 <el-table-column prop="courseName" label="课程名" align="center"></el-table-column>
                 <!-- <el-table-column prop="teacherNumber" label="教师号" align="center"></el-table-column> -->
                 <el-table-column prop="teacherName" label="授课教师" align="center"></el-table-column>
                 <el-table-column prop="recordTime" label="签到时间" align="center"></el-table-column>
                 <el-table-column prop="weekDay" label="星期" align="center"></el-table-column>
+                <el-table-column prop="flag" label="是否已签" align="center"></el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
                         <el-button type="text" icon="el-icon-more" class="blue" @click="handleMore(scope.$index, scope.row)"
@@ -200,7 +254,7 @@ export default {
             },
             requestAddr: '',
             url: '',
-            selected: '0', //注意数据格式的转换，否则会导致不正常
+            selected: '', //注意数据格式的转换，否则会导致不正常
             tableData: [],
             paramsData: [],
             count: {
@@ -837,7 +891,7 @@ export default {
                         time: this.QueryConditions.recordTime
                     }
                 };
-            } else {
+            } else {   
                 this.params = {
                     params: {
                         courseID: this.QueryConditions.courseID,
@@ -932,7 +986,9 @@ export default {
 .handle-line {
     position: relative;
     margin-left: 2px;
-    margin-top: 4px;
+    margin-bottom: 0px;
+    margin-right: 0px;
+    margin-top: 8px;
 }
 .handle-weekday {
     position: relative;
