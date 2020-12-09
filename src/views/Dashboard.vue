@@ -19,18 +19,27 @@
                         <span>{{ this.$store.getters.getUser.loginPlace }}</span>
                     </div>
                 </el-card>
-                <el-card shadow="hover" style="height: 252px">
+                <el-card shadow="hover" style="height: 252px" v-if="isAdmin">
+                    <div slot="header" class="clearfix">
+                        <span>人员比例</span>
+                    </div>
+                    {{ '管理员' }}<el-progress :percentage="parseInt(userList.adminPercent)" color="#42b983"></el-progress> {{ '教师'
+                    }}<el-progress :percentage="parseInt(userList.teacherPercent)" color="#f1e05a"></el-progress> {{ '学生'
+                    }}<el-progress :percentage="parseInt(userList.studentPercent)"></el-progress>
+                    <!-- HTML<el-progress :percentage="5.9" color="#f56c6c"></el-progress> -->
+                </el-card>
+                <el-card shadow="hover" style="height: 252px" v-else>
                     <div slot="header" class="clearfix">
                         <span>近期课程出勤率</span>
                     </div>
                     {{ recentAttendanceList.courseName
-                    }}<el-progress :percentage="recentAttendanceInfo.percent" color="#42b983"></el-progress>
+                    }}<el-progress :percentage="parseInt(recentAttendanceInfo.percent)" color="#42b983"></el-progress>
                     <!-- JavaScript<el-progress :percentage="24.1" color="#f1e05a"></el-progress>
                     CSS <el-progress :percentage="13.7"></el-progress>
                     HTML<el-progress :percentage="5.9" color="#f56c6c"></el-progress> -->
                 </el-card>
             </el-col>
-            <el-col :span="16">
+            <el-col :span="16" v-if="tsRose">
                 <el-row :gutter="20" class="mgb20" ref="dateList" :model="recentAttendanceList" v-if="tsRose">
                     <el-col :span="8">
                         <el-card shadow="hover" :body-style="{ padding: '0px' }">
@@ -137,16 +146,96 @@
                     </el-dialog>
                 </el-card>
             </el-col>
+            <el-col :span="16" v-if="isAdmin">
+                <el-row :gutter="20" class="mgb20" ref="userList" :model="userList">
+                    <el-col :span="8">
+                        <el-card shadow="hover" :body-style="{ padding: '0px' }">
+                            <div class="grid-content grid-con-1">
+                                <i class="el-icon-lx-notice grid-con-icon"></i>
+                                <div class="grid-cont-right">
+                                    <div class="grid-num">{{ userList.adminCount }}</div>
+                                    <div>管理员人数</div>
+                                </div>
+                            </div>
+                        </el-card>
+                    </el-col>
+                    <el-col :span="8" :model="userList">
+                        <el-card shadow="hover" :body-style="{ padding: '0px' }">
+                            <div class="grid-content grid-con-2">
+                                <i class="el-icon-lx-people grid-con-icon"></i>
+                                <div class="grid-cont-right">
+                                    <div class="grid-num">{{ userList.teacherCount }}</div>
+                                    <div>教师人数</div>
+                                </div>
+                            </div>
+                        </el-card>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-card shadow="hover" :body-style="{ padding: '0px' }">
+                            <div class="grid-content grid-con-3">
+                                <i class="el-icon-s-custom grid-con-icon"></i>
+                                <div class="grid-cont-right">
+                                    <div class="grid-num">{{ userList.stuCount }}</div>
+                                    <div>学生人数</div>
+                                </div>
+                            </div>
+                        </el-card>
+                    </el-col>
+                </el-row>
+                <el-card shadow="hover" style="height: 403px" :model="todoList">
+                    <div slot="header" class="clearfix">
+                        <span>待办</span>
+                        <el-button style="float: right; padding: 3px 0" type="text" @click="toDo">刷新</el-button>
+                    </div>
+                    <el-table :show-header="false" :data="todoList" style="width: 100%">
+                        <el-table-column width="40">
+                            <template slot-scope="scope">
+                                <el-checkbox v-model="scope.row.status"></el-checkbox>
+                            </template>
+                        </el-table-column>
+                        <el-table-column>
+                            <template slot-scope="scope">
+                                <div class="todo-item" :class="{ 'todo-item-del': scope.row.status }">
+                                    {{ scope.row.title }}
+                                </div>
+                            </template>
+                        </el-table-column>
+                        <el-table-column width="60">
+                            <template slot-scope="scope">
+                                <el-button
+                                    class="el-icon-edit"
+                                    style="float: right; padding: 3px 0"
+                                    type="text"
+                                    @click="detail(scope.$index, scope.row)"
+                                    >详情</el-button
+                                >
+                                <!-- <i class="el-icon-edit"></i>
+                                <i class="el-icon-delete"></i> -->
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </el-card>
+            </el-col>
         </el-row>
         <el-row :gutter="20">
             <el-col :span="12">
-                <el-card shadow="hover">
-                    <schart ref="bar" class="schart" canvasId="bar" :options="options"></schart>
+                <el-card shadow="hover" v-if="isAdmin">
+                    <schart ref="bar" class="schart" canvasId="bar" :options="adminOptionBar"></schart>
                 </el-card>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="12" v-if="isAdmin">
                 <el-card shadow="hover">
-                    <schart ref="line" class="schart" canvasId="line" :options="options2"></schart>
+                    <schart class="schart" canvasId="ring" :options="adminOptionsRing"></schart>
+                </el-card>
+            </el-col>
+            <el-col :span="12" v-if="tsRose">
+                <el-card shadow="hover">
+                    <schart ref="bar" class="schart" canvasId="bar" :options="tsOptionsBar"></schart>
+                </el-card>
+            </el-col>
+            <el-col :span="12" v-if="tsRose">
+                <el-card shadow="hover">
+                    <schart class="schart" canvasId="ring" :options="tsOptionsRing"></schart>
                 </el-card>
             </el-col>
         </el-row>
@@ -179,7 +268,7 @@ export default {
             recentAttendanceInfo: {
                 allFlag: '',
                 notFlag: '',
-                percent: ''
+                percent: 0
             },
             json: {
                 course: {},
@@ -197,7 +286,17 @@ export default {
             },
             showUsualCourseDialog: false,
             isTeacher: false,
+            isAdmin: false,
             selectedCourse: [],
+            userList: {
+                studentPercent: 0,
+                teacherPercent: 0,
+                adminPercent: 0,
+                stuCount: 0,
+                teacherCount: 0,
+                adminCount: 0,
+                allUser: 0
+            },
             todoList: [
                 {
                     title: '今天要修复100个bug',
@@ -210,18 +309,6 @@ export default {
                 {
                     title: '今天要写100行代码加几个bug吧',
                     status: false
-                },
-                {
-                    title: '今天要修复100个bug',
-                    status: false
-                },
-                {
-                    title: '今天要修复100个bug',
-                    status: true
-                },
-                {
-                    title: '今天要写100行代码加几个bug吧',
-                    status: true
                 }
             ],
             data: [
@@ -254,46 +341,84 @@ export default {
                     value: 1065
                 }
             ],
-            options: {
+            adminOptionBar: {
                 type: 'bar',
                 title: {
-                    text: '最近一周各品类销售图'
+                    text: '用户人数柱形图'
                 },
                 xRorate: 25,
-                labels: ['周一', '周二', '周三', '周四', '周五'],
+                labels: ['管理员', '教师', '学生'],
+
                 datasets: [
                     {
-                        label: '家电',
-                        data: [234, 278, 270, 190, 230]
+                        label: '管理员',
+                        data: [0]
                     },
                     {
-                        label: '百货',
-                        data: [164, 178, 190, 135, 160]
+                        label: '教师',
+                        data: [, 0]
                     },
                     {
-                        label: '食品',
-                        data: [144, 198, 150, 235, 120]
+                        label: '学生',
+                        data: [, , 0]
                     }
                 ]
             },
-            options2: {
-                type: 'line',
+            adminOptionsRing: {
+                type: 'ring',
                 title: {
-                    text: '最近几个月各品类销售趋势图'
+                    text: '用户比例环形图'
                 },
-                labels: ['6月', '7月', '8月', '9月', '10月'],
+                showValue: false,
+                legend: {
+                    position: 'bottom',
+                    bottom: 40
+                },
+                bgColor: '#fbfbfb',
+                labels: ['管理员', '教师', '学生'],
                 datasets: [
                     {
-                        label: '家电',
-                        data: [234, 278, 270, 190, 230]
+                        data: [0, 0, 0]
+                    }
+                ]
+            },
+            tsOptionsBar: {
+                type: 'bar',
+                title: {
+                    text: '最近课程签到情况柱形图'
+                },
+                xRorate: 25,
+                labels: ['应出勤', '实勤', '缺勤'],
+                datasets: [
+                    {
+                        label: '应出勤',
+                        data: [0]
                     },
                     {
-                        label: '百货',
-                        data: [164, 178, 150, 135, 160]
+                        label: '实勤',
+                        data: [, 0]
                     },
                     {
-                        label: '食品',
-                        data: [74, 118, 200, 235, 90]
+                        label: '缺勤',
+                        data: [, , 0]
+                    }
+                ]
+            },
+            tsOptionsRing: {
+                type: 'ring',
+                title: {
+                    text: '用户比例环形图'
+                },
+                showValue: false,
+                legend: {
+                    position: 'bottom',
+                    bottom: 40
+                },
+                bgColor: '#fbfbfb',
+                labels: ['实勤', '缺勤'],
+                datasets: [
+                    {
+                        data: [0, 0]
                     }
                 ]
             }
@@ -318,6 +443,9 @@ export default {
         this.recentCourse();
         if (this.$store.getters.getUser.roseID != '2') {
             this.tsRose = true;
+        } else {
+            this.isAdmin = true;
+            this.userCount();
         }
         const url = '/api/attendance/findAttendanceInfo';
         //学生
@@ -390,8 +518,8 @@ export default {
             }, 200);
         },
         renderChart() {
-            this.$refs.bar.renderChart();
-            this.$refs.line.renderChart();
+            // this.$refs.bar.renderChart();
+            // this.$refs.line.renderChart();
         },
         StuAttendenceRecords(url, params) {
             const that = this;
@@ -487,7 +615,14 @@ export default {
                         this.recentAttendanceInfo.notFlag = res2.data.length;
                         let number =
                             (this.recentAttendanceInfo.allFlag - this.recentAttendanceInfo.notFlag) / this.recentAttendanceInfo.allFlag;
-                        this.recentAttendanceInfo.percent = Number(number * 100).toFixed(2);
+                        this.recentAttendanceInfo.percent = Number(number * 100).toFixed(0);
+                        this.tsOptionsBar.datasets[0].data = [this.recentAttendanceInfo.allFlag];
+                        this.tsOptionsBar.datasets[1].data = [, this.recentAttendanceInfo.allFlag - this.recentAttendanceInfo.notFlag];
+                        this.tsOptionsBar.datasets[2].data = [, , this.recentAttendanceInfo.notFlag];
+                        this.tsOptionsRing.datasets[0].data = [
+                            this.recentAttendanceInfo.allFlag - this.recentAttendanceInfo.notFlag,
+                            this.recentAttendanceInfo.notFlag
+                        ];
                     })
                 )
                 .catch((err) => {
@@ -497,6 +632,7 @@ export default {
         courseTable() {
             this.$router.push({ path: '/Courses' });
         },
+        toDo() {},
         detail(e, data) {
             //console.log(e, data);
             this.selectedCourse = data;
@@ -574,6 +710,38 @@ export default {
                         console.log(err);
                     });
             }
+        },
+        userCount() {
+            const that = this;
+            var r0 = this.$axios.get('/api/student/count');
+            var r1 = this.$axios.get('/api/teacher/count');
+            var r2 = this.$axios.get('/api/admin/count');
+            //并发请求
+            this.$axios
+                .all([r0, r1, r2])
+                .then(
+                    that.$axios.spread((res0, res1, res2) => {
+                        //console.log(res0, res1, res2);
+                        this.userList.stuCount = res0.data;
+                        this.userList.teacherCount = res1.data;
+                        this.userList.adminCount = res2.data;
+                        this.allUser = this.userList.stuCount + this.userList.teacherCount + this.userList.adminCount;
+                        this.userList.studentPercent = Number((this.userList.stuCount / this.allUser) * 100).toFixed(0);
+                        this.userList.teacherPercent = Number((this.userList.teacherCount / this.allUser) * 100).toFixed(0);
+                        this.userList.adminPercent = Number((this.userList.adminCount / this.allUser) * 100).toFixed(0);
+                        this.adminOptionBar.datasets[0].data = [this.userList.adminCount];
+                        this.adminOptionBar.datasets[1].data = [, this.userList.teacherCount];
+                        this.adminOptionBar.datasets[2].data = [, , this.userList.stuCount];
+                        this.adminOptionsRing.datasets[0].data = [
+                            this.userList.adminCount,
+                            this.userList.teacherCount,
+                            this.userList.stuCount
+                        ];
+                    })
+                )
+                .catch((err) => {
+                    console.log(err);
+                });
         },
         dataTraversal(form) {
             this.list = [];
