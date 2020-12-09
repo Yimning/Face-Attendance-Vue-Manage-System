@@ -250,6 +250,13 @@ export default new Router({
                     } 
                 },
                 {
+                    path: '/attendenceInfo',
+                    component: () => import( /* webpackChunkName: "attendenceInfo" */ '../views/SignIn/AttendenceInfo.vue'),
+                    meta: {
+                        title: '课程出勤率'
+                    }
+                },
+                {
                     path: '/recentAttendence',
                     component: () => import( /* webpackChunkName: "RecentAttendence" */ '../views/SignIn/RecentAttendence.vue'),
                     meta: {
