@@ -243,17 +243,24 @@ export default new Router({
                     } 
                 },
                 { 
-                    path: '/roseJude',
-                    component: () => import( /* webpackChunkName: "roseJude" */ '../views/SignIn/RoseJude.vue'),
-                    meta: {
-                        title: '角色判断'
-                    } 
-                },
-                { 
                     path: '/teachAttendenceRecords',
                     component: () => import( /* webpackChunkName: "teachAttendenceRecords" */ '../views/SignIn/TeachAttendenceRecords.vue'),
                     meta: {
                         title: '考勤记录'
+                    } 
+                },
+                {
+                    path: '/recentAttendence',
+                    component: () => import( /* webpackChunkName: "RecentAttendence" */ '../views/SignIn/RecentAttendence.vue'),
+                    meta: {
+                        title: '课程签到情况'
+                    }
+                },
+                { 
+                    path: '/roseJude',
+                    component: () => import( /* webpackChunkName: "roseJude" */ '../views/SignIn/RoseJude.vue'),
+                    meta: {
+                        title: '角色判断'
                     } 
                 },
                 {
