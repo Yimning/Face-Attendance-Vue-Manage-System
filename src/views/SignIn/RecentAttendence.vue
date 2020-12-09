@@ -20,13 +20,25 @@
                 </el-select>
 
                 <el-select v-model="selected" placeholder="查询条件" v-on:input="selectedFunc" class="handle-select mr10">
-                    <el-option key="查教师号" label="教师号" value="0"></el-option>
+                    <el-option key="查教师号" label="教师号" value="0" v-if="isTeacher"></el-option>
+                    <el-option key="查学号" label="查学号" value="1" v-else></el-option>
                 </el-select>
 
                 <el-input
                     v-model="query.request"
                     v-if="selected === '0'"
                     placeholder="教师号"
+                    class="handle-input mr10"
+                    @keyup.enter.native="handleSearch"
+                    id="messageInput"
+                    v-on:input="inputFunc"
+                    clearable
+                    disabled
+                ></el-input>
+                <el-input
+                    v-model="query.request"
+                    v-if="selected === '1'"
+                    placeholder="学号"
                     class="handle-input mr10"
                     @keyup.enter.native="handleSearch"
                     id="messageInput"
@@ -255,6 +267,7 @@ export default {
         const url = '/api/attendance/findAttendanceInfo';
         //学生
         if (this.$store.getters.getUser.roseID == '0') {
+            this.selected='1';
             this.params = {
                 params: {
                     courseID: null,
@@ -308,7 +321,7 @@ export default {
                     //console.log('请求后台数据结果', res);
                     if (res.data.length != 0) {
                         this.json = res.data[0];
-                        //console.log('this.json数据结果', this.json);
+                        console.log('this.json数据结果', this.json);
                         this.newArray = this.dataTraversal(this.form);
                         this.QueryConditions = res.data[0];
                         const params1 = {
@@ -321,7 +334,7 @@ export default {
                         const params2 = {
                             params: {
                                 courseID: this.json.courseID,
-                                studentNumber: this.$store.getters.getUser.userID,
+                                studentNumber: null,
                                 studentName: null,
                                 teacherNumber: this.json.teacher.teacherNumber,
                                 teacherName: null,
@@ -361,7 +374,7 @@ export default {
                         const params2 = {
                             params: {
                                 courseID: this.json.courseID,
-                                studentNumber: this.json.student.studentNumber,
+                                studentNumber: null,
                                 studentName: null,
                                 teacherNumber: this.$store.getters.getUser.userID,
                                 teacherName: null,
@@ -385,7 +398,7 @@ export default {
                 .all([r0, r1])
                 .then(
                     that.$axios.spread((res1, res2) => {
-                        //console.log(res1, res2);
+                        console.log(res1, res2);
                         this.recentAttendanceStu = this.dataTraversal(res1.data);
                         this.recentAttendanceList = this.dataTraversal(res2.data);
                         this.tableData = this.recentAttendanceList;
@@ -816,7 +829,7 @@ export default {
             });
         },
         handleHistory() {
-             this.$router.push('/attendenceRecords');
+            this.$router.push('/attendenceRecords');
         }
     }
 };

@@ -415,7 +415,7 @@ export default {
                         const params2 = {
                             params: {
                                 courseID: this.json.courseID,
-                                studentNumber: this.$store.getters.getUser.userID,
+                                studentNumber: null,
                                 studentName: null,
                                 teacherNumber: this.json.teacher.teacherNumber,
                                 teacherName: null,
@@ -455,7 +455,7 @@ export default {
                         const params2 = {
                             params: {
                                 courseID: this.json.courseID,
-                                studentNumber: this.json.student.studentNumber,
+                                studentNumber: null,
                                 studentName: null,
                                 teacherNumber: this.$store.getters.getUser.userID,
                                 teacherName: null,
