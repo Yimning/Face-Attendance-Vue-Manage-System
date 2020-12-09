@@ -121,7 +121,7 @@ export default {
                         },
                         {
                             index: 'webSocket',
-                            title: 'webSocket' 
+                            title: 'webSocket'
                         }
                     ]
                 },
@@ -223,6 +223,10 @@ export default {
                         {
                             index: 'attendenceCourse',
                             title: '考勤课程'
+                        },
+                        {
+                            index: 'recentAttendence',
+                            title: '课程签到情况'
                         },
                         {
                             index: 'attendenceRecords',
