@@ -21,11 +21,13 @@
                 </el-card>
                 <el-card shadow="hover" style="height: 252px">
                     <div slot="header" class="clearfix">
-                        <span>语言详情</span>
+                        <span>近期课程出勤率</span>
                     </div>
-                    Vue <el-progress :percentage="71.3" color="#42b983"></el-progress>JavaScript
-                    <el-progress :percentage="24.1" color="#f1e05a"></el-progress>CSS <el-progress :percentage="13.7"></el-progress>HTML
-                    <el-progress :percentage="5.9" color="#f56c6c"></el-progress>
+                    {{ recentAttendanceList.courseName
+                    }}<el-progress :percentage="recentAttendanceInfo.percent" color="#42b983"></el-progress>
+                    <!-- JavaScript<el-progress :percentage="24.1" color="#f1e05a"></el-progress>
+                    CSS <el-progress :percentage="13.7"></el-progress>
+                    HTML<el-progress :percentage="5.9" color="#f56c6c"></el-progress> -->
                 </el-card>
             </el-col>
             <el-col :span="16">
@@ -176,7 +178,8 @@ export default {
             recentCourseList: [],
             recentAttendanceInfo: {
                 allFlag: '',
-                notFlag: ''
+                notFlag: '',
+                percent: ''
             },
             json: {
                 course: {},
@@ -402,7 +405,7 @@ export default {
                     //console.log('请求后台数据结果', res);
                     if (res.data.length != 0) {
                         this.json = res.data[0];
-                         //console.log('this.json数据结果', this.json);
+                        //console.log('this.json数据结果', this.json);
                         this.newArray = this.dataTraversal(this.form);
                         this.recentAttendanceList = this.newArray[0];
                         const params1 = {
@@ -482,6 +485,9 @@ export default {
                         console.log(res1, res2);
                         this.recentAttendanceInfo.allFlag = res1.data.length;
                         this.recentAttendanceInfo.notFlag = res2.data.length;
+                        let number =
+                            (this.recentAttendanceInfo.allFlag - this.recentAttendanceInfo.notFlag) / this.recentAttendanceInfo.allFlag;
+                        this.recentAttendanceInfo.percent = Number(number * 100).toFixed(2);
                     })
                 )
                 .catch((err) => {
@@ -509,7 +515,7 @@ export default {
             var aData = new Date();
             //console.log( this.dataDateNumber(aData));//显示当前星期几
             if (this.selectedCourse.courseID == this.dataDateNumber(aData)) {
-                sessionStorage.setItem('dataParams', JSON.stringify( this.dataParams));
+                sessionStorage.setItem('dataParams', JSON.stringify(this.dataParams));
                 this.showUsualCourseDialog = false;
                 this.$router.push({ path: '/SignIn', query: { data: this.dataParams } }); //路由跳转传参
             } else {
@@ -519,7 +525,7 @@ export default {
                     type: 'warning'
                 })
                     .then(() => {
-                       sessionStorage.setItem('dataParams', JSON.stringify( this.dataParams));
+                        sessionStorage.setItem('dataParams', JSON.stringify(this.dataParams));
                         this.showUsualCourseDialog = false;
                         this.$router.push({ path: '/SignIn', query: { data: this.dataParams } }); //路由跳转传参
                     })
@@ -537,7 +543,7 @@ export default {
             var aData = new Date();
             // this.dataDateNumber(aData);//星期几的索引
             if (this.$store.getters.getUser.roseID == '1') {
-                const params = { params: { tID: this.$store.getters.getUser.userID, cID: null, cD: 2 } };
+                const params = { params: { tID: this.$store.getters.getUser.userID, cID: null, cD: this.dataDateNumber(aData) } };
                 const that = this;
                 //axios的get请求
                 this.$axios
@@ -554,7 +560,7 @@ export default {
                     });
             }
             if (this.$store.getters.getUser.roseID == '0') {
-                const params = { params: { sID: this.$store.getters.getUser.userID, cID: null, cD: 1 } };
+                const params = { params: { sID: this.$store.getters.getUser.userID, cID: null, cD: this.dataDateNumber(aData) } };
                 const that = this;
                 //axios的get请求
                 this.$axios
