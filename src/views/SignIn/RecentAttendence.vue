@@ -7,23 +7,20 @@
         </div>
         <div class="container">
             <div class="handle-box" ref="QueryConditions" :rules="rules">
-                <el-button type="danger" icon="el-icon-delete" class="handle-del mr10" @click="delAllSelection">批量删除</el-button>
-
-                <el-select v-model="QueryConditions.courseID" placeholder="课程号-课程名" class="mr10" v-on:input="courseFunc">
+                <el-button type="danger" icon="el-icon-delete" class="handle-del mr10" @click="delAllSelection" disabled
+                    >批量删除</el-button
+                >
+                <el-select v-model="QueryConditions" placeholder="课程号-课程名" class="mr10" v-on:input="courseFunc">
                     <el-option
                         el-option
-                        v-for="item in QueryConditions.course"
-                        :key="item.courseID"
-                        :label="item.courseID + item.courseName"
-                        :value="item.courseID"
+                        :key="QueryConditions.courseID"
+                        :label="QueryConditions.courseID + QueryConditions.course.courseName"
+                        :value="QueryConditions.courseID"
                     ></el-option>
                 </el-select>
 
                 <el-select v-model="selected" placeholder="查询条件" v-on:input="selectedFunc" class="handle-select mr10">
-                    <el-option key="查教师号" label="教师号" v-if="teacherAdmin" value="0"></el-option>
-                    <el-option key="查教师姓名" label="教师姓名" v-if="teacherAdmin" value="1"></el-option>
-                    <el-option key="查查学生学号" label="查学生学号" value="2"></el-option>
-                    <el-option key="查学生姓名" label="学生姓名" value="3"></el-option>
+                    <el-option key="查教师号" label="教师号" value="0"></el-option>
                 </el-select>
 
                 <el-input
@@ -35,61 +32,16 @@
                     id="messageInput"
                     v-on:input="inputFunc"
                     clearable
+                    disabled
                 ></el-input>
-                <!-- @keyup.enter 但是若在组件框架中写需要加.native -->
-                <el-input
-                    v-model="query.request"
-                    v-else-if="selected === '1'"
-                    placeholder="输入教师姓名"
-                    class="handle-input mr10"
-                    @keyup.enter.native="handleSearch"
-                    id="messageInput"
-                    v-on:input="inputFunc"
-                    clearable
-                ></el-input>
-                <el-input
-                    v-model="query.request"
-                    v-else-if="selected === '2'"
-                    placeholder="学生学号"
-                    class="handle-input mr10"
-                    @keyup.enter.native="handleSearch"
-                    id="messageInput"
-                    v-on:input="inputFunc"
-                    clearable
-                ></el-input>
-                <!-- @keyup.enter 但是若在组件框架中写需要加.native -->
-                <el-input
-                    v-model="query.request"
-                    v-else
-                    placeholder="输入学生姓名"
-                    class="handle-input mr10"
-                    @keyup.enter.native="handleSearch"
-                    id="messageInput"
-                    v-on:input="inputFunc"
-                    clearable
-                ></el-input>
-                <div class="handle-weekday">
-                    <el-tooltip class="item" effect="dark" content="系统会以课程时间的前后十五分钟来查询，请注意选择" placement="top">
-                        <el-col :span="8">
-                            <el-date-picker
-                                type="datetime"
-                                placeholder="选择日期时间"
-                                v-model="QueryConditions.recordTime"
-                                value-format="yyyy-MM-dd HH:mm:ss"
-                                v-on:input="inputFuncDay"
-                                clearable
-                            ></el-date-picker>
-                        </el-col>
-                    </el-tooltip>
-                    <el-input v-model="QueryConditions.IsDay" placeholder="" class="handle-input mr10" disabled></el-input>
-                    <el-button class="" type="primary" icon="el-icon-search" @click="handleSearchByInfo">搜索</el-button>
+                <div>
+                    <el-button class="handle-line" type="primary" plain icon="el-icon-refresh" @click="handleFresh">条件重置</el-button>
+                    <el-button type="success" icon="el-icon-circle-check" @click="handleFlag">应出勤</el-button>
+                    <el-button type="warning" icon="el-icon-circle-close" @click="handleNotFlag">缺勤</el-button>
+                    <el-button type="primary" icon="el-icon-notebook-1" @click="handleNow">课程出勤率</el-button>
+                    <el-button type="info" icon="el-icon-data-analysis" @click="handleHistory">历史记录</el-button>
+                    <el-button type="success" plain icon="el-icon-s-flag" @click="handleCheck">个人出勤率查询</el-button>
                 </div>
-                <el-button class="handle-line" type="primary" plain icon="el-icon-refresh" @click="handleFresh">条件重置</el-button>
-                <el-button type="success" icon="el-icon-circle-check" @click="handleFlag">已签</el-button>
-                <el-button type="warning" icon="el-icon-circle-close" @click="handleNotFlag">未签</el-button>
-                <el-button type="primary" icon="el-icon-notebook-1" @click="handleNow">当天记录</el-button>
-                <el-button type="info" icon="el-icon-data-analysis" @click="handleHistory">历史记录</el-button>
-                <el-button type="success" plain icon="el-icon-s-flag" @click="handleCheck">出勤率查询</el-button>
                 <div>
                     <download-excel
                         class="handleUpload"
@@ -132,8 +84,15 @@
                         <el-button type="text" icon="el-icon-more" class="blue" @click="handleMore(scope.$index, scope.row)"
                             >统计</el-button
                         >
-                        <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">补签</el-button>
-                        <el-button type="text" icon="el-icon-delete" class="red" @click="handleEdit1(scope.$index, scope.row)"
+                        <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)" v-if="isTeacher"
+                            >补签</el-button
+                        >
+                        <el-button
+                            type="text"
+                            icon="el-icon-delete"
+                            class="red"
+                            @click="handleEdit1(scope.$index, scope.row)"
+                            v-if="isTeacher"
                             >缺勤</el-button
                         >
                     </template>
@@ -207,7 +166,7 @@ export default {
                 currentPage: 1,
                 pageSize: 5,
                 pageTotal: 0,
-                request: ''
+                request: this.$store.getters.getUser.userID
             },
             form: {
                 options: []
@@ -254,25 +213,27 @@ export default {
             },
             requestAddr: '',
             url: '',
-            selected: '', //注意数据格式的转换，否则会导致不正常
+            selected: '0', //注意数据格式的转换，否则会导致不正常
             tableData: [],
             paramsData: [],
             count: {
                 isFlag: '',
                 notFlag: ''
             },
+            recentAttendanceStu: [],
+            recentAttendanceList: [],
+            recentAttendanceInfo: {
+                allFlag: '',
+                notFlag: ''
+            },
             params: {},
             multipleSelection: [],
             delList: [],
             teacherAdmin: false,
-            editVisible: false,
+            isTeacher: false,
             moreVisible: false,
-            addVisible: false,
             showOrNot: false,
-            courseOrNot: true,
-            stuNumberOrNot: true,
             form: {},
-            formAdd: {},
             defaultAvatar: {},
             idx: -1,
             row: '',
@@ -283,15 +244,46 @@ export default {
         'download-excel': JsonExcel
     },
     created() {
-        if (this.$store.getters.getUser.roseName == '教师管理员') {
+        if (this.$store.getters.getUser.roseName == '教师') {
             this.teacherAdmin = true;
         }
         this.getData(); //渲染
         this.getAllCourse();
         AvatarData(this.defaultAvatar).then((res) => {
-            // console.log(res.avatar[0]);
             this.defaultAvatar = res.avatar[0].base64;
         });
+        const url = '/api/attendance/findAttendanceInfo';
+        //学生
+        if (this.$store.getters.getUser.roseID == '0') {
+            this.params = {
+                params: {
+                    courseID: null,
+                    studentNumber: this.$store.getters.getUser.userID,
+                    studentName: null,
+                    teacherNumber: null,
+                    teacherName: null,
+                    flag: null,
+                    time: null
+                }
+            };
+            this.StuAttendenceRecords(url, this.params);
+        }
+        //教师
+        if (this.$store.getters.getUser.roseID == '1') {
+            this.isTeacher = true; //只有教师显示
+            this.params = {
+                params: {
+                    courseID: null,
+                    studentNumber: null,
+                    studentName: null,
+                    teacherNumber: this.$store.getters.getUser.userID,
+                    teacherName: null,
+                    flag: null,
+                    time: null
+                }
+            };
+            this.TeachAttendenceRecords(url, this.params);
+        }
     },
 
     methods: {
@@ -299,62 +291,110 @@ export default {
         getData() {
             const that = this;
             if (this.$store.getters.getUser.roseID == '1') {
-                if (this.$store.getters.getUser.roseName == '教师管理员') {
-                    const url = '/api/attendance/findAllAttendance';
-                    this.$axios
-                        .get(url)
-                        .then((res) => {
-                            //console.log(res);
-                            this.form = res.data;
-                            //console.log('请求后台数据结果', this.form);
-                            this.dataTraversal(this.form);
-                        })
-                        .catch((err) => {
-                            console.log(err);
-                        });
-                } else {
-                    const params = { params: { id: this.$store.getters.getUser.userID } };
-                    const that = this;
-                    //axios的get请求
-                    this.$axios
-                        .get('/api/attendance/findAttendanceByteacherID', params)
-                        .then((res) => {
-                            //console.log(res);
-                            this.form = res.data;
-                            //console.log('请求后台数据结果', this.form);
-                            this.dataTraversal(this.form);
-                        })
-                        .catch((err) => {
-                            console.log(err);
-                        });
-                }
             }
         },
 
         // 获取全部课程数据
-        getAllCourse() {
+        getAllCourse() {},
+        StuAttendenceRecords(url, params) {
             const that = this;
-            const params = { params: { tID: this.$store.getters.getUser.userID } };
+            const url1 = '/api/scourse/findScourseByteacherNumbercIDcD';
+            const url2 = '/api/attendance/findAttendanceInfo';
             //axios的get请求
             this.$axios
-                .get('/api/scourse/findScourseBytIDcIDcD', params)
+                .get(url, params)
                 .then((res) => {
-                    this.list = [];
-                    this.newArray = [];
-                    for (const i in res.data) {
-                        for (const key in res.data[i].course) {
-                            this.$set(this.list, key, res.data[i].course[key]); //对象新增属性(使用Vue.$set())
-                            this.newArray[i] = this.list; //新建数组存放
-                        }
-                        this.list = []; //循环完必须清空,否则可能会覆盖
+                    this.form = res.data;
+                    //console.log('请求后台数据结果', res);
+                    if (res.data.length != 0) {
+                        this.json = res.data[0];
+                        //console.log('this.json数据结果', this.json);
+                        this.newArray = this.dataTraversal(this.form);
+                        this.QueryConditions = res.data[0];
+                        const params1 = {
+                            params: {
+                                tID: this.json.teacher.teacherNumber,
+                                cID: this.json.courseID,
+                                cD: null
+                            }
+                        };
+                        const params2 = {
+                            params: {
+                                courseID: this.json.courseID,
+                                studentNumber: this.$store.getters.getUser.userID,
+                                studentName: null,
+                                teacherNumber: this.json.teacher.teacherNumber,
+                                teacherName: null,
+                                flag: 0,
+                                time: this.json.recordTime
+                            }
+                        };
+                        this.recentAttendanceFlag(url1, params1, url2, params2);
                     }
-                    that.QueryConditions.course = this.newArray;
                 })
                 .catch((err) => {
-                    this.$message({
-                        type: 'info',
-                        message: '请正确选择'
-                    });
+                    console.log(err);
+                });
+        },
+        TeachAttendenceRecords(url, params) {
+            const that = this;
+            const url1 = '/api/scourse/findScourseByteacherNumbercIDcD';
+            const url2 = '/api/attendance/findAttendanceInfo';
+            //axios的get请求
+            this.$axios
+                .get(url, params)
+                .then((res) => {
+                    this.form = res.data;
+                    //console.log('请求后台数据结果', res);
+                    if (res.data.length != 0) {
+                        this.json = res.data[0];
+                        //console.log('this.json数据结果', this.json);
+                        this.newArray = this.dataTraversal(this.form);
+                        this.QueryConditions = res.data[0];
+                        const params1 = {
+                            params: {
+                                tID: this.json.teacher.teacherNumber,
+                                cID: this.json.courseID,
+                                cD: null
+                            }
+                        };
+                        const params2 = {
+                            params: {
+                                courseID: this.json.courseID,
+                                studentNumber: this.json.student.studentNumber,
+                                studentName: null,
+                                teacherNumber: this.$store.getters.getUser.userID,
+                                teacherName: null,
+                                flag: 0,
+                                time: this.json.recordTime
+                            }
+                        };
+                        this.recentAttendanceFlag(url1, params1, url2, params2);
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        },
+        recentAttendanceFlag(url1, params1, url2, params2) {
+            const that = this;
+            var r0 = this.$axios.get(url1, params1);
+            var r1 = this.$axios.get(url2, params2);
+            //并发请求
+            this.$axios
+                .all([r0, r1])
+                .then(
+                    that.$axios.spread((res1, res2) => {
+                        //console.log(res1, res2);
+                        this.recentAttendanceStu = this.dataTraversal(res1.data);
+                        this.recentAttendanceList = this.dataTraversal(res2.data);
+                        this.tableData = this.recentAttendanceList;
+                        this.recentAttendanceInfo.allFlag = res1.data.length;
+                        this.recentAttendanceInfo.notFlag = res2.data.length;
+                    })
+                )
+                .catch((err) => {
+                    console.log(err);
                 });
         },
         dataTraversal(form) {
@@ -383,8 +423,7 @@ export default {
                 }
                 this.list = []; //循环完必须清空,否则可能会覆盖
             }
-            //console.log(this.newArray);
-            this.tableData = this.newArray;
+            return this.newArray;
             this.query.currentPage = 1;
             this.query.pageTotal = form.length;
             this.query.pageSize = form.length;
@@ -583,109 +622,7 @@ export default {
             this.QueryConditions.IsDay = weekArr[weekIndex];
         },
         // 触发搜索按钮
-        handleSearch(value) {
-            // console.log(this.query.request);//打印输入搜索的值
-            this.tableData = [];
-            const that = this;
-            const findBystudentID = '/api/attendance/findAttendanceInfo';
-            const findBystudnetName = '/api/attendance/findAttendanceInfo';
-            const findByteacherID = '/api/attendance/findAttendanceInfo';
-            const findByteacherName = '/api/attendance/findAttendanceInfo';
-            //console.log(this.selected);
-            if (this.query.request != '') {
-                //
-                if (this.selected == '' || this.QueryConditions.courseID == '') return this.$message.error(`选择课程号-课程名`);
-                if (this.selected == 0) {
-                    this.requestAddr = findByteacherID;
-                    this.params = {
-                        params: {
-                            courseID: this.QueryConditions.courseID,
-                            studentNumber: null,
-                            studentName: null,
-                            teacherNumber: value,
-                            teacherName: null,
-                            flag: null,
-                            time: null
-                        }
-                    };
-                    this.getAttendanceByteacherID(this.requestAddr, this.params);
-                } else if (this.selected == 1) {
-                    this.requestAddr = findByteacherName;
-                    this.params = {
-                        params: {
-                            courseID: this.QueryConditions.courseID,
-                            studentNumber: null,
-                            studentName: null,
-                            teacherNumber: null,
-                            teacherName: value,
-                            flag: null,
-                            time: null
-                        }
-                    };
-                    this.getAttendanceByteacherName(this.requestAddr, this.params);
-                } else if (this.selected == 2) {
-                    this.requestAddr = findBystudentID;
-                    if (this.teacherAdmin) {
-                        this.params = {
-                            params: {
-                                courseID: this.QueryConditions.courseID,
-                                studentNumber: value,
-                                studentName: null,
-                                teacherNumber: null,
-                                teacherName: null,
-                                flag: null,
-                                time: null
-                            }
-                        };
-                    } else {
-                        this.params = {
-                            params: {
-                                courseID: this.QueryConditions.courseID,
-                                studentNumber: null,
-                                studentName: null,
-                                teacherNumber: this.$store.getters.getUser.userID,
-                                teacherName: null,
-                                flag: null,
-                                time: null
-                            }
-                        };
-                    }
-
-                    this.getAttendanceBystudentID(this.requestAddr, this.params);
-                } else {
-                    this.requestAddr = findBystudnetName;
-                    if (this.teacherAdmin) {
-                        this.params = {
-                            params: {
-                                courseID: this.QueryConditions.courseID,
-                                studentNumber: null,
-                                studentName: value,
-                                teacherNumber: null,
-                                teacherName: null,
-                                flag: null,
-                                time: null
-                            }
-                        };
-                    } else {
-                        this.params = {
-                            params: {
-                                courseID: this.QueryConditions.courseID,
-                                studentNumber: null,
-                                studentName: null,
-                                teacherNumber: this.$store.getters.getUser.userID,
-                                teacherName: null,
-                                flag: null,
-                                time: null
-                            }
-                        };
-                    }
-                    this.getAttendanceBystudentName(this.requestAddr, this.params);
-                }
-            } else {
-                this.$message.error(`请正确选择或输入查询内容`);
-                this.getData();
-            }
-        },
+        handleSearch(value) {},
 
         //详情信息
         handleMore(index, row) {
@@ -784,33 +721,7 @@ export default {
         arrayToObject(data) {},
 
         // 删除操作
-        handleDelete(index, row) {
-            const that = this;
-            // 二次确认删除
-            this.$confirm('确定要删除吗？', '提示', {
-                type: 'warning'
-            })
-                .then(() => {
-                    const id = this.tableData.splice(index, 1)[0].recordID;
-                    //console.log(id);
-                    this.$axios
-                        .post('/api/attendance/deleteOne/' + id)
-                        .then((res) => {
-                            console.log(res);
-                            that.$message.success('删除成功');
-                        })
-                        .catch((err) => {
-                            console.error();
-                            that.$message.error(`删除失败`);
-                        });
-                })
-                .catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                    });
-                });
-        },
+        handleDelete(index, row) {},
         // 多选操作
         handleSelectionChange(val) {
             this.multipleSelection = val;
@@ -877,95 +788,36 @@ export default {
             return this.reload(); //刷新 ----推荐
         },
         handleFlag() {
-            const url = '/api/attendance/findAttendanceInfo';
-            if (this.teacherAdmin) {
-                if (this.query.request != '' && this.selected == 0) return that.$message.error(`请输入教师号`);
-                this.params = {
-                    params: {
-                        courseID: this.QueryConditions.courseID,
-                        studentNumber: null,
-                        studentName: null,
-                        teacherNumber: this.query.request,
-                        teacherName: null,
-                        flag: 1,
-                        time: this.QueryConditions.recordTime
-                    }
-                };
-            } else {   
-                this.params = {
-                    params: {
-                        courseID: this.QueryConditions.courseID,
-                        studentNumber: null,
-                        studentName: null,
-                        teacherNumber: this.$store.getters.getUser.userID,
-                        teacherName: null,
-                        flag: 1,
-                        time: this.QueryConditions.recordTime
-                    }
-                };
-            }
-            if (!this.QueryConditions.courseID) {
-                return this.$message.error(`请选择课程号-课程名`);
-            } else {
-                this.requestHandle(url, this.params);
-            }
+            this.isTeacher = false;
+            this.tableData = this.recentAttendanceStu;
         },
 
         handleNotFlag() {
-            const url = '/api/attendance/findAttendanceInfo';
-            if (this.teacherAdmin) {
-                if (this.query.request != '' && this.selected == 0) return that.$message.error(`请输入教师号`);
-                this.params = {
-                    params: {
-                        courseID: this.QueryConditions.courseID,
-                        studentNumber: null,
-                        studentName: null,
-                        teacherNumber: this.query.request,
-                        teacherName: null,
-                        flag: 0,
-                        time: this.QueryConditions.recordTime
-                    }
-                };
-            } else {
-                this.params = {
-                    params: {
-                        courseID: this.QueryConditions.courseID,
-                        studentNumber: null,
-                        studentName: null,
-                        teacherNumber: this.$store.getters.getUser.userID,
-                        teacherName: null,
-                        flag: 0,
-                        time: this.QueryConditions.recordTime
-                    }
-                };
-            }
-            if (!this.QueryConditions.courseID) {
-                return this.$message.error(`请选择课程号-课程名`);
-            } else {
-                this.requestHandle(url, this.params);
-            }
+            this.tableData = this.recentAttendanceList;
         },
-        requestHandle(url, params) {
-            const that = this;
-            //axios的get请求
-            this.$axios
-                .get(url, params)
-                .then((res) => {
-                    this.form = res.data;
-                    this.dataTraversal(this.form);
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-        },
+        requestHandle(url, params) {},
         // 分页导航
         handlePageChange(val) {
             //console.log(val);
             this.$set(this.query, 'currentPage', val);
             this.getData();
         },
-        handleNow() {},
-        handleHistory() {}
+        handleNow() {
+            let self = this;
+            let number = (this.recentAttendanceInfo.allFlag - this.recentAttendanceInfo.notFlag) / this.recentAttendanceInfo.allFlag;
+            let str = Number(number * 100).toFixed(2);
+            str += '%';
+            // this.testCoverages = str;
+            // var str = Number(point * 100).toFixed(1);
+            // str += '%';
+            self.$message({
+                message: '本次课程出勤率为:' + str,
+                type: 'success'
+            });
+        },
+        handleHistory() {
+             this.$router.push('/attendenceRecords');
+        }
     }
 };
 </script>

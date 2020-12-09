@@ -88,9 +88,8 @@
                     <el-button class="handle-line" type="primary" plain icon="el-icon-refresh" @click="handleFresh">条件重置</el-button>
                     <el-button type="success" icon="el-icon-circle-check" @click="handleFlag">已签</el-button>
                     <el-button type="warning" icon="el-icon-circle-close" @click="handleNotFlag">未签</el-button>
-                    <el-button type="primary" icon="el-icon-notebook-1" @click="handleNow">当天记录</el-button>
-                    <el-button type="info" icon="el-icon-data-analysis" @click="handleHistory">历史记录</el-button>
-                    <el-button type="success" plain icon="el-icon-s-flag" @click="handleCheck">出勤率查询</el-button>
+                    <el-button type="primary" icon="el-icon-notebook-1" @click="handleNow">近期签到记录</el-button>
+                    <el-button type="success" plain icon="el-icon-s-flag" @click="handleCheck">个人出勤率查询</el-button>
                 </div>
                 <div>
                     <download-excel
@@ -966,7 +965,9 @@ export default {
             this.$set(this.query, 'currentPage', val);
             this.getData();
         },
-        handleNow() {},
+        handleNow() {
+            this.$router.push('/recentAttendence');
+        },
         handleHistory() {}
     }
 };
