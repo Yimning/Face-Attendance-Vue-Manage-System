@@ -439,7 +439,7 @@ export default {
                 .get(url, params)
                 .then((res) => {
                     this.form = res.data;
-                    //console.log('请求后台数据结果', res.data);
+                    //console.log('请求后台数据结果', res);
                     if (res.data.length != 0) {
                         this.json = res.data[0];
                         //console.log('this.json数据结果', this.json);
