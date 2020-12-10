@@ -24,7 +24,7 @@
                 <!--canvas截取流-->
                 <canvas ref="canvas" width="480px" height="400px" style="display: none"></canvas>
             </div>
-            <el-button plain @click="open2"> 警告 </el-button>
+            <!-- <el-button plain @click="open2"> 警告 </el-button> -->
         </div>
     </div>
 </template>
