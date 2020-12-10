@@ -268,6 +268,7 @@ import StuAttendenceRecordsVue from './SignIn/StuAttendenceRecords.vue';
 const weekArr = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
 export default {
     name: 'dashboard',
+    inject: ['reload'],
     data() {
         return {
             userInfo: this.$store.getters.getUser,
@@ -320,7 +321,7 @@ export default {
                     status: false
                 },
                 {
-                    title: '今天要修复100个bug',
+                    title: '今天已修复100个bug',
                     status: false
                 },
                 {
@@ -649,7 +650,9 @@ export default {
         courseTable() {
             this.$router.push({ path: '/Courses' });
         },
-        toDo() {},
+        toDo() {
+             this.reload(); //刷新 ----推荐
+        },
         detail(e, data) {
             //console.log(e, data);
             this.selectedCourse = data;
