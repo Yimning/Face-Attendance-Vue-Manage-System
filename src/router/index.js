@@ -68,7 +68,7 @@ export default new Router({
                     path: '/tabs',
                     component: () => import( /* webpackChunkName: "tabs" */ '../views/Tabs.vue'),
                     meta: {
-                        title: 'tab选项卡',
+                        title: '消息中心',
                         requireAuth: true
                     }
                 },
