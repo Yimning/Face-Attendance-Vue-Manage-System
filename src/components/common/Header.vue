@@ -5,7 +5,7 @@
             <i v-if="!collapse" class="el-icon-s-fold"></i>
             <i v-else class="el-icon-s-unfold"></i>
         </div>
-        <div class="logo">后台管理系统</div>
+        <div class="logo">人脸考勤管理系统</div>
         <div class="header-right">
             <div class="header-user-con">
                 <!-- 全屏显示 -->
@@ -36,9 +36,10 @@
                         <i class="el-icon-caret-bottom"></i>
                     </span>
                     <el-dropdown-menu slot="dropdown">
-                        <a href="https://github.com/lin-xin/vue-manage-system" target="_blank">
+                        <!-- <a href="https://github.com/Yimning/Face-Attendance-Vue-Manage-System" target="_blank">
                             <el-dropdown-item>项目仓库</el-dropdown-item>
-                        </a>
+                        </a> -->
+                        <el-dropdown-item divided command="personInfo">个人信息</el-dropdown-item>
                         <el-dropdown-item divided command="loginout">退出登录</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
@@ -80,6 +81,10 @@ export default {
                         this.$router.push('/login');
                     })
                     .catch(() => {});
+            }
+
+            if(command == 'personInfo'){
+                 this.$router.push({ path: '/personInfo' });
             }
         },
         // 侧边栏折叠
