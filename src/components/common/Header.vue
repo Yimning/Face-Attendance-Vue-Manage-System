@@ -54,7 +54,7 @@ export default {
         return {
             collapse: false,
             fullscreen: false,
-            name: 'linxin',
+            name: 'message',
             message: 2,
             userAvatar: this.$store.getters.getUser.avatar
         };
