@@ -18,7 +18,8 @@ export default new Router({
             path: '/',
             component: () => import( /* webpackChunkName: "home" */ '../components/common/Home.vue'),
             meta: {
-                title: '自述文件'
+                title: '自述文件',
+                requireAuth: true
             },
             children: [{
                     path: '/dashboard',
@@ -138,7 +139,9 @@ export default new Router({
                     path: '/resetPwd',
                     component: () => import( /* webpackChunkName: "resetPwd" */ '../views/AccountSettings/ResetPwd.vue'),
                     meta: {
-                        title: '账户冻结'
+                        title: '重置密码'
+                        ,
+                        requireAuth: true
                     }
                 },
 
@@ -146,98 +149,112 @@ export default new Router({
                     path: '/courses',
                     component: () => import( /* webpackChunkName: "courses" */ '../views/ClassTable/Courses.vue'),
                     meta: {
-                        title: '课程表'
+                        title: '课程表',
+                        requireAuth: true
                     }
                 },
                 {
                     path: '/addcourse',
                     component: () => import( /* webpackChunkName: "addcourse" */ '../views/ClassTable/AddCourse.vue'),
                     meta: {
-                        title: '添加课程'
+                        title: '添加课程',
+                        requireAuth: true
                     }
                 },
                 {
                     path: '/arrangeCourse',
                     component: () => import( /* webpackChunkName: "arrangeCourse" */ '../views/ClassTable/ArrangeCourse.vue'),
                     meta: {
-                        title: '排课'
+                        title: '排课',
+                        requireAuth: true
                     }
                 },
                 {
                     path: '/studenttable',
                     component: () => import( /* webpackChunkName: "studenttable" */ '../views/ClassTable/StudentTable.vue'),
                     meta: {
-                        title: '选修情况'
+                        title: '选修情况',
+                        requireAuth: true
                     }
                 },
                 {
                     path: '/signin',
                     component: () => import( /* webpackChunkName: "signin" */ '../views/SignIn/SignIn.vue'),
                     meta: {
-                        title: '考勤'
+                        title: '考勤',
+                        requireAuth: true
                     }
                 },
                 {
                     path: '/attendenceRecords',
                     component: () => import( /* webpackChunkName: "attendenceRecords" */ '../views/SignIn/AttendenceRecords.vue'),
                     meta: {
-                        title: '考勤记录'
+                        title: '考勤记录',
+                        requireAuth: true
                     }
                 },
                 {
                     path: '/attendenceCourse',
                     component: () => import( /* webpackChunkName: "attendenceCourse" */ '../views/SignIn/AttendenceCourse.vue'),
                     meta: {
-                        title: '考勤课程'
+                        title: '考勤课程',
+                        requireAuth: true
                     }
                 },
                 {
                     path: '/attendenceQuery',
                     component: () => import( /* webpackChunkName: "attendenceQuery" */ '../views/SignIn/AttendenceQuery.vue'),
                     meta: {
-                        title: '出勤率'
+                        title: '出勤率',
+                        requireAuth: true
                     }
                 },
                 { 
                     path: '/stuAttendenceRecords',
                     component: () => import( /* webpackChunkName: "stuAttendenceRecords" */ '../views/SignIn/StuAttendenceRecords.vue'),
                     meta: {
-                        title: '考勤记录'
+                        title: '考勤记录',
+                        requireAuth: true
                     } 
                 },
                 { 
                     path: '/teachAttendenceRecords',
                     component: () => import( /* webpackChunkName: "teachAttendenceRecords" */ '../views/SignIn/TeachAttendenceRecords.vue'),
                     meta: {
-                        title: '考勤记录'
+                        title: '考勤记录',
+                        requireAuth: true
                     } 
                 },
                 {
                     path: '/attendenceInfo',
                     component: () => import( /* webpackChunkName: "attendenceInfo" */ '../views/SignIn/AttendenceInfo.vue'),
                     meta: {
-                        title: '课程出勤率'
+                        title: '课程出勤率',
+                        requireAuth: true
                     }
                 },
                 {
                     path: '/recentAttendence',
                     component: () => import( /* webpackChunkName: "RecentAttendence" */ '../views/SignIn/RecentAttendence.vue'),
                     meta: {
-                        title: '课程签到情况'
+                        title: '课程签到情况',
+                        requireAuth: true
                     }
                 },
                 { 
                     path: '/roseJude',
                     component: () => import( /* webpackChunkName: "roseJude" */ '../views/SignIn/RoseJude.vue'),
                     meta: {
-                        title: '角色判断'
+                        title: '角色判断',
+                        requireAuth: true
                     } 
                 },
                 {
                     path: '/webSocket',
                     component: () => import( /* webpackChunkName: "webSocket" */ '../views/WebSocket/WebSocket.vue'),
                     meta: {
-                        title: 'WebSocket'
+                        title: 'WebSocket',
+                        requireAuth: true
                     }
                 },
 
@@ -245,7 +262,7 @@ export default new Router({
                     path: '/404',
                     component: () => import( /* webpackChunkName: "404" */ '../views/404.vue'),
                     meta: {
-                        title: '404'
+                        title: '404',
                     }
                 },
                 {
