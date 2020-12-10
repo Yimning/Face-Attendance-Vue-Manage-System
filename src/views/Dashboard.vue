@@ -46,7 +46,11 @@
                             <div class="grid-content grid-con-1">
                                 <i class="el-icon-lx-notice grid-con-icon"></i>
                                 <div class="grid-cont-right">
-                                    <div class="grid-num">{{ recentAttendanceList.courseID }}</div>
+                                    <el-button type="text" @click="courseBtn">
+                                        <div class="grid-num">
+                                            {{ recentAttendanceList.courseID }}
+                                        </div>
+                                    </el-button>
                                     <div>最近签到课程:</div>
                                     <div>{{ recentAttendanceList.courseName }}</div>
                                     <div>{{ recentAttendanceList.recordTime }}</div>
@@ -59,7 +63,10 @@
                             <div class="grid-content grid-con-2">
                                 <i class="el-icon-lx-people grid-con-icon"></i>
                                 <div class="grid-cont-right">
-                                    <div class="grid-num">{{ recentAttendanceInfo.allFlag }}</div>
+                                    <el-button type="text" @click="allFlagBtn">
+                                        <div class="grid-num">{{ recentAttendanceInfo.allFlag }}</div>
+                                    </el-button>
+
                                     <div>应出勤人数</div>
                                 </div>
                             </div>
@@ -70,7 +77,9 @@
                             <div class="grid-content grid-con-3">
                                 <i class="el-icon-s-custom grid-con-icon"></i>
                                 <div class="grid-cont-right">
-                                    <div class="grid-num">{{ recentAttendanceInfo.notFlag }}</div>
+                                    <el-button type="text" @click="notFlagBtn">
+                                        <div class="grid-num">{{ recentAttendanceInfo.notFlag }}</div>
+                                    </el-button>
                                     <div>缺勤人数</div>
                                 </div>
                             </div>
@@ -153,7 +162,10 @@
                             <div class="grid-content grid-con-1">
                                 <i class="el-icon-lx-notice grid-con-icon"></i>
                                 <div class="grid-cont-right">
-                                    <div class="grid-num">{{ userList.adminCount }}</div>
+                                    <el-button type="text" @click="adminCountBtn">
+                                        <div class="grid-num">{{ userList.adminCount }}</div>
+                                    </el-button>
+
                                     <div>管理员人数</div>
                                 </div>
                             </div>
@@ -164,7 +176,10 @@
                             <div class="grid-content grid-con-2">
                                 <i class="el-icon-lx-people grid-con-icon"></i>
                                 <div class="grid-cont-right">
-                                    <div class="grid-num">{{ userList.teacherCount }}</div>
+                                    <el-button type="text" @click="teacherCountBtn">
+                                        <div class="grid-num">{{ userList.teacherCount }}</div>
+                                    </el-button>
+
                                     <div>教师人数</div>
                                 </div>
                             </div>
@@ -175,7 +190,9 @@
                             <div class="grid-content grid-con-3">
                                 <i class="el-icon-s-custom grid-con-icon"></i>
                                 <div class="grid-cont-right">
-                                    <div class="grid-num">{{ userList.stuCount }}</div>
+                                    <el-button type="text" @click="stuCountBtn">
+                                        <div class="grid-num">{{ userList.stuCount }}</div>
+                                    </el-button>
                                     <div>学生人数</div>
                                 </div>
                             </div>
@@ -743,6 +760,30 @@ export default {
                     console.log(err);
                 });
         },
+        courseBtn() {
+            this.allFlagBtn();
+        },
+        allFlagBtn() {
+            if (this.$store.getters.getUser.roseID == '0') {
+                this.$router.push({ path: '/recentAttendence' });
+            }
+            if (this.$store.getters.getUser.roseID == '1') {
+                this.$router.push({ path: '/recentAttendence' });
+            }
+        },
+        notFlagBtn() {
+            this.allFlagBtn();
+        },
+        stuCountBtn() {
+            this.$router.push({ path: '/students' });
+        },
+        teacherCountBtn() {
+            this.$router.push({ path: '/teachers' });
+        },
+        adminCountBtn() {
+            this.$message.error('无权限查看');
+        },
+
         dataTraversal(form) {
             this.list = [];
             this.newArray = [];
