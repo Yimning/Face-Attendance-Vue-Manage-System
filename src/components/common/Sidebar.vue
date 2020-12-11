@@ -384,11 +384,7 @@ export default {
                 //         },
                 //     ]
                 // },
-                // {
-                //     icon: 'el-icon-lx-global',
-                //     index: 'i18n',
-                //     title: '国际化功能'
-                // },
+
                 {
                     icon: 'el-icon-lx-warn',
                     index: '7',

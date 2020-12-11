@@ -8,7 +8,7 @@
             <tr>
               <th v-for="(item,index) in classTableData.weeks" :key="index">{{item?'周'+item:''}}</th>
             </tr> 
-          </thead>
+          </thead> 
           <tbody>
             <tr v-for="(item,index) in classTableData.num" :key="index">
               <td
