@@ -1,4 +1,4 @@
-<!-- 考试倒计时组件 -->
+ <!-- 考试倒计时组件 -->
 <template>
  <div class="time">
   <p>00:{{timerCount2}}:{{timerCount1}}</p>
