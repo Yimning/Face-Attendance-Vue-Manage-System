@@ -30,7 +30,7 @@
             </div>
         </div> 
     </div>
-</template>
+</template> 
   
 <script>
 require('tracking/build/tracking-min.js');

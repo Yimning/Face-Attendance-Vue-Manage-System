@@ -18,6 +18,6 @@ export default {
     },
     methods: {
     }
-};
+}; 
 </script>
 
