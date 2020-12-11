@@ -374,11 +374,6 @@ export default {
                 },
 
                 // {
-                //     icon: 'el-icon-pie-chart',
-                //     index: 'charts',
-                //     title: 'schart图表'
-                // },
-                // {
                 //     icon: 'el-icon-rank',
                 //     index: '6',
                 //     title: '拖拽组件',
