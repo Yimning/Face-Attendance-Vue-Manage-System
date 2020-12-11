@@ -28,7 +28,7 @@
                 <!--canvas截取流-->
                 <canvas ref="canvas" id="canvas" width="480px" height="400px" style="display: none"></canvas>
             </div>
-        </div>
+        </div> 
     </div>
 </template>
   
