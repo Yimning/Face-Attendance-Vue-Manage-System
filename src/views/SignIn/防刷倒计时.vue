@@ -37,7 +37,7 @@ export default {
    sessionStorage.setItem("answered", 1);
    clearInterval(this.timer);
   },
-  // 倒计时 
+  // 倒计时  
   timing() {
    let [startTime1, startTime2] = [ localStorage.getItem("startTime1"), localStorage.getItem("startTime2") ];
    let nowTime = new Date().getTime();
