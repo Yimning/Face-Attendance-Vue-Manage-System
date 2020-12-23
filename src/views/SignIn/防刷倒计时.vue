@@ -8,7 +8,7 @@
 
 <script>
 export default {
- name: "Time", 
+ name: "Time",  
  data() {
   return {
    timeSeconds: 0,
