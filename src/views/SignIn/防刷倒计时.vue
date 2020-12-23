@@ -35,7 +35,7 @@ export default {
    localStorage.removeItem("startTime1");
    localStorage.removeItem("startTime2");
    sessionStorage.setItem("answered", 1);
-   clearInterval(this.timer);
+   clearInterval(this.timer); 
   },
   // 倒计时  
   timing() {
