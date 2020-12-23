@@ -85,7 +85,7 @@ export default {
   }
  },
  destroyed() {
-  // 退出后清除计时器 
+  // 退出后清除计时器    
   if (this.timer) {
    clearInterval(this.timer);
   }
