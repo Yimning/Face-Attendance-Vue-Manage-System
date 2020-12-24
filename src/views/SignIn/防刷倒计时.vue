@@ -91,7 +91,7 @@ export default {
   } 
  }
 };
-</script>
+</script> 
 <style scoped>
 .time {
  color: #f72a3a;
