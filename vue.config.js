@@ -1,3 +1,4 @@
+
 module.exports = {
     // baseUrl: './',
     // assetsDir: 'static',
@@ -16,6 +17,7 @@ module.exports = {
             '/api': {
                 // 服务端域名和端口
                 target: 'http://localhost:8082',
+                // target: 'https://www.yimning.cn:8082', //未上线可用
                 // 如果设置成true：请求头中host会设置成target
                 changeOrigin: true,   //开启代理
                 // 用'/'替换浏览器请求url中的'/api'，例如浏览器请求为http://localhost:8082/api/xxx,
