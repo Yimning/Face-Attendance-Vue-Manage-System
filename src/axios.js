@@ -1,3 +1,11 @@
+/*
+ * @Author: your name
+ * @Date: 2020-08-30 21:29:12
+ * @LastEditTime: 2020-12-25 16:50:16
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \vue-manage-system\src\axios.js
+ */
 import axios from 'axios'
 import Element from 'element-ui'
 import router from './router'
@@ -5,7 +13,7 @@ import store from './store'
 
 /* 当发起axios请求时 会自动作为前置 */
 axios.defaults.baseURL = "http://localhost:8082"
-
+// axios.defaults.baseURL = "https://www.yimning.cn:8082"
 // 前置拦截
 axios.interceptors.request.use(config => {
   return config
