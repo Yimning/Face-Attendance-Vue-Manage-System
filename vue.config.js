@@ -1,10 +1,14 @@
+var  path = require( 'path' )
 
 module.exports = {
-    // baseUrl: './',
-    // assetsDir: 'static',
+    publicPath: './',
+    assetsDir: 'static',
     productionSourceMap: false,
+    //如果不需要定位问题，并且不想被看到源码，就把productionSourceMap 置为false，既可以减少包大小，也可以加密源码。
     // All options for webpack-dev-server are supported
     // https://webpack.js.org/configuration/dev-server/
+
+
     devServer: {
         // https://github.com/chimurai/http-proxy-middleware#proxycontext-config
         // axios跨域代理配置表，在这里可以配置特定的请求代理到对应的API接口
