@@ -12,8 +12,8 @@ module.exports = {
     devServer: {
         // https://github.com/chimurai/http-proxy-middleware#proxycontext-config
         // axios跨域代理配置表，在这里可以配置特定的请求代理到对应的API接口
-        port: 8088, //本机启动端口
         host: "localhost", //本机主机名
+        port: 8088, //本机启动端口
         https: false, //协议
         open: true, //启动服务器时自动打开浏览器访问
         proxy: {
