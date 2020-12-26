@@ -1,17 +1,4 @@
-/*
- * @Author: your name
- * @Date: 2020-08-29 10:36:14
- * @LastEditTime: 2020-12-26 10:14:32
- * @LastEditors: Please set LastEditors
- * @Description: In User Settings Edit
- * @FilePath: \vue-manage-system\vue.config.js
- */
 var  path = require( 'path' )
-function isPro() {
-    return process.env.NODE_ENV === 'production'
-  }
-  
-
 
 module.exports = {
     publicPath: './',
@@ -21,8 +8,6 @@ module.exports = {
     // All options for webpack-dev-server are supported
     // https://webpack.js.org/configuration/dev-server/
 
-    ...
-    publicPath:isPro() ? '/smartclass/' : '/',
 
     devServer: {
         // https://github.com/chimurai/http-proxy-middleware#proxycontext-config
