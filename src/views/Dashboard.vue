@@ -888,7 +888,8 @@ export default {
             };
             // 发起ws请求
             // const baseUrl = 'ws://localhost:8082/websocket/';
-             const baseUrl = 'ws://localhost:8082/websocket/';
+            // 协议标识符是ws（如果加密，则为wss），服务器网址就是 URL。 跟http与https一样
+            const baseUrl = 'wss://www.yimning.cn:8082/websocket/';
             sendWebSocket(baseUrl + this.$store.getters.getUser.userID, '', this.wsMessage, this.wsError);
             let url = '/api/webSocket/serialPorts?shopId=' + this.$store.getters.getUser.userID;
 
