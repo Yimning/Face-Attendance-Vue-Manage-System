@@ -16,8 +16,10 @@ function initWebSocket() {
     return false
   }
   const token = localStorage.getItem("token")
+
   // ws请求完整地址
   const requestWsUrl = wsUrl + '?' + token
+  
   console.log(requestWsUrl)
   websocket = new WebSocket(requestWsUrl)
 
