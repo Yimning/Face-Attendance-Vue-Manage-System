@@ -887,7 +887,8 @@ export default {
                 userName: ''
             };
             // 发起ws请求
-            const baseUrl = 'ws://localhost:8082/websocket/';
+            // const baseUrl = 'ws://localhost:8082/websocket/';
+             const baseUrl = 'ws://localhost:8082/websocket/';
             sendWebSocket(baseUrl + this.$store.getters.getUser.userID, '', this.wsMessage, this.wsError);
             let url = '/api/webSocket/serialPorts?shopId=' + this.$store.getters.getUser.userID;
 
