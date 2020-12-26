@@ -1,8 +1,9 @@
 var  path = require( 'path' )
 
 module.exports = {
-    publicPath: './',
-    assetsDir: 'static',
+    // outputDir: 'smartclass', //打包好的包名 默认时为dist
+    publicPath: './',  //公共路径  
+    assetsDir: 'static',//打包好的静态资源路径
     productionSourceMap: false,
     //如果不需要定位问题，并且不想被看到源码，就把productionSourceMap 置为false，既可以减少包大小，也可以加密源码。
     // All options for webpack-dev-server are supported
