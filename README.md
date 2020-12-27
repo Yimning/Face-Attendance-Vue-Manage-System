@@ -1,4 +1,12 @@
-- [ ] ```
+<!--
+ * @Author: your name
+ * @Date: 2020-12-26 18:32:44
+ * @LastEditTime: 2020-12-27 13:21:02
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \vue-manage-system\README.md
+-->
+- [ ] ``` 
   ├── README.md            项目介绍
   ├── index.html           入口页面
   ├── public              构建项目的公共部分
