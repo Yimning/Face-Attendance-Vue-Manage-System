@@ -37,7 +37,7 @@
                             {{ '课程号: ' + dataParams.courseID }}
                         </div>
                         <div class="item text">
-                            {{ '时间: 每周' + dataParams.weekDay + ' ' + dataParams.courseTime }}
+                            {{ '时间: 每周' + dataParams.courseDay + ' ' + dataParams.courseTime }}
                         </div>
                         <div class="item text">
                             {{ '地点:' + dataParams.classRoomID }}
@@ -108,6 +108,7 @@ export default {
     created() {
         this.dataParams = this.$route.query.data;
         //sessionStorage.setItem('courseID', this.dataParams.courseID);
+        console.log( this.dataParams )
         this.dataParams = JSON.parse(sessionStorage.getItem('dataParams'));
         console.log(this.dataParams);
         this.faceInfo = this.dataParams;
