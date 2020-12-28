@@ -2,7 +2,7 @@
     <div>
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item> <i class="el-icon-lx-cascades"></i> 出勤率 </el-breadcrumb-item>
+                <el-breadcrumb-item> <i class="el-icon-lx-cascades"></i> 考勤记录 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="container">
