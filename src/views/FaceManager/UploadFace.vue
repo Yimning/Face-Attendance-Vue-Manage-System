@@ -143,7 +143,8 @@ export default {
             if (this.$store.getters.getUser.roseID === '2') {
                 this.submitAxious();
             } else {
-                if (this.ruleForm.userID == this.$store.getters.getUser.id) {
+                console.log(this.ruleForm.userID,this.$store.getters.getUser.userID);
+                if (this.ruleForm.userID == this.$store.getters.getUser.userID) {
                     this.submitAxious();
                 } else {
                     this.$message.error(`当前账号与图片命名不一致`);
