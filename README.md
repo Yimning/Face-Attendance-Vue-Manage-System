@@ -23,12 +23,13 @@ cnpm run build
 ```
 
 
-
+```
 由于node_modules文件夹所含的依赖包太大，一般不予提供。
 在终端输入命令：
 	安装依赖：cnpm i 和 cnpm install安装依赖即可以。
 	项目运行：cnpm run serve 
 	项目打包：cnpm run build
+```
 - [ ] ``` 
   ├── README.md            项目介绍
   ├── index.html           入口页面
