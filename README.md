@@ -29,7 +29,7 @@ cnpm run build
 	安装依赖：cnpm i 和 cnpm install安装依赖即可以。
 	项目运行：cnpm run serve 
 	项目打包：cnpm run build
-```
+``` 
 - [ ] ``` 
   ├── README.md            项目介绍
   ├── index.html           入口页面
