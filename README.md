@@ -22,7 +22,7 @@ cnpm run serve
 cnpm run build
 ```
 
-
+  
 ```
 由于node_modules文件夹所含的依赖包太大，一般不予提供。
 在终端输入命令：
