@@ -6,7 +6,7 @@
     components - 组件文件夹, 组件是 vue 等 MVC 框架等核心概念，自行了解含义。 
     view - 视图文件夹。
 
-   2、5个文件  
+   2、5个文件   
         app.vue、main.js - 主视图、配合 
         main.js 成为 vue 程序的主入口。
         router.js - 路由程序主入口。
