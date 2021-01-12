@@ -79,7 +79,7 @@
                for (let i = 0; i < Math.ceil(arr.length / n); i++) {
                     // 使用slice（start，end]进行截取,这个截取公式，可以自行研究
                     newArray[i] = arr.slice(i * n, (i + 1) * n);
-               }
+               } 
                console.log(newArray);
                },
 
