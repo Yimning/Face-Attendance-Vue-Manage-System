@@ -55,7 +55,7 @@
           1、将对象转换为JSON格式字符串
           JSON.stringify(object)
 
-          2、将JSON字符串转换为对象
+          2、将JSON字符串转换为对象  
           JSON.parse(jsonString);
 
           3、vue把对象转为数组
