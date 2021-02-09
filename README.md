@@ -1,12 +1,18 @@
 <!--
  * @Author: Yimning
  * @Date: 2020-12-26 18:32:44
+<<<<<<< HEAD
  * @LastEditTime: 2021-01-03 11:34:18
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
+=======
+ * @LastEditTime: 2020-12-29 15:01:10
+ * @LastEditors: Please set LastEditors   
+ * @Description: In User Settings Edit   
+>>>>>>> ddb82df8b0a39840d61ab5f8bc645de96fc65789
  * @FilePath: \vue-manage-system\README.md
 -->
-
+    
 ## Project setup
 ```
 cnpm install
@@ -22,7 +28,7 @@ cnpm run serve
 cnpm run build
 ```
 
-
+  
 ```
 由于node_modules文件夹所含的依赖包太大，一般不予提供。
 在终端输入命令：
